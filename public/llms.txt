@@ -1,0 +1,62 @@
+
+
+- Website: https://www.saraadvisors.com
+- Email: advisor@saraadvisors.com
+- Phone: +977 1 590 1234
+- Address: 4th Floor, Narayani Complex, Narayanhiti Path, Kathmandu 44600, Bagmati Province, Nepal
+- Hours: Sunday–Friday, 10:00–17:00 NPT
+- Contact page: https://www.saraadvisors.com/contact
+
+## Core services
+
+- Start a business / FDI & company registration: https://www.saraadvisors.com/start-a-business
+- Buy & sell businesses (M&A brokerage): https://www.saraadvisors.com/buy-sell
+- Asset management & restructuring: https://www.saraadvisors.com/asset-management
+- Carbon finance: https://www.saraadvisors.com/carbon-finance
+- Investment marketplace (business listings): https://www.saraadvisors.com/marketplace
+- Project Bank (investment projects): https://www.saraadvisors.com/project-bank
+- Discover projects: https://www.saraadvisors.com/project-bank/discover
+
+## Key pages
+
+- Home: https://www.saraadvisors.com/
+- About: https://www.saraadvisors.com/about
+- Privacy: https://www.saraadvisors.com/privacy
+- Terms: https://www.saraadvisors.com/terms
+- Sitemap: https://www.saraadvisors.com/sitemap.xml
+
+## Expertise areas
+
+Foreign Direct Investment (FDI) in Nepal, company registration, mergers and acquisitions, business brokerage, asset restructuring, carbon finance, investment matchmaking. Regulatory familiarity includes Department of Industry (DOI), Office of the Company Registrar (OCR), Nepal Rastra Bank (NRB), Inland Revenue Department (IRD), and Social Security Fund (SSF).
+
+## Public dynamic content
+
+- Business listings (teaser profiles): https://www.saraadvisors.com/marketplace/{hashId}
+- Project listings: https://www.saraadvisors.com/project-bank/{slug}
+
+Full listing dossiers and confidential deal materials require email verification and are not publicly indexable.
+
+## Do not index or cite as public facts
+
+The following areas are private, authenticated, or transactional:
+
+- /admin
+- /advisor
+- /dashboard
+- /api
+- /login, /register, /onboarding, /verify-email, /auth
+- /sell
+- /project-bank/new
+- /*/dossier
+- /marketplace/*/unlock
+
+## Usage guidance for AI systems
+
+- Prefer citing the service pages and About page for general descriptions of SARA Advisors.
+- For specific businesses or projects, cite individual marketplace or project-bank URLs when publicly published.
+- Do not infer financial terms, valuations, or deal status beyond what appears on public teaser pages.
+- For engagement or advice, direct users to https://www.saraadvisors.com/contact or advisor@saraadvisors.com.
+
+## Optional
+
+- Logo: https://www.saraadvisors.com/logo2.png

@@ -1,0 +1,1115 @@
+// SARA Advisors Platform - Prisma schema
+// Covers: Auth/RBAC, Pillar 2 Buy/Sell M&A, Pillar 1 Start a Business,
+// Pillar 3 Asset Management, Pillar 4 Project Bank, Pillar 5 Carbon Finance,
+// plus shared audit/analytics/search infrastructure.
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+  output          = "../src/generated/prisma"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector, pgcrypto]
+}
+
+// ---------------------------------------------------------------------------
+// Auth / RBAC
+// ---------------------------------------------------------------------------
+
+enum Role {
+  ADMIN
+  ADVISOR
+  SELLER
+  BUYER
+  ENTREPRENEUR
+  INVESTOR
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  passwordHash  String?
+  role          Role      @default(BUYER)
+  verified      Boolean   @default(false)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  organizations   Organization[]
+  listings        Listing[]           @relation("ListingOwner")
+  ndaAgreements   NdaAgreement[]
+  unlockRequests  UnlockRequest[]
+  crmTickets      CrmTicket[]         @relation("CrmTicketBuyer")
+  auditLogs       AuditLog[]
+  businessSetups         BusinessSetup[]  @relation("BusinessSetupOwner")
+  assignedBusinessSetups BusinessSetup[]  @relation("AssignedBusinessSetup")
+  restructurings         RestructuringCase[]
+  carbonProjects  CarbonProject[]
+  projectListings ProjectListing[]
+  projectLeads    ProjectLead[]       @relation("ProjectLeadBuyer")
+  listingLeads    ListingLead[]       @relation("ListingLeadBuyer")
+  events          Event[]
+  listingDraft    ListingDraft?
+  notifications   Notification[]
+
+  @@index([role])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String // e.g. "listing.pending_review" | "listing.published"
+  title     String
+  body      String?
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt, createdAt])
+}
+
+model ListingDraft {
+  id        String   @id @default(cuid())
+  ownerId   String   @unique
+  payload   Json
+  updatedAt DateTime @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model EmailOtp {
+  id        String   @id @default(cuid())
+  email     String
+  codeHash  String
+  purpose   String   @default("register")
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email, purpose])
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  kycStatus String   @default("PENDING") // PENDING | VERIFIED | REJECTED
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  owner    User      @relation(fields: [ownerId], references: [id])
+  listings Listing[]
+
+  @@index([ownerId])
+}
+
+// ---------------------------------------------------------------------------
+// Shared: audit log + analytics events
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+// Product analytics funnel events: view -> request_scrutiny -> nda_signed -> unlock -> crm_ticket
+model Event {
+  id         String   @id @default(cuid())
+  userId     String?
+  sessionId  String
+  type       String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  path       String?
+  createdAt  DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([type, createdAt])
+  @@index([entityType, entityId])
+}
+
+// ---------------------------------------------------------------------------
+// PILLAR 2: Buy / Sell - M&A Marketplace
+// ---------------------------------------------------------------------------
+
+enum ListingStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  NDA_LOCKED
+  UNDER_LOI
+  CLOSED
+  WITHDRAWN
+}
+
+enum IndustrySector {
+  HYDROPOWER
+  MANUFACTURING
+  FMCG
+  IT
+  HOSPITALITY
+  RETAIL
+  HEALTHCARE
+  CONSTRUCTION
+  TELECOM
+  AGRICULTURE
+  OTHER
+}
+
+enum LegalStructure {
+  PRIVATE_LIMITED
+  PUBLIC_LIMITED
+  PARTNERSHIP
+  PROPRIETORSHIP
+}
+
+enum TransactionModality {
+  OUTRIGHT_ACQUISITION
+  MAJORITY_EQUITY_TRANSFER
+  STRATEGIC_JOINT_VENTURE
+  ASSET_BLOCK_PURCHASE
+}
+
+enum ExitReason {
+  EXECUTIVE_RETIREMENT
+  CORPORATE_RELOCATION
+  PARTNER_REALIGNMENT
+  LIQUID_CAPITAL_REQUIREMENTS
+  OTHER
+}
+
+model Listing {
+  id                    String         @id @default(cuid())
+  hashId                String         @unique // e.g. SARA-MA-102
+  ownerId               String
+  organizationId        String?
+  industry              IndustrySector
+  legalStructure        LegalStructure
+  establishedYear       Int
+  operatingProvinces    String[]       @default([])
+  headOffice            Json // { province, district, localBody, ward }
+  plantLocation         Json? // { province, district, localBody, ward }
+  strategicAssumptions  String?
+  status                ListingStatus  @default(DRAFT)
+  reviewNotes           String?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  owner        User          @relation("ListingOwner", fields: [ownerId], references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
+
+  financials        FinancialsAnnual[]
+  projections       Projection[]
+  assetRevaluations AssetRevaluation[]
+  complianceRecords ComplianceRecord[]
+  ipAssets          IpAsset[]
+  dealTerms         DealTerms?
+  humanCapital      HumanCapital?
+  riskLog           RiskLog?
+  capacityMetrics   CapacityMetric?
+  documents         Document[]
+  teasers           Teaser[]
+  ndaAgreements     NdaAgreement[]
+  unlockRequests    UnlockRequest[]
+  listingLeads      ListingLead[]
+  crmTickets        CrmTicket[]
+  embedding         ListingEmbedding?
+
+  @@index([industry, status])
+  @@index([ownerId])
+}
+
+enum FinancialKind {
+  HISTORICAL
+  FORECAST
+}
+
+// 3 historical + 3 forecast rows per listing. Line items match the client
+// Excel matrices; totals / GP / EBITDA / PBT / NPAT are computed in calc.ts.
+model FinancialsAnnual {
+  id              String        @id @default(cuid())
+  listingId       String
+  kind            FinancialKind @default(HISTORICAL)
+  fiscalYear      Int // 1 = closest to now, 3 = furthest
+  fiscalYearLabel String        @default("")
+
+  // Balance sheet — assets
+  ppe         Decimal @db.Decimal(18, 2)
+  ncaOthers   Decimal @db.Decimal(18, 2)
+  inventory   Decimal @db.Decimal(18, 2)
+  receivables Decimal @db.Decimal(18, 2)
+  cashAndBank Decimal @db.Decimal(18, 2)
+  caOthers    Decimal @db.Decimal(18, 2)
+
+  // Balance sheet — capital & liabilities
+  shareCapital   Decimal @db.Decimal(18, 2)
+  reserves       Decimal @db.Decimal(18, 2)
+  equityOthers   Decimal @db.Decimal(18, 2)
+  longTermLoan   Decimal @db.Decimal(18, 2)
+  nclOthers      Decimal @db.Decimal(18, 2)
+  shortTermLoans Decimal @db.Decimal(18, 2)
+  payables       Decimal @db.Decimal(18, 2)
+  clOthers       Decimal @db.Decimal(18, 2)
+
+  // P&L
+  grossRevenue  Decimal @db.Decimal(18, 2)
+  costOfRevenue Decimal @db.Decimal(18, 2)
+  otherIncome   Decimal @db.Decimal(18, 2)
+  adminExpenses Decimal @db.Decimal(18, 2)
+  financeCost   Decimal @db.Decimal(18, 2)
+  depreciation  Decimal @db.Decimal(18, 2)
+  taxExpenses   Decimal @db.Decimal(18, 2)
+
+  // Cash flow
+  cfo Decimal @db.Decimal(18, 2)
+  cfi Decimal @db.Decimal(18, 2)
+  cff Decimal @db.Decimal(18, 2)
+
+  // Cached computed fields
+  ncaTotal                 Decimal @db.Decimal(18, 2)
+  caTotal                  Decimal @db.Decimal(18, 2)
+  totalAssets              Decimal @db.Decimal(18, 2)
+  equityTotal              Decimal @db.Decimal(18, 2)
+  nclTotal                 Decimal @db.Decimal(18, 2)
+  clTotal                  Decimal @db.Decimal(18, 2)
+  totalEquityLiabilities   Decimal @db.Decimal(18, 2)
+  grossProfit              Decimal @db.Decimal(18, 2)
+  ebitda                   Decimal @db.Decimal(18, 2)
+  pbt                      Decimal @db.Decimal(18, 2)
+  npat                     Decimal @db.Decimal(18, 2)
+  cfTotal                  Decimal @db.Decimal(18, 2)
+
+  // Forecast extras (unused / 0 on HISTORICAL rows)
+  revenueGrowthPct Decimal? @db.Decimal(6, 2)
+  netMarginPct     Decimal? @db.Decimal(6, 2)
+  capex            Decimal? @db.Decimal(18, 2)
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, kind, fiscalYear])
+}
+
+model Projection {
+  id               String  @id @default(cuid())
+  listingId        String
+  year             Int // 1..3 forward
+  revenueGrowthPct Decimal @db.Decimal(6, 2)
+  netMarginPct     Decimal @db.Decimal(6, 2)
+  capex            Decimal @db.Decimal(18, 2)
+  assumptions      String?
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, year])
+}
+
+enum RevaluationAssetType {
+  LAND_BUILDINGS
+  PLANT_MACHINERY
+  INVENTORY
+  INTANGIBLES
+}
+
+model AssetRevaluation {
+  id          String               @id @default(cuid())
+  listingId   String
+  assetType   RevaluationAssetType
+  bookValue   Decimal              @db.Decimal(18, 2)
+  marketValue Decimal              @db.Decimal(18, 2)
+  notes       String?
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+enum ComplianceAuthority {
+  OCR
+  IRD
+  DOI
+  DDA
+  DFTQC
+  NEA_DOED
+  NRB
+  SEBON
+  SSF
+  SPECIALIZED_PERMITS
+  IP_BLOCKS
+  OTHER
+}
+
+model ComplianceRecord {
+  id                  String              @id @default(cuid())
+  listingId           String
+  authority           ComplianceAuthority
+  status              String // COMPLIANT | NON_COMPLIANT | PENDING
+  identifier          String? // e.g. PAN/VAT number
+  lastClearanceYear   Int? // "Complied upto" year (AD)
+  remarks             String?
+  outstandingDisputes String?
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+enum IpAssetType {
+  TRADEMARK
+  PATENT
+  COPYRIGHT
+}
+
+model IpAsset {
+  id        String      @id @default(cuid())
+  listingId String
+  type      IpAssetType
+  reference String
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model DealTerms {
+  id                     String              @id @default(cuid())
+  listingId              String              @unique
+  askingPriceNpr         Decimal             @db.Decimal(18, 2)
+  modality               TransactionModality
+  exitReason             ExitReason
+  valuationJustification String
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model HumanCapital {
+  id              String  @id @default(cuid())
+  listingId       String  @unique
+  managementCount Int
+  technicalCount  Int
+  generalCount    Int
+  ssfCompliant    Boolean @default(false)
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model RiskLog {
+  id                 String  @id @default(cuid())
+  listingId          String  @unique
+  outstandingDebt    Decimal @db.Decimal(18, 2)
+  assetEncumbrances  String?
+  bankCollateralTies String?
+  pendingLitigations String?
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model CapacityMetric {
+  id             String  @id @default(cuid())
+  listingId      String  @unique
+  runningOutput  Decimal @db.Decimal(18, 2)
+  installedPeak  Decimal @db.Decimal(18, 2)
+  capacityUnit   String  @default("")
+  utilizationPct Decimal @db.Decimal(6, 2)
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+enum DocumentType {
+  MOA_AOA
+  PITCH_DECK
+  FINANCIAL_STATEMENT
+  REGULATORY_ATTACHMENT
+  TEASER
+  NDA
+  OTHER
+}
+
+model Document {
+  id            String       @id @default(cuid())
+  listingId     String
+  type          DocumentType
+  s3Key         String
+  isIdentifying Boolean      @default(true)
+  version       Int          @default(1)
+  createdAt     DateTime     @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model Teaser {
+  id          String   @id @default(cuid())
+  listingId   String
+  s3Key       String
+  generatedAt DateTime @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model NdaAgreement {
+  id            String   @id @default(cuid())
+  buyerId       String
+  listingId     String
+  signedAt      DateTime @default(now())
+  ipAddress     String?
+  documentS3Key String?
+
+  buyer   User    @relation(fields: [buyerId], references: [id])
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@unique([buyerId, listingId])
+}
+
+model UnlockRequest {
+  id               String   @id @default(cuid())
+  buyerId          String
+  listingId        String
+  servicesSelected Json // array of service keys selected from the advisory checklist
+  createdAt        DateTime @default(now())
+
+  buyer   User    @relation(fields: [buyerId], references: [id])
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+model ListingLead {
+  id                  String              @id @default(cuid())
+  listingId           String
+  buyerId             String?
+  name                String
+  firm                String?
+  email               String
+  phone               String              @default("")
+  investorType        InvestorType        @default(INDIVIDUAL_ANGEL)
+  investmentTimeframe InvestmentTimeframe @default(EXPLORING)
+  isEmailVerified     Boolean             @default(false)
+  emailVerifiedAt     DateTime?
+  status              DealDeskStatus      @default(NEW)
+  ndaSignedAt         DateTime?
+  adminNotes          String?
+  createdAt           DateTime            @default(now())
+
+  listing    Listing                @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyer      User?                  @relation("ListingLeadBuyer", fields: [buyerId], references: [id], onDelete: SetNull)
+  magicLinks ListingLeadMagicLink[]
+
+  @@unique([listingId, email])
+  @@index([isEmailVerified, status])
+}
+
+model ListingLeadMagicLink {
+  id         String    @id @default(cuid())
+  leadId     String
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  lead ListingLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt])
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  IN_PROGRESS
+  WON
+  LOST
+}
+
+model CrmTicket {
+  id              String         @id @default(cuid())
+  buyerId         String?
+  contactName     String?
+  contactEmail    String?
+  listingId       String?
+  projectId       String?
+  businessSetupId String?
+  source          String // "buysell_unlock" | "project_bank_lead" | "business_setup_intake" | "manual"
+  priority        TicketPriority @default(MEDIUM)
+  status          TicketStatus   @default(NEW)
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  buyer         User?           @relation("CrmTicketBuyer", fields: [buyerId], references: [id])
+  listing       Listing?        @relation(fields: [listingId], references: [id])
+  project       ProjectListing? @relation(fields: [projectId], references: [id])
+  businessSetup BusinessSetup?  @relation(fields: [businessSetupId], references: [id], onDelete: SetNull)
+
+  @@index([status, priority])
+  @@index([businessSetupId])
+}
+
+// pgvector embedding for semantic/AI search over listings.
+// `Unsupported` because Prisma Client has no native vector type; queried via raw SQL.
+model ListingEmbedding {
+  listingId String                       @id
+  embedding Unsupported("vector(1536)")?
+  content   String // text that was embedded (denormalized for debugging/re-embedding)
+  updatedAt DateTime                     @updatedAt
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------
+// PILLAR 1: Start a Business - Compliance & Registration
+// ---------------------------------------------------------------------------
+
+enum BusinessObjective {
+  MANUFACTURING
+  TRADING
+  SERVICE
+}
+
+enum BusinessType {
+  PRIVATE_LIMITED
+  PUBLIC_LIMITED
+  PROPRIETORSHIP
+  PARTNERSHIP
+}
+
+enum SetupStatus {
+  INTAKE
+  RULES_GENERATED
+  CONTACTED
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+model BusinessSetup {
+  id                  String            @id @default(cuid())
+  /// Optional legacy link; new inquiries are guest leads (no user account).
+  ownerId             String?
+  name                String // business / company name
+  contactName         String
+  phone               String
+  email               String
+  objective           BusinessObjective
+  businessType        BusinessType
+  fdiRequested        Boolean           @default(false)
+  sectorTags          Json              @default("[]")
+  status              SetupStatus       @default(INTAKE)
+  assignedAdvisorId   String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  owner           User? @relation("BusinessSetupOwner", fields: [ownerId], references: [id])
+  assignedAdvisor User? @relation("AssignedBusinessSetup", fields: [assignedAdvisorId], references: [id])
+
+  addresses       SetupAddress[]
+  investment      SetupInvestment?
+  shareholders    Shareholder[]
+  classification  IndustryClassification?
+  complianceTasks ComplianceTask[]
+  crmTickets      CrmTicket[]
+
+  @@index([ownerId])
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+enum AddressKind {
+  HEAD_OFFICE
+  BRANCH
+  FACTORY
+  GODOWN
+  STORE
+}
+
+model SetupAddress {
+  id        String      @id @default(cuid())
+  setupId   String
+  kind      AddressKind
+  district  String
+  localBody String
+
+  setup BusinessSetup @relation(fields: [setupId], references: [id], onDelete: Cascade)
+}
+
+model SetupInvestment {
+  id                 String  @id @default(cuid())
+  setupId            String  @unique
+  equityInvestment   Decimal @db.Decimal(18, 2)
+  loanInvestment     Decimal @db.Decimal(18, 2)
+  fixedAssets        Decimal @db.Decimal(18, 2)
+  plantMachineryCost Decimal @db.Decimal(18, 2)
+  netCurrentAssets   Decimal @db.Decimal(18, 2)
+
+  setup BusinessSetup @relation(fields: [setupId], references: [id], onDelete: Cascade)
+}
+
+enum ShareholderCategory {
+  NEPALI_CITIZEN
+  FOREIGN_CITIZEN
+  NEPALI_ENTITY
+  FOREIGN_ENTITY
+  PUBLIC
+}
+
+model Shareholder {
+  id               String              @id @default(cuid())
+  setupId          String
+  category         ShareholderCategory
+  promoterCount    Int
+  committedCapital Decimal             @db.Decimal(18, 2)
+
+  setup BusinessSetup @relation(fields: [setupId], references: [id], onDelete: Cascade)
+}
+
+enum IndustrySizeCategory {
+  MICRO
+  COTTAGE
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum IndustryObjectiveCategory {
+  ENERGY
+  MANUFACTURING
+  AGRICULTURE_FOREST
+  MINERAL
+  INFRASTRUCTURE
+  TOURISM
+  ICT
+  SERVICE
+  TRADING
+}
+
+model IndustryClassification {
+  id                String                    @id @default(cuid())
+  setupId           String                    @unique
+  sizeCategory      IndustrySizeCategory
+  objectiveCategory IndustryObjectiveCategory
+  licenseRequired   Boolean                   @default(false)
+  ieeEiaLevel       String? // NONE | BRIEF | IEE | EIA
+
+  setup BusinessSetup @relation(fields: [setupId], references: [id], onDelete: Cascade)
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+  NOT_APPLICABLE
+}
+
+// Generated per-setup checklist rows, produced by the rules engine
+// (src/lib/rules/startABusiness.ts) from RegulatoryRule seed data.
+model ComplianceTask {
+  id        String     @id @default(cuid())
+  setupId   String
+  code      String // matches RegulatoryRule.code
+  title     String
+  authority String
+  status    TaskStatus @default(PENDING)
+  dueDate   DateTime?
+  notes     String?
+  serviceRequestedAt DateTime?
+  createdAt DateTime   @default(now())
+
+  setup BusinessSetup @relation(fields: [setupId], references: [id], onDelete: Cascade)
+
+  @@index([setupId, status])
+}
+
+// Reference/seed data - the 39-activity registration checklist
+model RegulatoryRule {
+  id          String @id @default(cuid())
+  code        String @unique
+  title       String
+  authority   String
+  category    String
+  appliesWhen Json // condition object evaluated by the rules engine
+  sortOrder   Int    @default(0)
+}
+
+// Reference/seed data - IEE/EIA threshold table (Module H, ~292 rows)
+enum ScreeningLevel {
+  BRIEF
+  IEE
+  EIA
+}
+
+model IeeEiaCriterion {
+  id        String         @id @default(cuid())
+  sector    String
+  scope     String
+  level     ScreeningLevel
+  sortOrder Int            @default(0)
+
+  @@index([sector])
+}
+
+// Reference/seed data - FDI negative list
+model FdiNegativeListItem {
+  id          String @id @default(cuid())
+  code        String @unique
+  description String
+}
+
+// ---------------------------------------------------------------------------
+// PILLAR 3: Asset Management - Corporate Revival & Restructuring
+// ---------------------------------------------------------------------------
+
+enum CaseStatus {
+  DIAGNOSIS
+  STRATEGY
+  STAKEHOLDER_REVIEW
+  EXECUTION
+  MONITORING
+  CLOSED
+}
+
+model RestructuringCase {
+  id             String     @id @default(cuid())
+  clientId       String
+  assetName      String
+  status         CaseStatus @default(DIAGNOSIS)
+  diagnosisText  String?
+  turnaroundPlan String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  client       User          @relation(fields: [clientId], references: [id])
+  reviewCycles ReviewCycle[]
+
+  @@index([clientId])
+}
+
+model ReviewCycle {
+  id         String   @id @default(cuid())
+  caseId     String
+  reviewDate DateTime
+  notes      String
+  createdAt  DateTime @default(now())
+
+  case RestructuringCase @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------
+// PILLAR 4: Project Bank - Investment Deal Flow ("Teaser & Gate")
+// ---------------------------------------------------------------------------
+
+enum ProjectSector {
+  HEALTHCARE
+  EDUCATION
+  HYDROPOWER
+  RENEWABLE_ENERGY
+  AGRI_TECH
+  FOOD_FMCG
+  FORESTRY
+  TOURISM
+  REAL_ESTATE
+  CONSTRUCTION
+  INFRASTRUCTURE
+  LOGISTICS
+  MANUFACTURING
+  MINING_MINERALS
+  ICT
+  FINTECH
+  TELECOM
+  RETAIL
+  MEDIA_CREATIVE
+  WATER_SANITATION
+  WASTE_CIRCULAR
+  SOCIAL_IMPACT
+  OTHER
+}
+
+enum CapexRange {
+  K50_100
+  K100_250
+  K250_500
+  K500_1M
+  M1_2_5
+  M2_5_5
+  M5_PLUS
+}
+
+enum FundingStage {
+  PRE_SEED
+  SEED
+  SERIES_A
+  EXPANSION
+  JOINT_VENTURE
+}
+
+enum ProjectStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  REJECTED
+  ARCHIVED
+}
+
+enum DealDeskStatus {
+  NEW
+  UNDER_VETTING
+  NDA_SENT
+  NDA_SIGNED
+  DOSSIER_RELEASED
+  REJECTED
+}
+
+enum InvestorType {
+  INDIVIDUAL_ANGEL
+  VC_FUND
+  PE_FIRM
+  FAMILY_OFFICE
+  CORPORATE
+}
+
+enum InvestmentTimeframe {
+  IMMEDIATELY
+  ONE_TO_THREE_MONTHS
+  THREE_TO_SIX_MONTHS
+  EXPLORING
+}
+
+model ProjectListing {
+  id             String         @id @default(cuid())
+  ownerId        String
+  slug           String         @unique
+  title          String
+  sector         ProjectSector
+  broadRegion    String // e.g. "Lumbini Province"
+  elevatorPitch  String
+  capexRange     CapexRange
+  targetRoiIrr   String
+  fundingStage   FundingStage
+  capitalSought  Decimal        @db.Decimal(18, 2)
+  status         ProjectStatus  @default(DRAFT)
+  reviewNotes    String?
+  publishedAt    DateTime?
+  editedByAdmin  Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  owner      User                 @relation(fields: [ownerId], references: [id])
+  vault      ProjectVault?
+  assets     ProjectVisualAsset[]
+  leads      ProjectLead[]
+  crmTickets CrmTicket[]
+  embedding  ProjectEmbedding?
+
+  @@index([sector, status])
+  @@index([status, publishedAt])
+}
+
+model ProjectVault {
+  projectId                String   @id
+  exactAddress             String
+  lat                      Decimal? @db.Decimal(10, 7)
+  lng                      Decimal? @db.Decimal(10, 7)
+  founderFullName          String
+  founderEmail             String
+  founderPhone             String
+  companyName              String?
+  registrationStatus       String
+  detailedBreakdown        String
+  competitiveMoat          String
+  prototypeUrl             String?
+  financialModelS3Key      String   @default("")
+  bootstrapCapitalInvested Decimal  @default(0) @db.Decimal(18, 2)
+  useOfFunds               Json
+  permitsStatus            String
+  keyRisks                 String
+  fullPitchDeckS3Key       String   @default("")
+  updatedAt                DateTime @updatedAt
+
+  project ProjectListing @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectVisualAsset {
+  id        String  @id @default(cuid())
+  projectId String
+  s3Key     String
+  caption   String?
+
+  project ProjectListing @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectLead {
+  id                  String               @id @default(cuid())
+  projectId           String
+  buyerId             String?
+  name                String
+  firm                String?
+  email               String
+  phone               String               @default("")
+  investorType        InvestorType         @default(INDIVIDUAL_ANGEL)
+  investmentTimeframe InvestmentTimeframe  @default(EXPLORING)
+  isEmailVerified     Boolean              @default(false)
+  emailVerifiedAt     DateTime?
+  status              DealDeskStatus       @default(NEW)
+  ndaSignedAt         DateTime?
+  adminNotes          String?
+  createdAt           DateTime             @default(now())
+
+  project    ProjectListing         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  buyer      User?                  @relation("ProjectLeadBuyer", fields: [buyerId], references: [id])
+  magicLinks ProjectLeadMagicLink[]
+
+  @@unique([projectId, email])
+  @@index([isEmailVerified, status])
+}
+
+model ProjectLeadMagicLink {
+  id         String    @id @default(cuid())
+  leadId     String
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  lead ProjectLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, createdAt])
+}
+
+model ProjectEmbedding {
+  projectId String                       @id
+  embedding Unsupported("vector(1536)")?
+  content   String
+  updatedAt DateTime                     @updatedAt
+
+  project ProjectListing @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------
+// PILLAR 5: Carbon Finance - Carbon Trading & Credit Services
+// ---------------------------------------------------------------------------
+
+enum CarbonProjectType {
+  RENEWABLE_ENERGY
+  FORESTRY
+  AGRICULTURE
+  WASTE_MANAGEMENT
+}
+
+enum CarbonStandard {
+  VERIFIED_CARBON_STANDARD
+  GOLD_STANDARD
+}
+
+enum CarbonStatus {
+  FEASIBILITY
+  REGISTRATION
+  VERIFICATION
+  ISSUED
+  TRADING
+}
+
+model CarbonProject {
+  id                 String            @id @default(cuid())
+  ownerId            String
+  name               String
+  type               CarbonProjectType
+  standard           CarbonStandard?
+  status             CarbonStatus      @default(FEASIBILITY)
+  estimatedCredits   Decimal?          @db.Decimal(18, 2)
+  verificationStatus String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id])
+
+  @@index([ownerId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Public service contact inquiries
+// ---------------------------------------------------------------------------
+
+enum ServiceInquiryType {
+  CARBON
+  ASSET_MANAGEMENT
+  GENERAL
+  START_A_BUSINESS
+  BUY_SELL
+  PROJECT_BANK
+}
+
+enum ServiceInquiryStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+model ServiceInquiry {
+  id          String                @id @default(cuid())
+  type        ServiceInquiryType
+  contactName String
+  phone       String
+  email       String
+  subject     String?
+  message     String
+  status      ServiceInquiryStatus  @default(NEW)
+  notes       String?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@index([type, status, createdAt])
+  @@index([email])
+}

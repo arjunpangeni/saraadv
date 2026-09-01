@@ -1,0 +1,11 @@
+[
+  { "code": "FDI-A", "description": "Poultry farming, fisheries, bee-keeping, fruits, vegetables, oil seeds, pulse seeds, milk industry and other sectors of primary agro-production" },
+  { "code": "FDI-B", "description": "Cottage and small industries" },
+  { "code": "FDI-C", "description": "Personal service business (hair cutting, tailoring, driving etc.)" },
+  { "code": "FDI-D", "description": "Industries manufacturing arms, ammunition, bullets and shell, gunpowder or explosives, and nuclear, biological and chemical (N.B.C.) weapons; industries producing atomic energy and radio-active materials" },
+  { "code": "FDI-E", "description": "Real estate business (excluding construction industries), retail business, internal courier service, local catering service, moneychanger, remittance service" },
+  { "code": "FDI-F", "description": "Travel agency, guide involved in tourism, trekking and mountaineering guide, rural tourism including homestay" },
+  { "code": "FDI-G", "description": "Business of mass communication media (newspaper, radio, television and online news) and motion picture of national language" },
+  { "code": "FDI-H", "description": "Management, account, engineering, legal consultancy service and language training, music training, computer training" },
+  { "code": "FDI-I", "description": "Consultancy services having foreign investment of more than fifty-one percent" }
+]
