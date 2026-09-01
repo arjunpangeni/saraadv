@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { DealDeskStatus } from "@prisma/client";
+import type { DealDeskStatus } from "@/generated/prisma";
 import { FilterTabs } from "@/components/console/filter-tabs";
 import { cn } from "@/lib/utils";
 

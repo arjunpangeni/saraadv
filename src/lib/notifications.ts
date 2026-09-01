@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/generated/prisma";
 import { sendAdminNotificationEmail } from "@/lib/mail";
 
 export type NotificationPayload = {

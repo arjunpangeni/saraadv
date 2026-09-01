@@ -4,7 +4,7 @@ import { can } from "@/lib/rbac";
 import { createProject, getPublicProjects } from "@/lib/project-bank";
 import { formatZodError, projectCreateSchema } from "@/lib/project-bank-schemas";
 import { isOwnedObjectKey } from "@/lib/file-type";
-import type { CapexRange, FundingStage, ProjectSector } from "@prisma/client";
+import type { CapexRange, FundingStage, ProjectSector } from "@/generated/prisma";
 
 export async function POST(req: Request) {
   const session = await auth();

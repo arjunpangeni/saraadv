@@ -12,7 +12,7 @@ import { DashboardEmpty, DashboardPanel, DashboardRow } from "@/components/conso
 import { SERVICE_INQUIRY_TAB_LABELS, isServiceInquiryType } from "@/lib/service-inquiries";
 import { industryLabel } from "@/types/listing";
 import { DEAL_DESK_STATUS_LABELS, sectorLabel } from "@/types/project-bank";
-import type { DealDeskStatus } from "@prisma/client";
+import type { DealDeskStatus } from "@/generated/prisma";
 
 type Message = {
   id: string;

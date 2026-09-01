@@ -13,7 +13,7 @@ import {
   type GeneratedTask,
 } from "@/lib/rules/startABusiness";
 import { splitGuideTasks, type SetupGuidePayload } from "@/lib/start-a-business-guide";
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@/generated/prisma";
 
 export { computeSetupProgress, pipelineLabel, SETUP_PIPELINE_STATUSES, type SetupProgress } from "@/lib/business-setup-progress";
 

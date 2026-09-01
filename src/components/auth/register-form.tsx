@@ -42,8 +42,7 @@ export function RegisterForm({
     setLoading("google");
     try {
       await rememberIntent();
-      const res = await signIn("google", { callbackUrl: `/auth/complete?callbackUrl=${encodeURIComponent(next)}` });
-      if (res?.error) setError("Google sign-in was cancelled or failed. Try email instead.");
+      await signIn("google", { callbackUrl: `/auth/complete?callbackUrl=${encodeURIComponent(next)}` });
     } catch {
       setError("Could not start Google sign-in. Try again.");
     } finally {

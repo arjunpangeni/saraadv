@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { DealDeskStatus } from "@prisma/client";
+import { DealDeskStatus } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import { prisma } from "@/lib/prisma";

@@ -1,4 +1,4 @@
-import type { SetupStatus } from "@prisma/client";
+import type { SetupStatus } from "@/generated/prisma";
 
 export type SetupDeskView = "new" | "working" | "contacted" | "done" | "archived";
 

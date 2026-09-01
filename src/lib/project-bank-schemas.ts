@@ -4,7 +4,7 @@ import {
   FundingStage,
   InvestmentTimeframe,
   InvestorType,
-} from "@prisma/client";
+} from "@/generated/prisma";
 import { PROJECT_SECTOR_VALUES } from "@/types/project-bank";
 
 export const useOfFundsSchema = z

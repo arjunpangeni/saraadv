@@ -14,6 +14,8 @@ export type AnalyticsEventType =
   | "crm_ticket_created"
   | "teaser_downloaded"
   | "listing_dossier_downloaded"
+  | "listing_lead_submitted"
+  | "listing_lead_verified"
   | "project_view"
   | "project_lead_submitted"
   | "project_lead_verified"

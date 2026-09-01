@@ -273,7 +273,7 @@ function writeSheet(workbook: ExcelJS.Workbook, name: string, aoa: unknown[][], 
   }
   for (const { addr, f } of formulas) {
     if (!f) continue;
-    sheet.getCell(addr).value = { formula: f };
+    sheet.getCell(addr).value = { formula: f, date1904: false };
   }
 }
 

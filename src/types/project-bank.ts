@@ -6,7 +6,7 @@ import type {
   InvestorType,
   ProjectSector,
   ProjectStatus,
-} from "@prisma/client";
+} from "@/generated/prisma";
 
 export const PROJECT_SECTOR_LABELS: Record<ProjectSector, string> = {
   HEALTHCARE: "Healthcare",

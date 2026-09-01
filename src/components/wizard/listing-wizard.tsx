@@ -171,7 +171,7 @@ function emptyYearLabels(rows: FormYear[]) {
 function canOpenWizardStep(index: number, form: FormState) {
   for (let i = 0; i < index; i += 1) {
     const step = WIZARD_STEPS[i];
-    if (step.optional || step.key === "review") continue;
+    if (("optional" in step && step.optional) || step.key === "review") continue;
     if (!isStepComplete(step.key, form)) return false;
   }
   return true;
@@ -659,7 +659,7 @@ export function ListingWizard({
               ) : null}
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
-              {step.optional ? (
+              {"optional" in step && step.optional ? (
                 <SmoothButton
                   type="button"
                   variant="outline"

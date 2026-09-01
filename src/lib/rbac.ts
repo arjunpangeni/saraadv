@@ -1,4 +1,4 @@
-import type { Role } from "@prisma/client";
+import type { Role } from "@/generated/prisma";
 
 /**
  * Role-Based Access Control (RBAC) policy for the SARA Advisors platform.

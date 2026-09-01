@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type { Prisma } from "@/generated/prisma";
 import { Landmark } from "lucide-react";
-import { ProjectStatus } from "@prisma/client";
+import { ProjectStatus } from "@/generated/prisma";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/console/page-header";
 import { FilterTabs } from "@/components/console/filter-tabs";

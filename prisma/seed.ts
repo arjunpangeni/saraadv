@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../src/generated/prisma";
 import bcrypt from "bcryptjs";
 import startABusinessRegistration from "./data/startABusinessRegistration.json";
 import ieeEiaCriteria from "./data/ieeEiaCriteria.json";

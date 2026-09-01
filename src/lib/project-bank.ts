@@ -3,7 +3,7 @@ import type {
   FundingStage,
   ProjectSector,
   ProjectStatus,
-} from "@prisma/client";
+} from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { notifyRoles, notifyUsers } from "@/lib/notifications";
 import { compactDetails, sendOwnerProjectDecisionEmail } from "@/lib/mail";

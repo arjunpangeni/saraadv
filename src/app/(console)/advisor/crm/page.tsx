@@ -24,17 +24,33 @@ export const metadata: Metadata = {
   title: "Deal-flow CRM",
 };
 
-function searchWhere(q: string): Prisma.ListingLeadWhereInput {
+function searchWhere(q: string) {
   const query = q.trim();
   if (!query) return {};
   return {
     OR: [
-      { name: { contains: query, mode: "insensitive" } },
-      { email: { contains: query, mode: "insensitive" } },
-      { firm: { contains: query, mode: "insensitive" } },
+      { name: { contains: query, mode: "insensitive" as const } },
+      { email: { contains: query, mode: "insensitive" as const } },
+      { firm: { contains: query, mode: "insensitive" as const } },
     ],
   };
 }
+
+type BuyerLead = Prisma.ListingLeadGetPayload<{
+  include: {
+    listing: {
+      select: {
+        hashId: true;
+        industry: true;
+        organization: { select: { name: true } };
+      };
+    };
+  };
+}>;
+
+type InvestorLead = Prisma.ProjectLeadGetPayload<{
+  include: { project: { select: { title: true; slug: true } } };
+}>;
 
 const EMPTY_TITLES: Record<CrmView, { buyers: string; investors: string }> = {
   action: { buyers: "No buyer leads needing action", investors: "No investor leads needing action" },
@@ -74,7 +90,7 @@ export default async function AdvisorCrmPage({
               },
             },
           })
-        : Promise.resolve([]),
+        : Promise.resolve([] as BuyerLead[]),
       tab === "investors"
         ? prisma.projectLead.findMany({
             where: { status: { in: statuses }, ...query },
@@ -83,7 +99,7 @@ export default async function AdvisorCrmPage({
             take: PAGE_SIZE,
             include: { project: { select: { title: true, slug: true } } },
           })
-        : Promise.resolve([]),
+        : Promise.resolve([] as InvestorLead[]),
       tab === "buyers"
         ? prisma.listingLead.count({ where: { status: { in: statuses }, ...query } })
         : prisma.projectLead.count({ where: { status: { in: statuses }, ...query } }),

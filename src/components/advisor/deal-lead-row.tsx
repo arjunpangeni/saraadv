@@ -11,7 +11,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { DealLeadStatusSelect } from "@/components/advisor/deal-lead-status-select";
 import { LeadAdminNotes } from "@/components/project-bank/lead-admin-notes";
 import { DEAL_DESK_STATUS_LABELS } from "@/types/project-bank";
-import type { DealDeskStatus } from "@prisma/client";
+import type { DealDeskStatus } from "@/generated/prisma";
 
 function statusBadge(status: string) {
   if (status === "REJECTED") return { label: DEAL_DESK_STATUS_LABELS.REJECTED, variant: "danger" as const };

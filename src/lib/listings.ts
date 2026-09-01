@@ -15,7 +15,7 @@ import { buildListingSearchContent, upsertListingEmbedding, searchListingIds } f
 import { notifyRoles } from "@/lib/notifications";
 import { deleteStorageKeys } from "@/lib/storage";
 import type { ListingWizardInput } from "@/types/listing";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/generated/prisma";
 import { canEditOwnListing } from "@/lib/listing-status";
 
 function lineItemsFrom(row: AnnualLineItems): AnnualLineItems {

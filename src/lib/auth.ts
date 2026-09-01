@@ -5,7 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { googleOAuthEnabled, safeCallbackUrl } from "@/lib/auth-utils";
-import type { Role } from "@prisma/client";
+import type { Role } from "@/generated/prisma";
 
 declare module "next-auth" {
   interface Session {
@@ -147,7 +147,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id as string;
         session.user.role = token.role as Role;
         session.user.verified = Boolean(token.verified);
-        session.user.emailVerified = Boolean(token.emailVerified);
+        (session.user as { emailVerified: boolean }).emailVerified = Boolean(token.emailVerified);
       }
       return session;
     },
