@@ -39,7 +39,6 @@ export default async function LoginPage({
       <LoginForm
         callbackUrl={callbackUrl}
         googleEnabled={googleOAuthEnabled()}
-        showDemo={process.env.NODE_ENV !== "production"}
         oauthError={oauthErrorMessage(params.error)}
         initialEmail={params.email}
         verified={params.verified === "1"}

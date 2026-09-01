@@ -49,15 +49,8 @@ npm run db:seed
 ```
 
 Seeding loads the "Start a Business" regulatory rule set, the IEE/EIA threshold table, the FDI
-Negative List, and demo accounts (password for all: `Password123!`):
-
-| Email                        | Role         |
-| ----------------------------- | ------------ |
-| admin@saraadvisors.com       | ADMIN        |
-| advisor@saraadvisors.com     | ADVISOR      |
-| seller@example.com           | SELLER       |
-| entrepreneur@example.com     | ENTREPRENEUR |
-| investor@example.com         | INVESTOR     |
+Negative List, and the admin account `admin@saraadvisors.com` (password `Password123!`).
+Local development also creates extra desk/test users; those are skipped in production.
 
 ### 4. Run the dev server
 

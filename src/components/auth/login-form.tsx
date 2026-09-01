@@ -14,7 +14,6 @@ import { safeCallbackUrl, type SignupRole } from "@/lib/auth-utils";
 export function LoginForm({
   callbackUrl,
   googleEnabled,
-  showDemo,
   oauthError,
   initialEmail,
   verified,
@@ -22,7 +21,6 @@ export function LoginForm({
 }: {
   callbackUrl: string;
   googleEnabled: boolean;
-  showDemo: boolean;
   oauthError?: string | null;
   initialEmail?: string;
   verified?: boolean;
@@ -151,17 +149,6 @@ export function LoginForm({
           <Link href={registerHref}>Sign up</Link>
         </SmoothButton>
       </div>
-
-      {showDemo ? (
-        <details className="text-xs text-muted-foreground">
-          <summary className="cursor-pointer hover:text-foreground">Demo accounts</summary>
-          <p className="mt-2 leading-relaxed">
-            Password for all: <span className="font-mono">Password123!</span>
-            <br />
-            admin@saraadvisors.com, seller@example.com, entrepreneur@example.com
-          </p>
-        </details>
-      ) : null}
     </div>
   );
 }
