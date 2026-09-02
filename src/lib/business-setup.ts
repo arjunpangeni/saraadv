@@ -225,7 +225,7 @@ export async function submitBusinessSetup(intake: BusinessSetupIntake): Promise<
         licenseIndustries: licenseIndustries,
         fdiNegativeCodes: intake.fdiRequested ? intake.fdiNegativeCodes ?? [] : [],
       },
-      status: "RULES_GENERATED",
+      status: "INTAKE",
       addresses: {
         create: intake.addresses.map((a) => ({
           kind: a.kind,

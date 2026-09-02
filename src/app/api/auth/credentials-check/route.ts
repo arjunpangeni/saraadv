@@ -10,7 +10,7 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  const limited = rateLimit(`credentials-check:${clientIp(req)}`, 10, 15 * 60 * 1000);
+  const limited = rateLimit(`credentials-check:${clientIp(req)}`, 20, 15 * 60 * 1000);
   if (!limited.ok) {
     return NextResponse.json({ status: "invalid", error: rateLimitResponse(limited.retryAfter).error }, { status: 429 });
   }
