@@ -88,9 +88,9 @@ export function ServiceContactForm({
   if (done) {
     const thanks = (
       <div className={uncarded ? "py-2" : "text-center"}>
-        <h3 className="font-display text-xl font-semibold text-foreground">Thank you</h3>
+        <h3 className="heading-soft font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">Thank you</h3>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Your message was received. The SARA Advisors team will follow up by message or call.
+          Your message was received. The ASAR Partners team will follow up by message or call.
         </p>
       </div>
     );
@@ -113,7 +113,7 @@ export function ServiceContactForm({
     <form onSubmit={onSubmit} className={compact ? "relative space-y-3" : "relative space-y-4"}>
       {!uncarded && (
         <div className="mb-2">
-          <h3 className="font-display text-xl font-semibold text-foreground">{title}</h3>
+          <h3 className="heading-soft font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">{title}</h3>
           <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
         </div>
       )}
@@ -208,7 +208,7 @@ export function ServiceContactForm({
       </div>
       <FormError>{error}</FormError>
       <SmoothButton type="submit" variant="candy" size={compact ? "sm" : "default"} disabled={loading}>
-        {loading ? "Sending…" : "Send to SARA team"}
+        {loading ? "Sending…" : "Send to ASAR team"}
       </SmoothButton>
     </form>
   );

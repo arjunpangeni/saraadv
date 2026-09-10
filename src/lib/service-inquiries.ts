@@ -44,7 +44,7 @@ export function serviceInquiryCopy(
       return {
         title: "Invest or buy Nepal carbon credits",
         subtitle:
-          "Tell us the vintage, volume, standards, and sectors you want. The SARA team follows up with pipeline or issued inventory under NDA.",
+          "Tell us the vintage, volume, standards, and sectors you want. The ASAR team follows up with pipeline or issued inventory under NDA.",
         placeholder: "e.g. Hydropower VCS offtake / cookstove Gold Standard",
         defaultSubject: "Investor / credit buyer — carbon finance",
       };
@@ -61,7 +61,7 @@ export function serviceInquiryCopy(
     return {
       title: "Carbon finance inquiry",
       subtitle:
-        "Tell us whether you generate tonnes, want to buy them, or want to finance a pipeline. The SARA team follows up by message or call.",
+        "Tell us whether you generate tonnes, want to buy them, or want to finance a pipeline. The ASAR team follows up by message or call.",
       placeholder: "e.g. Hydropower VCS offtake / cookstove Gold Standard",
     };
   }
@@ -72,7 +72,7 @@ export function serviceInquiryCopy(
   > = {
     GENERAL: {
       title: "How can we help?",
-      subtitle: "Share your situation confidentially. The SARA team follows up by message or call.",
+      subtitle: "Share your situation confidentially. The ASAR team follows up by message or call.",
       placeholder: "e.g. Advisory for a Nepal investment",
     },
     START_A_BUSINESS: {
@@ -89,7 +89,7 @@ export function serviceInquiryCopy(
     },
     ASSET_MANAGEMENT: {
       title: "Asset management inquiry",
-      subtitle: "Tell us briefly about your project or situation. The SARA team follows up by message or call.",
+      subtitle: "Tell us briefly about your project or situation. The ASAR team follows up by message or call.",
       placeholder: "e.g. Restructuring support",
     },
     PROJECT_BANK: {

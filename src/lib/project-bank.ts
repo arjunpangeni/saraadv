@@ -207,7 +207,7 @@ export async function createProject(ownerId: string, input: ProjectInput) {
   await notifyUsers([ownerId], {
     type: "project.submitted",
     title: "Project submitted for review",
-    body: `"${project.title}" is with the SARA deal desk. You'll be notified when it goes live.`,
+    body: `"${project.title}" is with the ASAR deal desk. You'll be notified when it goes live.`,
     href: "/dashboard",
     emailAdmin: false,
   }).catch((err) => console.error("[project-bank] failed to notify owner", err));

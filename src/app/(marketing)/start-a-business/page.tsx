@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   description:
     "End-to-end incubation for domestic enterprises and FDI ventures in Nepal - FDI approval, OCR registration, IRD tax registration, banking, and full regulatory compliance.",
   path: "/start-a-business",
-  ogTitle: "Start a business in Nepal | SARA Advisors",
+  ogTitle: "Start a business in Nepal | ASAR Partners",
 });
 
 export default function StartABusinessPage() {
@@ -16,7 +16,7 @@ export default function StartABusinessPage() {
     <PillarPage
       title="Start a business in Nepal"
       focus="Turnkey Corporate Setup & Compliance"
-      intro="Navigating Nepal's regulatory and operational landscape requires precision and expertise. SARA Advisors provides an end-to-end incubation pipeline for both domestic enterprises and Foreign Direct Investment (FDI) ventures, guiding you from minimal intake details through registration, licensing, and daily operations."
+      intro="Navigating Nepal's regulatory and operational landscape requires precision and expertise. ASAR Partners provides an end-to-end incubation pipeline for both domestic enterprises and Foreign Direct Investment (FDI) ventures, guiding you from minimal intake details through registration, licensing, and daily operations."
       serviceType="Corporate Formation & Compliance Advisory"
       cta={{ label: "Submit a setup inquiry", href: "/start-a-business/wizard#inquiry-form" }}
       faq={[
@@ -33,7 +33,7 @@ export default function StartABusinessPage() {
         {
           question: "Is an account required to start?",
           answer:
-            "No. Submit the setup inquiry without logging in. The SARA team reviews it and follows up on the phone and email you provide.",
+            "No. Submit the setup inquiry without logging in. The ASAR team reviews it and follows up on the phone and email you provide.",
         },
       ]}
       sections={[

@@ -250,7 +250,7 @@ export function ListingLeadForm({
         </SmoothButton>
         <p className="inline-flex items-start gap-1.5 text-xs leading-relaxed text-foreground/50">
           <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-          After you confirm your email, SARA Advisors vet the request, arrange an NDA, and share the data room
+          After you confirm your email, ASAR Partners vet the request, arrange an NDA, and share the data room
           offline. No buyer account is required.
         </p>
       </div>

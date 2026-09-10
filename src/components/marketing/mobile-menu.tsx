@@ -42,7 +42,7 @@ export function MobileMenuPanel({ onNavigate }: { onNavigate: () => void }) {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="rounded-2xl border border-border bg-[var(--nav-glass)] p-4 shadow-lg">
+    <div className="mobile-chrome rounded-3xl p-4 shadow-lg">
       <motion.div
         initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
         animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
@@ -132,11 +132,11 @@ function MenuLink({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
       className={cn(
-        "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
-        active ? "bg-muted text-foreground" : "text-foreground hover:bg-muted"
+        "flex items-center gap-3 rounded-full px-3 py-2 text-[13px] font-semibold transition-colors",
+        active ? "bg-primary text-primary-foreground" : "text-foreground/80 hover:bg-muted hover:text-foreground"
       )}
     >
-      <Icon className="size-4 text-foreground/70" aria-hidden />
+      <Icon className={cn("size-4", active ? "text-primary-foreground" : "text-foreground/70")} aria-hidden />
       {label}
     </Link>
   );

@@ -8,7 +8,7 @@ export function GatedVaultPreview() {
         Advisor only
       </p>
       <p className="mt-1.5 text-sm leading-relaxed text-foreground/70">
-        Exact site, founder name, WhatsApp, and login email stay with SARA Advisors. They are not
+        Exact site, founder name, WhatsApp, and login email stay with ASAR Partners. They are not
         shown on this teaser.
       </p>
     </aside>

@@ -4,13 +4,13 @@ import { pageMetadata } from "@/lib/seo";
 
 const TITLE = "Carbon Finance in Nepal";
 const DESCRIPTION =
-  "SARA Advisors originates, registers, and markets high-integrity carbon projects in Nepal — hydropower, forestry, household energy, and waste — and matches them with corporate buyers, climate funds, and investors seeking verified tonnes and Article 6-ready offtake.";
+  "ASAR Partners originates, registers, and markets high-integrity carbon projects in Nepal — hydropower, forestry, household energy, and waste — and matches them with corporate buyers, climate funds, and investors seeking verified tonnes and Article 6-ready offtake.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Carbon Finance in Nepal | Credits, Offsets & Climate Investment",
   description: DESCRIPTION,
   path: "/carbon-finance",
-  ogTitle: "Carbon Finance in Nepal | SARA Advisors",
+  ogTitle: "Carbon Finance in Nepal | ASAR Partners",
   keywords: [
     "carbon finance Nepal",
     "carbon credits Nepal",
@@ -34,12 +34,12 @@ const FAQ = [
   {
     question: "What is carbon finance, and how is it different from climate finance?",
     answer:
-      "Carbon finance is capital tied to greenhouse-gas outcomes: a verified tonne avoided or removed, a credit, or an offtake on a project that will issue those tonnes. Climate finance is broader and can include adaptation or biodiversity with no carbon metric. SARA’s desk focuses on the carbon outcome — so buyers, funds, and project owners can transact on the same unit.",
+      "Carbon finance is capital tied to greenhouse-gas outcomes: a verified tonne avoided or removed, a credit, or an offtake on a project that will issue those tonnes. Climate finance is broader and can include adaptation or biodiversity with no carbon metric. ASAR’s desk focuses on the carbon outcome — so buyers, funds, and project owners can transact on the same unit.",
   },
   {
     question: "Can investors buy Nepal carbon credits or finance projects before issuance?",
     answer:
-      "Yes. Corporates and funds typically buy issued credits from Gold Standard or Verified Carbon Standard registries, or they pre-finance a pipeline (hydropower, forestry, cookstoves, biogas, waste) against future delivery. SARA introduces both structures under NDA and does not treat Nepal as a compliance ETS market.",
+      "Yes. Corporates and funds typically buy issued credits from Gold Standard or Verified Carbon Standard registries, or they pre-finance a pipeline (hydropower, forestry, cookstoves, biogas, waste) against future delivery. ASAR Partners introduces both structures under NDA and does not treat Nepal as a compliance ETS market.",
   },
   {
     question: "How do project owners in Nepal monetise carbon?",
@@ -53,7 +53,7 @@ export default function CarbonFinancePage() {
     <PillarPage
       title={TITLE}
       focus="Credits, climate investment & Nepal origination"
-      intro="Carbon finance is the money that follows a tonne of CO₂-equivalent — credits from real projects, and the capital that builds them. It is a slice of climate finance, not a synonym: the carbon outcome has to be measurable. Globally that sits in two very different markets: project-based offsetting (credits) and compliance carbon pricing (taxes and emissions-trading schemes). Nepal is not an ETS jurisdiction. The opportunity here is high-integrity voluntary credits and Article 6-ready projects — hydropower, community forestry, household energy, and waste — originated for corporate buyers, climate funds, and investors who need documented tonnes, not a slogan. SARA Advisors runs that desk from Kathmandu: feasibility through registration and verification, then confidential matchmaking with offtakers and capital."
+      intro="Carbon finance is the money that follows a tonne of CO₂-equivalent — credits from real projects, and the capital that builds them. It is a slice of climate finance, not a synonym: the carbon outcome has to be measurable. Globally that sits in two very different markets: project-based offsetting (credits) and compliance carbon pricing (taxes and emissions-trading schemes). Nepal is not an ETS jurisdiction. The opportunity here is high-integrity voluntary credits and Article 6-ready projects — hydropower, community forestry, household energy, and waste — originated for corporate buyers, climate funds, and investors who need documented tonnes, not a slogan. ASAR Partners runs that desk from Kathmandu: feasibility through registration and verification, then confidential matchmaking with offtakers and capital."
       serviceType="Carbon finance, credit origination and climate investment advisory"
       cta={{ label: "Develop a carbon project", href: "/contact?topic=CARBON&intent=project" }}
       secondaryCta={{

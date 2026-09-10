@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Bell, Home, Inbox, Landmark, PlusCircle, Store } from "lucide-react";
 import NotificationBadge from "@/components/smoothui/notification-badge";
 import { useDeskCounts } from "@/hooks/use-desk-counts";
+import { useHideOnScrollDown } from "@/hooks/use-hide-on-scroll-down";
 import { cn } from "@/lib/utils";
 
 function itemsForRole(role: string | undefined, pathname: string) {
@@ -105,12 +106,17 @@ export function ConsoleBottomNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { counts } = useDeskCounts();
+  const hidden = useHideOnScrollDown();
   const items = itemsForRole(session?.user?.role, pathname);
   const unread = counts?.notifications ?? 0;
 
   return (
     <nav
-      className="glass-panel fixed inset-x-0 bottom-0 z-40 rounded-none border-x-0 border-b-0 lg:hidden"
+      className={cn(
+        "mobile-chrome fixed inset-x-0 bottom-0 z-40 rounded-none border-x-0 border-b-0 border-t transition-transform duration-300 ease-out motion-reduce:transition-none lg:hidden",
+        hidden && "pointer-events-none translate-y-full"
+      )}
+      aria-hidden={hidden}
       aria-label="Console shortcuts"
     >
       <ul

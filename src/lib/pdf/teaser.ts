@@ -53,7 +53,7 @@ export async function generateTeaserPdf(data: TeaserData): Promise<Uint8Array> {
   const brand = rgb(0.05, 0.2, 0.35);
   const muted = rgb(0.4, 0.4, 0.4);
 
-  page.drawText("SARA ADVISORS", { x: margin, y, size: 12, font: bold, color: brand });
+  page.drawText("ASAR PARTNERS", { x: margin, y, size: 12, font: bold, color: brand });
   page.drawText("Investment Teaser", { x: margin, y: y - 16, size: 20, font: bold });
   page.drawText("Confidential - Anonymized Summary", {
     x: margin,
@@ -130,7 +130,7 @@ export async function generateTeaserPdf(data: TeaserData): Promise<Uint8Array> {
     { x: margin, y, size: 9, font, color: muted }
   );
 
-  page.drawText("Request Full Profile & Get Quote for SARA M&A Services", {
+  page.drawText("Request Full Profile & Get Quote for ASAR M&A Services", {
     x: margin,
     y: 60,
     size: 10,

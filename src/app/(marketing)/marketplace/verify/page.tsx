@@ -27,7 +27,7 @@ export default async function VerifyListingLeadPage({
       <VerifyShell
         icon="ok"
         title="Request already on file"
-        body="This work email is already confirmed. SARA Advisors will contact you about the full profile."
+        body="This work email is already confirmed. ASAR Partners will contact you about the full profile."
         href={listing ? `/marketplace/${listing}` : "/marketplace"}
       />
     );
@@ -45,9 +45,9 @@ export default async function VerifyListingLeadPage({
   }
 
   return (
-    <main className="flex-1 bg-background">
-      <div className="container-page max-w-lg py-16 sm:py-20">
-        <div className="rounded-2xl border border-border bg-card px-6 py-10 text-center shadow-[var(--shadow-card)] sm:px-10">
+    <main className="flex-1">
+      <div className="container-page max-w-lg py-20 sm:py-28">
+        <div className="rounded-3xl border border-border bg-card px-6 py-12 text-center shadow-[var(--shadow-card)] sm:px-10">
           <ListingMagicLinkConfirm token={token} />
         </div>
       </div>
@@ -73,14 +73,14 @@ function VerifyShell({
     icon === "ok" ? "bg-success-bg text-success-fg" : icon === "expired" ? "bg-warning-bg text-warning-fg" : "bg-danger-bg text-danger-fg";
 
   return (
-    <main className="flex-1 bg-background">
-      <div className="container-page max-w-lg py-16 sm:py-20">
-        <div className="rounded-2xl border border-border bg-card px-6 py-10 text-center shadow-[var(--shadow-card)] sm:px-10">
+    <main className="flex-1">
+      <div className="container-page max-w-lg py-20 sm:py-28">
+        <div className="rounded-3xl border border-border bg-card px-6 py-12 text-center shadow-[var(--shadow-card)] sm:px-10">
           <div className={`mx-auto flex size-12 items-center justify-center rounded-full ${iconClass}`}>
             <Icon className="size-5" aria-hidden />
           </div>
-          <h1 className="mt-4 font-display text-2xl font-extrabold tracking-tight text-foreground">{title}</h1>
-          <p className="mt-3 text-pretty text-sm leading-relaxed text-foreground/70 sm:text-base">{body}</p>
+          <h1 className="heading-soft mt-4 font-heading text-[1.7rem] font-semibold tracking-[-0.015em] text-foreground">{title}</h1>
+          <p className="mt-3 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">{body}</p>
           {children}
           <SmoothButton asChild variant="candy" className="mt-6 w-full">
             <Link href={href}>Back to listing</Link>

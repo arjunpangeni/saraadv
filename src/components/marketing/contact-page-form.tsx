@@ -38,14 +38,14 @@ export function ContactPageForm() {
         role="status"
         aria-live="polite"
       >
-        <span className="flex size-12 items-center justify-center rounded-full bg-brand-sky-muted text-brand-sky">
+        <span className="flex size-12 items-center justify-center rounded-full bg-tz-green text-tz-green-deep">
           <Check className="size-6" aria-hidden />
         </span>
-        <h2 className="mt-4 font-display text-2xl font-extrabold tracking-tight text-foreground">
+        <h2 className="heading-soft mt-4 font-heading text-[1.7rem] font-semibold tracking-[-0.015em] text-foreground">
           Thank you
         </h2>
-        <p className="mt-2 max-w-sm text-sm leading-relaxed text-foreground/70 sm:text-base">
-          Your message was received. The SARA Advisors team will follow up by message or call.
+        <p className="mt-2 max-w-sm text-[1.05rem] leading-[1.75] text-muted-foreground">
+          Your message was received. The ASAR Partners team will follow up by message or call.
         </p>
       </div>
     );
@@ -54,8 +54,8 @@ export function ContactPageForm() {
   return (
     <div className="space-y-4">
       <div>
-        <p className="text-xs font-medium tracking-tight text-brand-sky">Write to us</p>
-        <h2 className="mt-0.5 font-display text-lg font-extrabold tracking-tight text-foreground sm:text-xl">
+        <p className="text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Write to us</p>
+        <h2 className="heading-soft mt-2 font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
           Send a message
         </h2>
       </div>

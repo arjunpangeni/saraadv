@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { BrandLogo } from "@/components/brand-logo";
 import { siteConfig } from "@/lib/site-config";
 import { SITE_OFFICE, SITE_OFFICE_LINES, googleMapsDirectionsUrl } from "@/lib/seo";
 import { MARKETING_PLATFORM_LINKS, MARKETING_SERVICES } from "@/lib/marketing-nav";
+import { SocialIcons } from "@/components/marketing/social-icons";
 
 const COMPANY_LINKS = [
   { href: "/about", label: "About" },
@@ -23,11 +23,27 @@ const MOBILE_LINK_GROUPS = [
   { title: "Company", links: COMPANY_LINKS },
 ] as const;
 
+function FooterHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mb-4 text-[11px] font-semibold tracking-[0.18em] text-foreground uppercase">
+      {children}
+    </p>
+  );
+}
+
+function FooterTagline() {
+  return (
+    <p className="max-w-sm text-sm leading-relaxed text-muted-foreground after:mx-auto after:mt-4 after:block after:h-px after:w-16 after:bg-foreground/25 after:content-[''] lg:after:mx-0">
+      End-to-end corporate, investment, and strategic consulting in Nepal.
+    </p>
+  );
+}
+
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
-      className="inline-flex min-h-10 items-center text-sm text-white/65 transition-colors hover:text-white lg:min-h-9"
+      className="inline-flex min-h-10 items-center text-sm text-muted-foreground transition-colors hover:text-foreground lg:min-h-9"
     >
       {children}
     </Link>
@@ -37,31 +53,29 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
 function MobileFooter() {
   return (
     <div className="flex flex-col items-center text-center lg:hidden">
-      <BrandLogo invertOnDarkPanel showTagline />
-      <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">
-        End-to-end corporate, investment, and strategic consulting in Nepal.
-      </p>
+      <FooterTagline />
+      <SocialIcons className="mt-5 justify-center" />
 
       <div className="mt-6 space-y-2.5 text-sm">
-        <address className="leading-relaxed text-white/80 not-italic">
+        <address className="leading-relaxed text-foreground/80 not-italic">
           {SITE_OFFICE.street}
           <br />
           {SITE_OFFICE.streetLine}
           <br />
           {SITE_OFFICE.locality} {SITE_OFFICE.postalCode}
         </address>
-        <p className="text-white/65">{SITE_OFFICE.hours}</p>
-        <a href={`mailto:${SITE_OFFICE.email}`} className="block break-all text-white">
+        <p className="text-muted-foreground">{SITE_OFFICE.hours}</p>
+        <a href={`mailto:${SITE_OFFICE.email}`} className="block break-all text-foreground">
           {SITE_OFFICE.email}
         </a>
-        <a href={`tel:${SITE_OFFICE.phoneTel}`} className="block text-white">
+        <a href={`tel:${SITE_OFFICE.phoneTel}`} className="block text-foreground">
           {SITE_OFFICE.phone}
         </a>
         <a
           href={googleMapsDirectionsUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-1 font-medium text-white"
+          className="inline-flex items-center justify-center gap-1 font-medium text-foreground"
         >
           View on Google Maps
           <ArrowUpRight className="size-3.5" aria-hidden />
@@ -71,13 +85,11 @@ function MobileFooter() {
       <nav aria-label="Footer" className="mt-8 grid w-full max-w-sm grid-cols-2 gap-8">
         {MOBILE_LINK_GROUPS.map((group) => (
           <div key={group.title}>
-            <h3 className="text-xs font-semibold tracking-[0.12em] text-white/45 uppercase">
-              {group.title}
-            </h3>
-            <ul className="mt-3 space-y-2">
+            <FooterHeading>{group.title}</FooterHeading>
+            <ul className="space-y-2">
               {group.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white/70">
+                  <Link href={link.href} className="text-sm text-muted-foreground">
                     {link.label}
                   </Link>
                 </li>
@@ -89,7 +101,7 @@ function MobileFooter() {
 
       <a
         href="#main-content"
-        className="mt-8 inline-flex items-center justify-center gap-1.5 text-sm font-medium text-white"
+        className="mt-8 inline-flex items-center justify-center gap-1.5 text-sm font-medium text-foreground"
       >
         Back to top
         <ArrowUp className="size-4" aria-hidden />
@@ -100,27 +112,46 @@ function MobileFooter() {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto bg-brand-solid text-white/70">
-      <div className="container-page py-8 sm:py-10 lg:py-16">
+    <footer className="relative mt-20 overflow-hidden border-t border-border/60 bg-card lg:bg-card/80">
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--tz-pink-deep),var(--tz-blue-deep),var(--tz-green-deep),transparent)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -left-16 hidden size-56 rounded-full bg-tz-pink-deep/15 blur-3xl lg:block dark:bg-[#c45d84]/28"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-20 -right-10 hidden size-52 rounded-full bg-tz-blue-deep/15 blur-3xl lg:block dark:bg-[#3b9ad9]/26"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-0 left-1/2 hidden h-40 w-[min(36rem,80%)] -translate-x-1/2 rounded-full bg-tz-green-deep/12 blur-3xl lg:block dark:bg-[#2f9e70]/24"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-10 right-1/4 hidden size-40 rounded-full bg-tz-gold/15 blur-3xl lg:block dark:bg-[#e8c36a]/18"
+      />
+
+      <div className="container-page relative py-14 sm:py-16">
         <MobileFooter />
 
         <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
-            <BrandLogo invertOnDarkPanel showTagline />
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/60">
-              End-to-end corporate, investment, and strategic consulting in Nepal.
-            </p>
+            <FooterTagline />
+            <SocialIcons className="mt-5" />
             <div className="mt-5 flex flex-wrap gap-2">
               <a
                 href={`mailto:${SITE_OFFICE.email}`}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 text-sm font-medium text-white transition-colors hover:bg-white/10"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 <Mail className="size-4 shrink-0" aria-hidden />
                 <span className="truncate">{SITE_OFFICE.email}</span>
               </a>
               <a
                 href={`tel:${SITE_OFFICE.phoneTel}`}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 text-sm font-medium text-white transition-colors hover:bg-white/10"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 <Phone className="size-4 shrink-0" aria-hidden />
                 {SITE_OFFICE.phone}
@@ -131,10 +162,8 @@ export function SiteFooter() {
           <nav aria-label="Footer" className="grid grid-cols-3 gap-x-8 lg:col-span-5">
             {LINK_GROUPS.map((group) => (
               <div key={group.title}>
-                <h3 className="text-xs font-semibold tracking-[0.12em] text-white/45 uppercase">
-                  {group.title}
-                </h3>
-                <ul className="mt-3 space-y-0.5">
+                <FooterHeading>{group.title}</FooterHeading>
+                <ul className="space-y-0.5">
                   {group.links.map((link) => (
                     <li key={link.href}>
                       <FooterLink href={link.href}>{link.label}</FooterLink>
@@ -146,17 +175,17 @@ export function SiteFooter() {
           </nav>
 
           <div className="lg:col-span-3">
-            <h3 className="text-xs font-semibold tracking-[0.12em] text-white/45 uppercase">Office</h3>
-            <p className="mt-3 text-sm font-medium text-white">{SITE_OFFICE.name}</p>
-            <address className="mt-1 text-sm leading-relaxed whitespace-pre-line text-white/60 not-italic">
+            <FooterHeading>Office</FooterHeading>
+            <p className="text-sm font-medium text-foreground">{SITE_OFFICE.name}</p>
+            <address className="mt-1 text-sm leading-relaxed whitespace-pre-line text-muted-foreground not-italic">
               {SITE_OFFICE_LINES.join("\n")}
             </address>
-            <p className="mt-3 text-sm text-white/60">{SITE_OFFICE.hours}</p>
+            <p className="mt-3 text-sm text-muted-foreground">{SITE_OFFICE.hours}</p>
             <a
               href={googleMapsDirectionsUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-white transition-colors hover:text-white/80"
+              className="mt-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-foreground transition-colors hover:text-foreground/80"
             >
               <MapPin className="size-4 shrink-0" aria-hidden />
               View on Google Maps
@@ -166,8 +195,8 @@ export function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="container-page flex flex-col items-center gap-1 py-4 text-center text-xs font-medium tracking-tight text-white/45 sm:flex-row sm:items-center sm:justify-between sm:text-left lg:py-5">
+      <div className="relative border-t border-border/60">
+        <div className="container-page flex flex-col items-center gap-1 py-4 text-center text-xs font-medium tracking-tight text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:text-left lg:py-5">
           <p>
             &copy; {new Date().getFullYear()} {siteConfig.name}
           </p>

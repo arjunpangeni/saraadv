@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
 import { THEME_INIT_SCRIPT } from "@/lib/theme-script";
@@ -7,21 +7,15 @@ import { Providers } from "@/components/providers";
 import { SkipLink } from "@/components/marketing/skip-link";
 import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 
-const inter = Inter({
+const sans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-dm-sans",
   display: "swap",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-plus-jakarta",
-  display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "Segoe UI", "Roboto", "Arial", "sans-serif"],
 });
 
 export const viewport: Viewport = {
-  themeColor: "#020617",
+  themeColor: "#fff6f8",
 };
 
 export const metadata: Metadata = {
@@ -32,7 +26,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    "SARA Advisors",
+    "ASAR Partners",
     "Nepal business consulting",
     "M&A Nepal",
     "buy sell business Nepal",
@@ -79,13 +73,13 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${inter.variable} ${plusJakarta.variable} dark h-full antialiased`}
+      className={`${sans.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body
-        className={`${inter.className} min-h-full flex flex-col bg-background text-foreground font-sans antialiased`}
+        className={`${sans.className} min-h-full flex flex-col bg-background text-foreground font-sans antialiased`}
       >
         <SkipLink />
         <GoogleAnalytics />

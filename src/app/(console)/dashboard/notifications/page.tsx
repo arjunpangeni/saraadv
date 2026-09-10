@@ -78,7 +78,7 @@ export default async function NotificationsPage({
               : isSeller
                 ? "You’ll be notified here when a listing is approved, rejected, or the desk leaves an update."
                 : isBuyer
-                  ? "You’ll be notified here when SARA reviews a profile request or unlocks a data room."
+                  ? "You’ll be notified here when ASAR reviews a profile request or unlocks a data room."
                   : undefined
           }
         />

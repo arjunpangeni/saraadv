@@ -80,7 +80,7 @@ export function renderEmailTemplate(options: EmailTemplateOptions) {
     : "";
   const footer =
     options.footer ||
-    "If you have questions, reply to this email and the SARA Advisors team will help.";
+    "If you have questions, reply to this email and the ASAR Partners team will help.";
 
   return `<!DOCTYPE html>
 <html>
@@ -95,11 +95,11 @@ export function renderEmailTemplate(options: EmailTemplateOptions) {
                 <table role="presentation" cellpadding="0" cellspacing="0">
                   <tr>
                     <td style="padding-right:14px;vertical-align:middle;">
-                      <img src="${escapeHtml(logoUrl)}" alt="SARA Advisors" width="52" height="52" style="display:block;width:52px;height:52px;border:0;border-radius:10px;" />
+                      <img src="${escapeHtml(logoUrl)}" alt="ASAR Partners" width="52" height="52" style="display:block;width:52px;height:52px;border:0;border-radius:10px;" />
                     </td>
                     <td style="vertical-align:middle;">
-                      <div style="color:#8fc7ed;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">SARA Advisors</div>
-                      <div style="color:#ffffff;font-size:21px;font-weight:750;line-height:1.3;margin-top:7px;">${escapeHtml(options.eyebrow || "A message from SARA Advisors")}</div>
+                      <div style="color:#8fc7ed;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;">ASAR Partners</div>
+                      <div style="color:#ffffff;font-size:21px;font-weight:750;line-height:1.3;margin-top:7px;">${escapeHtml(options.eyebrow || "A message from ASAR Partners")}</div>
                     </td>
                   </tr>
                 </table>
@@ -119,7 +119,7 @@ export function renderEmailTemplate(options: EmailTemplateOptions) {
             <tr>
               <td style="padding:18px 30px 26px;color:#7a8aa0;font-size:12px;line-height:1.6;border-top:1px solid #eef3f7;">
                 ${escapeHtml(footer)}<br /><br />
-                SARA Advisors · Confidential business and investment advisory
+                ASAR Partners · Confidential business and investment advisory
               </td>
             </tr>
           </table>
@@ -156,14 +156,14 @@ export async function sendAdminNotificationEmail(payload: AdminEmailPayload) {
   const { error } = await client.emails.send({
     from,
     to,
-    subject: `[SARA] ${payload.title}`,
+    subject: `[ASAR] ${payload.title}`,
     html: renderEmailTemplate({
       eyebrow: "New desk activity",
       heading: payload.title,
-      body: payload.body || "A new item needs attention in the SARA Advisors workspace.",
+      body: payload.body || "A new item needs attention in the ASAR Partners workspace.",
       detailHtml: renderDetailsTable(payload.details),
-      cta: { label: "Open in SARA", href: link },
-      footer: "Sent to the configured SARA Advisors admin inbox. Please handle client information confidentially.",
+      cta: { label: "Open in ASAR", href: link },
+      footer: "Sent to the configured ASAR Partners admin inbox. Please handle client information confidentially.",
     }),
     text: renderText(payload, link),
   });
@@ -209,7 +209,7 @@ export async function sendProjectBankMagicLinkEmail(opts: {
   const link = absoluteUrl(opts.verifyHref);
   return sendTransactionalEmail({
     to: opts.to,
-    subject: `Confirm your email | SARA Advisors`,
+    subject: `Confirm your email | ASAR Partners`,
     text: `Hello ${opts.name || ""},\n\nConfirm your work email to continue your dossier request for "${opts.projectTitle}". This link expires in 24 hours.\n\n${link}\n\nIf you did not request this, you can ignore this email.`,
     html: renderEmailTemplate({
       eyebrow: "Secure access",
@@ -231,7 +231,7 @@ export async function sendListingMagicLinkEmail(opts: {
   const link = absoluteUrl(opts.verifyHref);
   return sendTransactionalEmail({
     to: opts.to,
-    subject: `Confirm your email | SARA Advisors`,
+    subject: `Confirm your email | ASAR Partners`,
     text: `Hello ${opts.name || ""},\n\nConfirm your work email to continue your full-profile request for ${opts.hashId}. This link expires in 24 hours.\n\n${link}\n\nIf you did not request this, you can ignore this email.`,
     html: renderEmailTemplate({
       eyebrow: "Secure access",
@@ -263,7 +263,7 @@ export async function sendOwnerProjectDecisionEmail(opts: {
           subject: `"${title}" is live on Project Bank`,
           heading: "Your idea is live",
           body:
-            "Investors can now discover your teaser on Project Bank and request the full dossier. SARA will introduce qualified interest after an NDA.",
+            "Investors can now discover your teaser on Project Bank and request the full dossier. ASAR Partners will introduce qualified interest after an NDA.",
           cta: "View your listing",
         }
       : {
@@ -278,7 +278,7 @@ export async function sendOwnerProjectDecisionEmail(opts: {
   return sendTransactionalEmail({
     to: opts.to,
     subject: copy.subject,
-    text: `${greeting}\n\n${copy.body}\n\n${copy.cta}: ${link}\n\nSARA Advisors`,
+    text: `${greeting}\n\n${copy.body}\n\n${copy.cta}: ${link}\n\nASAR Partners`,
     html: renderEmailTemplate({
       eyebrow: "Project Bank update",
       heading: copy.heading,
@@ -312,7 +312,7 @@ export async function sendOwnerListingDecisionEmail(opts: {
       ? {
           subject: `${hashId} is live on the marketplace`,
           heading: "Your listing is live",
-          body: "Buyers can now discover your anonymized listing. SARA arranges an NDA before anything confidential is shared.",
+          body: "Buyers can now discover your anonymized listing. ASAR Partners arranges an NDA before anything confidential is shared.",
           cta: "View your listing",
         }
       : {
@@ -327,7 +327,7 @@ export async function sendOwnerListingDecisionEmail(opts: {
   return sendTransactionalEmail({
     to: opts.to,
     subject: copy.subject,
-    text: `${greeting}\n\n${copy.body}\n\n${copy.cta}: ${link}\n\nSARA Advisors`,
+    text: `${greeting}\n\n${copy.body}\n\n${copy.cta}: ${link}\n\nASAR Partners`,
     html: renderEmailTemplate({
       eyebrow: "Marketplace update",
       heading: copy.heading,

@@ -58,7 +58,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await notifyUsers([lead.buyerId], {
         type: "project.lead_vetted",
         title: `Your inquiry for "${lead.project.title}" is under review`,
-        body: "The SARA deal desk will contact you to arrange the NDA and a clarification meeting.",
+        body: "The ASAR deal desk will contact you to arrange the NDA and a clarification meeting.",
         href: projectUrl,
         emailAdmin: false,
       }).catch((err) => console.error("[project-bank] failed to notify investor on vet", err));
@@ -66,7 +66,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     await sendInvestorNoticeEmail({
       to: lead.email,
       name: lead.name,
-      subject: `SARA Advisors: your inquiry for "${lead.project.title}" is under review`,
+      subject: `ASAR Partners: your inquiry for "${lead.project.title}" is under review`,
       body: "Our deal desk has reviewed your inquiry and will be in touch to arrange the NDA and a clarification meeting with the project team.",
       href: projectUrl,
     });

@@ -62,17 +62,17 @@ export function PageHero({
 
           {eyebrow && (
             <BlurFade offset={8}>
-              <p className="text-sm font-medium tracking-tight text-brand-sky">{eyebrow}</p>
+              <p className="mb-4 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">{eyebrow}</p>
             </BlurFade>
           )}
 
           <BlurFade delay={0.08} offset={6} initial="visible">
             <h1
               className={cn(
-                "text-pretty font-display font-extrabold tracking-tight text-foreground",
+                "heading-soft text-balance font-heading font-semibold tracking-[-0.015em] text-foreground",
                 compact || tight
-                  ? "text-2xl sm:text-4xl lg:text-[2.75rem]"
-                  : "text-3xl sm:text-4xl lg:text-5xl"
+                  ? "text-[1.7rem] leading-[1.28] sm:text-[2rem]"
+                  : "text-[1.7rem] leading-[1.28] sm:text-[2rem] md:text-[2.6rem]"
               )}
             >
               {title}
@@ -83,7 +83,7 @@ export function PageHero({
             <BlurFade delay={0.12} offset={10}>
               <p
                 className={cn(
-                  "max-w-3xl text-pretty text-lg font-medium leading-relaxed text-foreground lg:text-xl",
+                  "heading-soft max-w-3xl text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground",
                   centered && "mx-auto"
                 )}
               >
@@ -96,8 +96,7 @@ export function PageHero({
             <BlurFade delay={0.16} offset={10}>
               <p
                 className={cn(
-                  "max-w-3xl text-pretty leading-relaxed text-foreground/70",
-                  compact || tight ? "text-lg" : "text-lg lg:text-xl",
+                  "heading-soft max-w-3xl text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground",
                   centered && "mx-auto"
                 )}
               >

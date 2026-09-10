@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Terms of Use",
   description: `Terms for using the ${siteConfig.name} website, marketplace, Project Bank, and advisory intake in Nepal.`,
   path: "/terms",
-  ogTitle: "Terms of Use | SARA Advisors",
+  ogTitle: "Terms of Use | ASAR Partners",
 });
 
 export default function TermsPage() {
@@ -22,7 +22,7 @@ export default function TermsPage() {
       <LegalSection title="Agreement">
         <p>
           By using this site you agree to these terms and our{" "}
-          <Link href="/privacy" className="font-medium text-brand-sky hover:underline">
+          <Link href="/privacy" className="font-semibold text-tz-blue-deep hover:underline">
             Privacy Policy
           </Link>
           . If you do not agree, do not use the site. {siteConfig.name} is based in {SITE_OFFICE.locality},{" "}
@@ -41,7 +41,7 @@ export default function TermsPage() {
       <LegalSection title="Marketplace and Project Bank">
         <p>
           Public listings and project teasers are anonymized. Full financials, identities, and dossiers are available
-          only after advisor review and an NDA (or equivalent). SARA does not guarantee that a listing or project is
+          only after advisor review and an NDA (or equivalent). ASAR does not guarantee that a listing or project is
           complete, that a deal will close, or that projected returns will be achieved. You must complete your own due
           diligence.
         </p>
@@ -65,15 +65,15 @@ export default function TermsPage() {
 
       <LegalSection title="Intellectual property">
         <p>
-          The site design, SARA marks, and original copy belong to {siteConfig.name} or its licensors. You may not
-          reuse them commercially without permission. You keep ownership of materials you upload, and you grant SARA a
+          The site design, ASAR marks, and original copy belong to {siteConfig.name} or its licensors. You may not
+          reuse them commercially without permission. You keep ownership of materials you upload, and you grant ASAR a
           licence to host and share them as needed to run the relevant mandate.
         </p>
       </LegalSection>
 
       <LegalSection title="Liability">
         <p>
-          To the fullest extent allowed by Nepal law, SARA is not liable for indirect, incidental, or consequential
+          To the fullest extent allowed by Nepal law, ASAR is not liable for indirect, incidental, or consequential
           loss arising from use of the site or reliance on teasers and guides. Nothing in these terms limits liability
           that cannot be limited by law (including fraud).
         </p>
@@ -90,7 +90,7 @@ export default function TermsPage() {
         <p>
           We may update these terms. The date above is the latest version. Continued use of the site after a change
           means you accept the revised terms. Questions:{" "}
-          <a href={`mailto:${SITE_OFFICE.email}`} className="font-medium text-brand-sky hover:underline">
+          <a href={`mailto:${SITE_OFFICE.email}`} className="font-semibold text-tz-blue-deep hover:underline">
             {SITE_OFFICE.email}
           </a>
           .

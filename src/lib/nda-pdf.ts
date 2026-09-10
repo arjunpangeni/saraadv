@@ -25,20 +25,20 @@ export async function generateNdaPdf(data: NdaPdfData | ListingNdaPdfData): Prom
   const muted = rgb(0.4, 0.4, 0.4);
 
   let y = 780;
-  page.drawText("SARA ADVISORS", { x: 50, y, size: 12, font: bold, color: brand });
+  page.drawText("ASAR PARTNERS", { x: 50, y, size: 12, font: bold, color: brand });
   page.drawText("Non-Disclosure Agreement", { x: 50, y: y - 20, size: 18, font: bold });
   page.drawText(`${refLabel}: ${refId}`, { x: 50, y: y - 42, size: 10, font, color: muted });
 
   y -= 80;
   const body = [
-    `This Non-Disclosure Agreement ("NDA") is executed digitally between SARA Advisors and`,
+    `This Non-Disclosure Agreement ("NDA") is executed digitally between ASAR Partners and`,
     `${data.buyerName} (${data.buyerEmail}) on ${data.signedAt.toISOString().slice(0, 10)}.`,
     "",
     "The Recipient agrees to keep confidential all information disclosed regarding the business",
     "opportunity referenced above, including financial statements, asset valuations, regulatory",
     "attachments, and operational data. The Recipient shall not disclose, copy, or use this",
     "information for any purpose other than evaluating a potential transaction facilitated by",
-    "SARA Advisors.",
+    "ASAR Partners.",
     "",
     "This agreement remains binding for 24 months from the date of execution. Breach may result",
     "in injunctive relief and liability for damages under applicable law.",
@@ -52,7 +52,7 @@ export async function generateNdaPdf(data: NdaPdfData | ListingNdaPdfData): Prom
   }
 
   y -= 20;
-  page.drawText("Digitally accepted via SARA Advisors platform.", { x: 50, y, size: 9, font: bold, color: brand });
+  page.drawText("Digitally accepted via ASAR Partners platform.", { x: 50, y, size: 9, font: bold, color: brand });
 
   return pdf.save();
 }

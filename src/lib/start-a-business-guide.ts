@@ -2,7 +2,7 @@ import type { EligibilityIssue, GeneratedTask } from "@/lib/rules/startABusiness
 
 export const BUSINESS_SETUP_GUIDE_KEY = "sara:business-setup-guide";
 
-/** Optional / ancillary items SARA can deliver as paid single-window services. */
+/** Optional / ancillary items ASAR can deliver as paid single-window services. */
 export const SARA_SERVICE_CODES = new Set([
   "REG-23",
   "REG-24",
@@ -60,6 +60,6 @@ export function loadGuidePayload(): SetupGuidePayload | null {
 export function saraMailto(tasks: GeneratedTask[], businessName: string) {
   const list = tasks.map((t) => `- ${t.title}`).join("\n");
   const subject = `Start a Business services: ${businessName}`;
-  const body = `Hello SARA Advisors,\n\nPlease handle the following items for ${businessName}:\n\n${list}\n\nThank you.`;
+  const body = `Hello ASAR Partners,\n\nPlease handle the following items for ${businessName}:\n\n${list}\n\nThank you.`;
   return `mailto:${SARA_ADVISOR_MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

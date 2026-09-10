@@ -430,7 +430,7 @@ export async function addCustomTask(
       setupId,
       code,
       title: input.title.trim(),
-      authority: input.authority.trim() || "SARA Advisors",
+      authority: input.authority.trim() || "ASAR Partners",
       notes: input.notes?.trim() || null,
       status: "PENDING",
     },

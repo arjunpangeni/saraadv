@@ -14,7 +14,7 @@ export default async function UnlockPage({ params }: { params: Promise<{ hashId:
         compact
         eyebrow="NDA Gatekeeper"
         title="Request deep scrutiny"
-        description={`Execute a binding NDA for ${hashId}, then select SARA advisory services to unlock the due-diligence data room.`}
+        description={`Execute a binding NDA for ${hashId}, then select ASAR advisory services to unlock the due-diligence data room.`}
       />
       <div className="container-page mx-auto max-w-2xl py-8 sm:py-10">
         <UnlockFlow listingId={listing.id} hashId={listing.hashId} />

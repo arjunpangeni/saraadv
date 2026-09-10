@@ -26,7 +26,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
     <article className="group h-full">
       <Link
         href={`/project-bank/${project.slug}`}
-        className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition-[transform,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-sky/40"
+        className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)]"
       >
         <div className="relative aspect-[16/10] overflow-hidden bg-surface-muted">
           {cover ? (
@@ -50,7 +50,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
             </span>
           ) : null}
           <span className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent" />
-          <span className="absolute top-2.5 left-2.5 rounded-md bg-background/92 px-2 py-0.5 text-[11px] font-semibold text-brand-sky shadow-sm">
+          <span className="absolute top-2.5 left-2.5 rounded-md bg-background/92 px-2 py-0.5 text-[11px] font-semibold text-tz-blue-deep shadow-sm">
             {sectorLabel(project.sector)}
           </span>
         </div>
@@ -60,29 +60,29 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
             <MapPin className="size-3.5 shrink-0" aria-hidden />
             <span className="truncate">{project.broadRegion}</span>
           </p>
-          <h3 className="mt-1.5 line-clamp-2 text-pretty font-display text-lg font-extrabold tracking-tight text-foreground group-hover:text-brand-sky sm:text-xl">
+          <h3 className="heading-soft mt-1.5 line-clamp-2 text-pretty font-heading text-lg font-semibold tracking-[-0.015em] text-foreground group-hover:text-tz-blue-deep sm:text-xl">
             {project.title}
           </h3>
-          <p className="mt-2 line-clamp-2 text-pretty text-sm leading-relaxed text-foreground/70">
+          <p className="mt-2 line-clamp-2 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">
             {project.elevatorPitch}
           </p>
 
           <dl className="mt-4 grid grid-cols-3 gap-px overflow-hidden rounded-xl bg-border">
             <div className="bg-surface-muted/70 px-2.5 py-2.5">
               <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">CAPEX</dt>
-              <dd className="mt-0.5 break-words font-display text-xs font-extrabold tracking-tight text-foreground sm:text-sm">
+              <dd className="heading-soft mt-0.5 break-words font-heading text-xs font-semibold tracking-[-0.015em] text-foreground sm:text-sm">
                 {capexLabel(project.capexRange)}
               </dd>
             </div>
             <div className="bg-surface-muted/70 px-2.5 py-2.5">
               <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">IRR</dt>
-              <dd className="mt-0.5 break-words font-display text-xs font-extrabold tracking-tight text-foreground sm:text-sm">
+              <dd className="heading-soft mt-0.5 break-words font-heading text-xs font-semibold tracking-[-0.015em] text-foreground sm:text-sm">
                 {irrLabel(project.targetRoiIrr)}
               </dd>
             </div>
             <div className="bg-surface-muted/70 px-2.5 py-2.5">
               <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">Stage</dt>
-              <dd className="mt-0.5 break-words font-display text-xs font-extrabold tracking-tight text-foreground sm:text-sm">
+              <dd className="heading-soft mt-0.5 break-words font-heading text-xs font-semibold tracking-[-0.015em] text-foreground sm:text-sm">
                 {stageLabel(project.fundingStage)}
               </dd>
             </div>
@@ -93,7 +93,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
               <Lock className="size-3" aria-hidden />
               Public teaser
             </span>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-sky">
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-tz-blue-deep">
               View teaser
               <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
             </span>

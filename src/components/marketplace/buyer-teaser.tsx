@@ -26,7 +26,7 @@ export function ListingMetricGrid({ items }: { items: { label: string; value: st
       {visible.map((item) => (
         <div key={item.label} className="bg-card px-3 py-3 sm:px-4 sm:py-4">
           <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">{item.label}</dt>
-          <dd className="mt-1 break-words font-display text-sm font-extrabold tracking-tight text-foreground sm:text-lg">
+          <dd className="heading-soft mt-1 break-words font-heading text-sm font-semibold tracking-[-0.015em] text-foreground sm:text-lg">
             {item.value}
           </dd>
         </div>

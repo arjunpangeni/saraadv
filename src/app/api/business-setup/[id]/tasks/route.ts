@@ -87,7 +87,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     const task = await addCustomTask(id, {
       title: parsed.data.title,
-      authority: parsed.data.authority ?? "SARA Advisors",
+      authority: parsed.data.authority ?? "ASAR Partners",
       notes: parsed.data.notes,
     });
     await prisma.auditLog.create({

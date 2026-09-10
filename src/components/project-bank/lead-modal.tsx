@@ -36,7 +36,7 @@ export function ProjectLeadModal({
           Request the dossier
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-foreground/70">
-          Confirm your work email. After vetting and an NDA, SARA Advisors share the full dossier
+          Confirm your work email. After vetting and an NDA, ASAR Partners share the full dossier
           offline.
         </p>
         <SmoothButton variant="candy" size="sm" className="mt-4" onClick={() => setOpen(true)}>
@@ -54,7 +54,7 @@ export function ProjectLeadModal({
         Request the full project dossier
       </h2>
       <p className="mx-auto mt-3 max-w-xl text-pretty text-sm leading-relaxed text-foreground/70 sm:text-base">
-        We will email a magic link to verify your work email. After vetting and an NDA, SARA Advisors
+        We will email a magic link to verify your work email. After vetting and an NDA, ASAR Partners
         will share the full dossier with you directly.
       </p>
       <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -62,7 +62,7 @@ export function ProjectLeadModal({
           Request Full Project Dossier
         </SmoothButton>
         <SmoothButton variant="outline" size="lg" onClick={() => setOpen(true)}>
-          Connect with SARA Advisors
+          Connect with ASAR Partners
         </SmoothButton>
       </div>
       {dialog}

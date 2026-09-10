@@ -86,6 +86,7 @@ export function localBusinessJsonLd() {
     legalName: siteConfig.name,
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo2.png`,
+    sameAs: Object.values(siteConfig.links.social),
     image: `${siteConfig.url}${siteConfig.ogImage}`,
     description: siteConfig.description,
     slogan: siteConfig.tagline,

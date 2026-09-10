@@ -22,7 +22,7 @@ export function ChecklistBuilder({
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
   const [customTitle, setCustomTitle] = useState("");
-  const [customAuthority, setCustomAuthority] = useState("SARA Advisors");
+  const [customAuthority, setCustomAuthority] = useState("ASAR Partners");
   const [customNotes, setCustomNotes] = useState("");
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);

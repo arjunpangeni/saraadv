@@ -12,7 +12,7 @@ const SERVICES = [
   {
     key: "DUE_DILIGENCE_AUDIT",
     label: "Independent Financial Due Diligence & Auditing",
-    hint: "SARA verifies seller books against physical assets.",
+    hint: "ASAR Partners verifies seller books against physical assets.",
   },
   {
     key: "LEGAL_STRUCTURING",
@@ -62,7 +62,7 @@ export function UnlockFlow({ listingId, hashId }: { listingId: string; hashId: s
 
   async function submitUnlock() {
     if (selected.length === 0 && !optOut) {
-      setError("Select at least one advisory service, or check the box below to proceed without SARA services.");
+      setError("Select at least one advisory service, or check the box below to proceed without ASAR services.");
       return;
     }
     setLoading(true);
@@ -92,8 +92,8 @@ export function UnlockFlow({ listingId, hashId }: { listingId: string; hashId: s
         </div>
         <h2 className="font-display text-xl font-extrabold tracking-tight text-foreground">Request submitted</h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-          Your full profile request for <span className="font-mono font-medium">{hashId}</span> is with the SARA
-          Advisors deal desk. An advisor will follow up shortly.
+          Your full profile request for <span className="font-mono font-medium">{hashId}</span> is with the ASAR
+          Partners deal desk. An advisor will follow up shortly.
         </p>
         <Button className="mt-8" variant="sky" onClick={() => router.push(`/marketplace/${hashId}`)}>
           View listing
@@ -110,7 +110,7 @@ export function UnlockFlow({ listingId, hashId }: { listingId: string; hashId: s
           Request full profile & quote
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Select the SARA M&A services you want quoted alongside data-room access for{" "}
+          Select the ASAR M&A services you want quoted alongside data-room access for{" "}
           <span className="font-mono">{hashId}</span>.
         </p>
         <div className="mt-5 space-y-3">
@@ -143,7 +143,7 @@ export function UnlockFlow({ listingId, hashId }: { listingId: string; hashId: s
               if (e.target.checked) setSelected([]);
             }}
           />
-          I do not require SARA advisory services at this time — profile access only.
+          I do not require ASAR advisory services at this time — profile access only.
         </label>
 
         <FormError className="mt-4">{error}</FormError>
@@ -174,7 +174,7 @@ export function UnlockFlow({ listingId, hashId }: { listingId: string; hashId: s
           By proceeding, you agree to keep confidential all information disclosed regarding this business
           opportunity, including financial statements, asset valuations, and regulatory attachments. You agree
           not to disclose, copy, or use this information for any purpose other than evaluating a potential
-          transaction facilitated by SARA Advisors.
+          transaction facilitated by ASAR Partners.
         </p>
         <p className="mt-3">A signed PDF copy of this agreement will be stored for your records. Binding period: 24 months.</p>
       </div>

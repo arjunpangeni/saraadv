@@ -22,14 +22,14 @@ export function SectionHeading({
   return (
     <BlurFade inView offset={8} className={cn(align === "center" && "text-center mx-auto max-w-2xl", className)}>
       {eyebrow && (
-        <p className={cn("text-sm font-medium tracking-tight text-brand-sky", compact ? "mb-1.5" : "mb-3")}>
+        <p className={cn("text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase", compact ? "mb-1.5" : "mb-3")}>
           {eyebrow}
         </p>
       )}
       <h2
         className={cn(
-          "text-pretty font-display font-extrabold tracking-tight text-foreground",
-          compact ? "text-xl sm:text-2xl" : "text-3xl md:text-4xl"
+          "heading-soft text-pretty font-heading font-semibold tracking-[-0.015em] text-foreground",
+          compact ? "text-xl sm:text-2xl" : "text-[1.7rem] sm:text-[2rem] md:text-[2.35rem]"
         )}
       >
         {title}
@@ -37,8 +37,8 @@ export function SectionHeading({
       {description && (
         <p
           className={cn(
-            "text-pretty leading-relaxed text-foreground/70",
-            compact ? "mt-1.5 max-w-2xl text-base" : "mt-4 max-w-xl text-lg lg:text-xl",
+            "text-pretty leading-[1.75] text-muted-foreground",
+            compact ? "mt-1.5 max-w-2xl text-[1.05rem]" : "mt-5 max-w-xl text-[1.05rem]",
             align === "center" && "mx-auto"
           )}
         >

@@ -168,7 +168,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="offcanvas" className="border-sidebar-border">
-      <SidebarHeader className="h-16 justify-center border-b border-sidebar-border px-3 sm:h-[4.25rem]">
+      <SidebarHeader className="h-[4.5rem] justify-center border-b border-sidebar-border px-3 sm:h-20">
         <BrandLogo priority compact />
       </SidebarHeader>
       <SidebarContent>

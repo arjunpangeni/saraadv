@@ -32,7 +32,7 @@ export function InvestorGuide() {
         Thank you{contactName ? `, ${contactName}` : ""}
       </h1>
       <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
-        We received your inquiry. A SARA Advisors team member will follow up shortly. For more queries,
+        We received your inquiry. A ASAR Partners team member will follow up shortly. For more queries,
         contact us at{" "}
         <a href={`mailto:${SARA_ADVISOR_MAIL}`} className="font-medium text-brand-sky underline">
           {SARA_ADVISOR_MAIL}
@@ -43,7 +43,7 @@ export function InvestorGuide() {
         <Button asChild variant="sky">
           <a href={`mailto:${SARA_ADVISOR_MAIL}`}>
             <Mail className="h-4 w-4" aria-hidden />
-            Email SARA
+            Email ASAR
           </a>
         </Button>
         <Button asChild variant="outline">

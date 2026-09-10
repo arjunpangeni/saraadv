@@ -1,7 +1,7 @@
 import type { Role } from "@/generated/prisma";
 
 /**
- * Role-Based Access Control (RBAC) policy for the SARA Advisors platform.
+ * Role-Based Access Control (RBAC) policy for the ASAR Partners platform.
  *
  * Roles:
  *  - ADMIN        full access

@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { normalizePhone } from "@/lib/phone";
+import { checkInvestmentTotals } from "@/lib/rules/startABusiness";
 
 const shareholderSchema = z
   .object({
@@ -17,10 +19,18 @@ const addressSchema = z.object({
   localBody: z.string().min(1),
 });
 
+const internationalPhone = z
+  .string()
+  .trim()
+  .refine((value) => normalizePhone(value) !== null, {
+    message: "Enter a valid phone number with country code (e.g. +977… or +1…).",
+  })
+  .transform((value) => normalizePhone(value)!);
+
 export const businessSetupIntakeSchema = z.object({
   name: z.string().trim().min(2).max(80),
   contactName: z.string().trim().min(2).max(60),
-  phone: z.string().regex(/^(97|98)\d{8}$/, "Enter a 10-digit Nepal mobile starting with 97 or 98"),
+  phone: internationalPhone,
   email: z.string().trim().email().max(200).transform((value) => value.toLowerCase()),
   objective: z.enum(["MANUFACTURING", "TRADING", "SERVICE"]),
   businessType: z.enum(["PRIVATE_LIMITED", "PUBLIC_LIMITED", "PROPRIETORSHIP", "PARTNERSHIP"]),
@@ -51,4 +61,24 @@ export const businessSetupIntakeSchema = z.object({
   ieeEiaLevel: z.enum(["NONE", "BRIEF", "IEE", "EIA"]).optional(),
   /** Honeypot — must stay empty */
   website: z.string().optional(),
+}).superRefine((data, ctx) => {
+  for (const issue of checkInvestmentTotals(
+    {
+      equityInvestment: data.equityInvestment,
+      loanInvestment: data.loanInvestment,
+      fixedAssets: data.fixedAssets,
+      plantMachineryCost: data.plantMachineryCost,
+      netCurrentAssets: data.netCurrentAssets,
+    },
+    data.objective
+  )) {
+    if (issue.severity !== "BLOCKER") continue;
+    const path =
+      issue.code === "INVESTMENT-MFG-MACHINERY"
+        ? ["plantMachineryCost"]
+        : issue.code === "INVESTMENT-MFG-REQUIRED"
+          ? ["equityInvestment"]
+          : ["fixedAssets"];
+    ctx.addIssue({ code: "custom", message: issue.message, path });
+  }
 });

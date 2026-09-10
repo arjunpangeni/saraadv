@@ -51,7 +51,7 @@ export default function OpenGraphImage() {
               color: "rgba(255,255,255,0.72)",
             }}
           >
-            SARA ADVISORS
+            ASAR PARTNERS
           </div>
           <div
             style={{

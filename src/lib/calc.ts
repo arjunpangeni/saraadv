@@ -1,6 +1,6 @@
 /**
  * Financial calculation helpers for the Buy/Sell listing matrices
- * (SARA Advisors Buy/Sell blueprint — Modules B & C).
+ * (ASAR Partners Buy/Sell blueprint — Modules B & C).
  *
  * All monetary inputs are plain numbers (NPR). Kept dependency-free so it can
  * run identically on the client (live form calc) and server (persisted cache).

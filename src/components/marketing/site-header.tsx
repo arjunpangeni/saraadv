@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -11,11 +12,18 @@ import { MobileMenuPanel } from "@/components/marketing/mobile-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { MARKETING_SERVICES, isNavActive } from "@/lib/marketing-nav";
 import { cn } from "@/lib/utils";
+import { RemoveScroll } from "react-remove-scroll";
 
 const EASE_OUT_QUART = [0.22, 1, 0.36, 1] as const;
 
+const navLinkClass =
+  "inline-flex h-8 items-center rounded-full px-2.5 text-[13px] font-semibold tracking-wide text-foreground/80 transition-colors hover:bg-muted hover:text-foreground lg:px-3";
+const navLinkActive =
+  "bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground";
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
@@ -23,6 +31,13 @@ export function SiteHeader() {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -85,18 +100,33 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="h-16 lg:h-[4.75rem]">
+    <>
+    <header
+      ref={headerRef}
+      className={cn("fixed inset-x-0 top-0 z-50", RemoveScroll.classNames.fullWidth)}
+    >
+      {open && typeof document !== "undefined"
+        ? createPortal(
+            <button
+              type="button"
+              aria-label="Close menu"
+              className="fixed inset-0 z-40 bg-background/70 lg:hidden"
+              onClick={() => setOpen(false)}
+            />,
+            document.body
+          )
+        : null}
       <nav
-        ref={headerRef}
-        className="fixed top-3 left-1/2 z-50 w-full max-w-[1280px] -translate-x-1/2 px-3 sm:px-6 lg:px-8"
+        className={cn(
+          "header-scrolled relative transition-[background-color,backdrop-filter] duration-300",
+          scrolled && "header-is-stuck"
+        )}
         aria-label="Primary"
       >
-        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-full border border-border bg-[var(--nav-glass)] px-2 py-1.5 shadow-sm sm:gap-3 sm:px-3">
-          <div className="flex min-w-0 items-center">
-            <BrandLogo priority compact />
-          </div>
+        <div className="mx-auto flex h-[4.5rem] w-[min(1180px,calc(100%-1rem))] items-center justify-between gap-2 sm:h-20 sm:w-[min(1180px,calc(100%-1.5rem))] sm:gap-3 lg:h-[5.25rem]">
+          <BrandLogo priority compact />
 
-          <ul className="hidden min-w-0 list-none items-center justify-center justify-self-center rounded-full bg-black/[0.04] p-1 dark:bg-white/[0.06] lg:flex">
+          <ul className="hidden min-w-0 list-none items-center rounded-full border border-border bg-card p-1 shadow-sm lg:flex">
             {MARKETING_SERVICES.map((item) => {
               const active = isNavActive(pathname, item.href);
               return (
@@ -105,12 +135,7 @@ export function SiteHeader() {
                     href={item.href}
                     data-active={active}
                     aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "block rounded-full px-3 py-2 text-sm font-medium leading-none whitespace-nowrap outline-none transition-colors",
-                      active
-                        ? "bg-[var(--nav-glass)] text-foreground shadow-sm dark:bg-white/10 dark:shadow-none"
-                        : "text-foreground/70 hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/10"
-                    )}
+                    className={cn(navLinkClass, active && navLinkActive)}
                   >
                     {item.label}
                   </Link>
@@ -119,21 +144,21 @@ export function SiteHeader() {
             })}
           </ul>
 
-          <div className="flex items-center justify-end gap-0.5 sm:gap-1">
+          <div className="flex items-center justify-end gap-1.5 sm:gap-2">
             <Link
               href="/marketplace"
               data-active={isNavActive(pathname, "/marketplace")}
               aria-current={isNavActive(pathname, "/marketplace") ? "page" : undefined}
               className={cn(
-                "hidden rounded-full px-3 py-2 text-sm font-medium leading-none whitespace-nowrap transition-colors sm:inline-flex",
+                "hidden rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-wide transition-colors sm:inline-flex",
                 isNavActive(pathname, "/marketplace")
-                  ? "bg-black/[0.04] text-foreground dark:bg-white/10"
-                  : "text-foreground/70 hover:bg-black/[0.04] hover:text-foreground dark:hover:bg-white/10"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-foreground/80 hover:bg-muted hover:text-foreground"
               )}
             >
               Marketplace
             </Link>
-            <ThemeToggle className="mr-2 size-9 rounded-full border-0 bg-transparent shadow-none hover:bg-black/[0.04] dark:hover:bg-white/10 lg:mr-0" />
+            <ThemeToggle />
             <AuthNav />
             <button
               type="button"
@@ -183,7 +208,7 @@ export function SiteHeader() {
                   : { opacity: 0, scale: 0.95, y: -10 }
               }
               transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.2, ease: EASE_OUT_QUART }}
-              className="absolute top-full right-3 left-3 z-50 mt-2 origin-top sm:right-6 sm:left-6 lg:hidden"
+              className="absolute top-full right-3 z-50 mt-2 w-[min(19.25rem,calc(100%-1.5rem))] origin-top-right sm:right-6 lg:hidden"
             >
               <div
                 data-mobile-menu-scroll
@@ -196,5 +221,7 @@ export function SiteHeader() {
         </AnimatePresence>
       </nav>
     </header>
+    <div className="h-[4.5rem] sm:h-20 lg:h-[5.25rem]" aria-hidden />
+    </>
   );
 }

@@ -62,8 +62,8 @@ export default async function ProjectTeaserPage({ params }: { params: Promise<{ 
   ).filter((url): url is string => Boolean(url));
 
   return (
-    <main className="flex-1 bg-background">
-      <div className="container-page py-6 sm:py-8">
+    <main className="flex-1">
+      <div className="container-page py-16 sm:py-20">
         <PageBreadcrumbs
           items={[
             { name: "Project Bank", href: "/project-bank" },
@@ -75,7 +75,7 @@ export default async function ProjectTeaserPage({ params }: { params: Promise<{ 
           <div className="mt-4 rounded-lg border border-border bg-warning-bg px-4 py-2.5 text-sm text-warning-fg">
             Preview only — this project is not yet published on the discovery grid.
             {session?.user?.id === project.ownerId
-              ? " Confidential Vault fields are held by SARA Advisors and are not shown here."
+              ? " Confidential Vault fields are held by ASAR Partners and are not shown here."
               : ""}
           </div>
         )}
@@ -87,7 +87,7 @@ export default async function ProjectTeaserPage({ params }: { params: Promise<{ 
 
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 text-sm text-foreground/60">
-              <span className="rounded-md bg-brand-sky-muted px-2 py-0.5 text-[11px] font-semibold text-brand-sky">
+              <span className="rounded-md bg-tz-green px-2 py-0.5 text-[11px] font-semibold text-tz-green-deep">
                 {sectorLabel(project.sector)}
               </span>
               <span className="inline-flex items-center gap-1">
@@ -98,30 +98,30 @@ export default async function ProjectTeaserPage({ params }: { params: Promise<{ 
               <span>{stageLabel(project.fundingStage)}</span>
             </div>
 
-            <h1 className="mt-3 text-pretty font-display text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+            <h1 className="heading-soft mt-3 text-pretty font-heading text-[1.7rem] font-semibold tracking-[-0.015em] text-foreground sm:text-[2rem]">
               {project.title}
             </h1>
 
-            <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-foreground/75">
+            <p className="mt-4 max-w-2xl text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">
               {project.elevatorPitch}
             </p>
 
             <dl className="mt-6 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-border bg-border">
               <div className="bg-card px-3 py-3 sm:px-4 sm:py-4">
                 <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">CAPEX</dt>
-                <dd className="mt-1 break-words font-display text-sm font-extrabold tracking-tight text-foreground sm:text-lg">
+                <dd className="heading-soft mt-1 break-words font-heading text-sm font-semibold tracking-[-0.015em] text-foreground sm:text-lg">
                   {capexLabel(project.capexRange)}
                 </dd>
               </div>
               <div className="bg-card px-3 py-3 sm:px-4 sm:py-4">
                 <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">Target IRR</dt>
-                <dd className="mt-1 break-words font-display text-sm font-extrabold tracking-tight text-foreground sm:text-lg">
+                <dd className="heading-soft mt-1 break-words font-heading text-sm font-semibold tracking-[-0.015em] text-foreground sm:text-lg">
                   {irrLabel(project.targetRoiIrr)}
                 </dd>
               </div>
               <div className="bg-card px-3 py-3 sm:px-4 sm:py-4">
                 <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">Stage</dt>
-                <dd className="mt-1 break-words font-display text-sm font-extrabold tracking-tight text-foreground sm:text-lg">
+                <dd className="heading-soft mt-1 break-words font-heading text-sm font-semibold tracking-[-0.015em] text-foreground sm:text-lg">
                   {stageLabel(project.fundingStage)}
                 </dd>
               </div>

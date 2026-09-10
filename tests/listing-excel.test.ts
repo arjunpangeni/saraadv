@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import ExcelJS from "exceljs";
+import * as XLSX from "xlsx";
 import { EMPTY_LINE_ITEMS } from "@/lib/calc";
 import { historicalFiscalYears } from "@/lib/fiscal-years";
 import { financialFieldCoverage } from "@/lib/listing-financial-fields";
@@ -86,18 +86,14 @@ describe("listing financial Excel", () => {
   it("puts P&L and cash-flow fields on their own sheets", async () => {
     const years = [year(1, "2024-25", { grossRevenue: 9, cfo: 3, ppe: 1 })];
     const bytes = await buildFinancialWorkbook(years, "historical");
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(bytes as unknown as Parameters<ExcelJS.Xlsx["load"]>[0]);
-    expect(workbook.worksheets.map((sheet) => sheet.name)).toEqual(["Balance Sheet", "Profit & Loss", "Cash Flow"]);
+    const workbook = XLSX.read(bytes, { type: "array" });
+    expect(workbook.SheetNames).toEqual(["Balance Sheet", "Profit & Loss", "Cash Flow"]);
 
     const keys = (name: string) => {
-      const sheet = workbook.getWorksheet(name);
+      const sheet = workbook.Sheets[name];
       if (!sheet) return [];
-      const out: unknown[] = [];
-      sheet.eachRow({ includeEmpty: true }, (row) => {
-        out.push(row.getCell(1).value ?? "");
-      });
-      return out;
+      const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, raw: true, defval: "", blankrows: true });
+      return rows.map((row) => row[0] ?? "");
     };
 
     const pl = keys("Profit & Loss");

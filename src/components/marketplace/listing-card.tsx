@@ -45,7 +45,7 @@ function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-surface-muted/70 px-2 py-2">
       <dt className="text-[10px] font-medium tracking-wide text-foreground/50 uppercase">{label}</dt>
-      <dd className="mt-0.5 break-words font-display text-xs font-extrabold tracking-tight text-foreground sm:text-sm">
+      <dd className="heading-soft mt-0.5 break-words font-heading text-xs font-semibold tracking-[-0.015em] text-foreground sm:text-sm">
         {value}
       </dd>
     </div>
@@ -81,10 +81,10 @@ export function ListingCard({ listing }: { listing: PublicListingSummary; priori
     <article className="group h-full">
       <Link
         href={`/marketplace/${listing.hashId}`}
-        className="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-brand-sky/40 hover:shadow-[var(--shadow-card-hover)]"
+        className="flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-[var(--shadow-card)] transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-card-hover)]"
       >
-        <div className="flex items-center justify-between gap-2 bg-brand-sky-muted px-4 py-3">
-          <span className="inline-flex min-w-0 items-center gap-1.5 text-[11px] font-semibold text-brand-sky">
+        <div className="flex items-center justify-between gap-2 bg-tz-green px-4 py-3">
+          <span className="inline-flex min-w-0 items-center gap-1.5 text-[11px] font-semibold text-tz-green-deep">
             <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-card/80">
               <Icon className="size-3.5" aria-hidden />
             </span>
@@ -98,10 +98,10 @@ export function ListingCard({ listing }: { listing: PublicListingSummary; priori
         </div>
 
         <div className="flex flex-1 flex-col p-4">
-          <h3 className="break-all font-display font-mono text-lg font-extrabold tracking-tight text-foreground group-hover:text-brand-sky sm:text-xl">
+          <h3 className="heading-soft break-all font-heading font-mono text-lg font-semibold tracking-[-0.015em] text-foreground group-hover:text-tz-blue-deep sm:text-xl">
             {listing.hashId}
           </h3>
-          <p className="mt-2 font-display text-2xl font-extrabold tracking-tight text-foreground">{asking}</p>
+          <p className="heading-soft mt-2 font-heading text-2xl font-semibold tracking-[-0.015em] text-foreground">{asking}</p>
           <p className="text-[10px] font-medium tracking-wide text-foreground/45 uppercase">Proposed sale value</p>
 
           {(modality || ebitdaPositive) && (
@@ -146,7 +146,7 @@ export function ListingCard({ listing }: { listing: PublicListingSummary; priori
               <Lock className="size-3" aria-hidden />
               Identity gated until NDA
             </span>
-            <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-sky">
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-tz-blue-deep">
               View teaser
               <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
             </span>

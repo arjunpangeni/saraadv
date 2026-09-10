@@ -26,11 +26,11 @@ export function AuthShell({
           <BrandLogo showTagline priority />
         </div>
         <div className="relative z-10 max-w-md">
-          <p className="mb-3 text-sm font-medium tracking-tight text-brand-sky">Advisory platform</p>
-          <h1 className="text-pretty font-display text-2xl font-extrabold tracking-tight text-foreground xl:text-3xl">
+          <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Advisory platform</p>
+          <h1 className="heading-soft text-pretty font-heading text-[1.7rem] font-semibold tracking-[-0.015em] text-foreground xl:text-[2rem]">
             Corporate, investment & strategic consulting for Nepal
           </h1>
-          <p className="mt-3 text-base leading-relaxed text-foreground/70 xl:text-lg">
+          <p className="mt-3 text-[1.05rem] leading-[1.75] text-muted-foreground xl:text-[1.1rem]">
             From company formation and M&A brokerage to project matchmaking and carbon finance.
           </p>
         </div>
@@ -52,7 +52,7 @@ export function AuthShell({
               {title ? (
                 <h2
                   className={cn(
-                    "font-display font-extrabold tracking-tight text-foreground",
+                    "heading-soft font-heading font-semibold tracking-[-0.015em] text-foreground",
                     compact ? "text-lg" : "text-xl sm:text-2xl"
                   )}
                 >

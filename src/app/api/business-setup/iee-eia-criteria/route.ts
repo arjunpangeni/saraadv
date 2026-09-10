@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   const criteria = await prisma.ieeEiaCriterion.findMany({
-    orderBy: [{ sector: "asc" }, { sortOrder: "asc" }],
+    orderBy: [{ sortOrder: "asc" }],
     select: { id: true, sector: true, scope: true, level: true },
   });
 

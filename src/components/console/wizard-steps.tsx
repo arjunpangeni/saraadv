@@ -30,7 +30,7 @@ export function WizardSteps({
     >
       {!statuses && (
         <>
-          <p className="text-sm font-medium text-foreground sm:hidden">
+          <p className="heading-soft font-heading text-sm font-semibold tracking-[-0.015em] text-foreground sm:hidden">
             Step {current + 1} of {steps.length}
             {label ? `: ${label}` : ""}
           </p>

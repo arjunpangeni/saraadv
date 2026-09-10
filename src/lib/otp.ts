@@ -24,7 +24,7 @@ function otpEmailHtml(code: string) {
     heading: "Your verification code",
     body: "Enter this code to verify your email. It expires in 10 minutes.",
     contentHtml: `<div style="margin:22px 0;padding:18px;background:#f4f8fc;border:1px solid #d8e8f8;border-radius:12px;color:#001848;font-size:32px;letter-spacing:0.28em;font-weight:700;text-align:center;">${code}</div>`,
-    footer: "If you did not create a SARA Advisors account, you can ignore this email.",
+    footer: "If you did not create a ASAR Partners account, you can ignore this email.",
   });
 }
 
@@ -52,9 +52,9 @@ export async function issueEmailOtp(email: string, purpose = "register") {
 
   const sent = await sendTransactionalEmail({
     to: normalized,
-    subject: "Your SARA Advisors verification code",
+    subject: "Your ASAR Partners verification code",
     html: otpEmailHtml(code),
-    text: `Your SARA Advisors verification code is ${code}. It expires in 10 minutes.`,
+    text: `Your ASAR Partners verification code is ${code}. It expires in 10 minutes.`,
   });
 
   if (sent.skipped) {

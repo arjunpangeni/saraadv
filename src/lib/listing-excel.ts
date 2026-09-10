@@ -1,4 +1,4 @@
-import ExcelJS, { type CellValue, type Worksheet } from "exceljs";
+import * as XLSX from "xlsx";
 import { LINE_ITEM_KEYS, type AnnualLineItems } from "@/lib/calc";
 import { displayYearOrder } from "@/lib/fiscal-years";
 import {
@@ -70,7 +70,7 @@ function instruction(kind: FinancialExcelKind, labels: string[], sheet: string) 
     sheet === "Assumptions"
       ? " Write strategic assumptions in the first year column. Growth %, margin %, and CAPEX are one row each."
       : " Grey/calculated rows update from the figures you type. Leave them alone.";
-  return `SARA Advisors — ${title} — ${sheet} (NPR). Years: ${labels.join(", ")}. Fill year columns only. Do not rename Field or year headers. The file has Balance Sheet, Profit & Loss, and Cash Flow sheets. Upload this file on the listing form.${extra}`;
+  return `ASAR Partners — ${title} — ${sheet} (NPR). Years: ${labels.join(", ")}. Fill year columns only. Do not rename Field or year headers. The file has Balance Sheet, Profit & Loss, and Cash Flow sheets. Upload this file on the listing form.${extra}`;
 }
 
 function colLetter(index: number) {
@@ -182,35 +182,13 @@ function formulaFromParts(letter: string, parts: string[], rowOf: (key: string) 
     .join("");
 }
 
-function cellToValue(value: CellValue): unknown {
-  if (value == null) return "";
-  if (typeof value === "number" || typeof value === "boolean" || typeof value === "string") return value;
-  if (value instanceof Date) return value;
-  if (typeof value !== "object") return "";
-  if ("richText" in value) return value.richText.map((part) => part.text).join("");
-  if ("text" in value && typeof value.text === "string") return value.text;
-  if ("result" in value) {
-    const result = value.result;
-    if (result == null || (typeof result === "object" && "error" in result)) return "";
-    return result;
-  }
-  return "";
-}
-
-function sheetToAoa(sheet: Worksheet): unknown[][] {
-  const rows: unknown[][] = [];
-  const rowCount = sheet.rowCount;
-  const colCount = Math.max(sheet.columnCount, 1);
-  for (let r = 1; r <= rowCount; r += 1) {
-    const row = sheet.getRow(r);
-    const cells: unknown[] = [];
-    const width = Math.max(colCount, row.cellCount);
-    for (let c = 1; c <= width; c += 1) {
-      cells.push(cellToValue(row.getCell(c).value));
-    }
-    rows.push(cells);
-  }
-  return rows;
+function sheetToAoa(sheet: XLSX.WorkSheet): unknown[][] {
+  return XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+    header: 1,
+    raw: true,
+    defval: "",
+    blankrows: true,
+  });
 }
 
 function parseCsv(text: string): unknown[][] {
@@ -260,21 +238,14 @@ function parseCsv(text: string): unknown[][] {
   return rows;
 }
 
-function writeSheet(workbook: ExcelJS.Workbook, name: string, aoa: unknown[][], formulas: { addr: string; f: string }[]) {
-  const sheet = workbook.addWorksheet(name);
-  sheet.columns = [{ width: 22 }, { width: 48 }, { width: 16 }, { width: 16 }, { width: 16 }];
-  for (let r = 0; r < aoa.length; r += 1) {
-    const values = aoa[r] ?? [];
-    for (let c = 0; c < values.length; c += 1) {
-      const value = values[c];
-      if (value === "" || value == null) continue;
-      sheet.getRow(r + 1).getCell(c + 1).value = value as string | number | boolean;
-    }
-  }
+function writeSheet(workbook: XLSX.WorkBook, name: string, aoa: unknown[][], formulas: { addr: string; f: string }[]) {
+  const sheet = XLSX.utils.aoa_to_sheet(aoa as (string | number | boolean)[][]);
   for (const { addr, f } of formulas) {
     if (!f) continue;
-    sheet.getCell(addr).value = { formula: f, date1904: false };
+    sheet[addr] = { t: "n", f };
   }
+  sheet["!cols"] = [{ wch: 22 }, { wch: 48 }, { wch: 16 }, { wch: 16 }, { wch: 16 }];
+  XLSX.utils.book_append_sheet(workbook, sheet, name);
 }
 
 function toUint8Array(data: ArrayBuffer | Uint8Array): Uint8Array {
@@ -282,10 +253,8 @@ function toUint8Array(data: ArrayBuffer | Uint8Array): Uint8Array {
   return new Uint8Array(data);
 }
 
-async function loadXlsx(data: Uint8Array) {
-  const workbook = new ExcelJS.Workbook();
-  await workbook.xlsx.load(data as unknown as Parameters<ExcelJS.Xlsx["load"]>[0]);
-  return workbook;
+function loadXlsx(data: Uint8Array) {
+  return XLSX.read(data, { type: "array", cellDates: true });
 }
 
 function yearValue(year: FinancialExcelYear, key: string) {
@@ -404,7 +373,7 @@ export function parseFinancialAoa<T extends FinancialExcelYear>(
     return {
       years: existing,
       filled: 0,
-      warnings: ["This file is not a SARA financial template. Download the template and keep the Field column."],
+      warnings: ["This file is not a ASAR financial template. Download the template and keep the Field column."],
     };
   }
 
@@ -503,12 +472,12 @@ export async function buildFinancialWorkbook<T extends FinancialExcelYear>(
   kind: FinancialExcelKind,
   extras?: { strategicAssumptions?: string }
 ): Promise<Uint8Array> {
-  const workbook = new ExcelJS.Workbook();
+  const workbook = XLSX.utils.book_new();
   for (const spec of sheetSpecs(kind)) {
     const { aoa, formulas } = buildStatementAoa(years, kind, spec, extras);
     writeSheet(workbook, spec.name, aoa, formulas);
   }
-  const output = await workbook.xlsx.writeBuffer();
+  const output = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
   return toUint8Array(output);
 }
 
@@ -533,8 +502,8 @@ export async function parseFinancialWorkbook<T extends FinancialExcelYear>(
     };
   }
 
-  const workbook = await loadXlsx(buffer);
-  if (workbook.worksheets.length === 0) {
+  const workbook = loadXlsx(buffer);
+  if (workbook.SheetNames.length === 0) {
     return { years: existing, filled: 0, warnings: ["The spreadsheet is empty."] };
   }
 
@@ -544,7 +513,9 @@ export async function parseFinancialWorkbook<T extends FinancialExcelYear>(
   const warningSet = new Set<string>();
   let sawHeader = false;
 
-  for (const sheet of workbook.worksheets) {
+  for (const name of workbook.SheetNames) {
+    const sheet = workbook.Sheets[name];
+    if (!sheet) continue;
     const rows = sheetToAoa(sheet);
     if (!rows.some((row) => cellString(row?.[0]).toLowerCase() === FIELD_HEADER.toLowerCase())) {
       continue;
@@ -564,7 +535,7 @@ export async function parseFinancialWorkbook<T extends FinancialExcelYear>(
     return {
       years: existing,
       filled: 0,
-      warnings: ["This file is not a SARA financial template. Download the template and keep the Field column."],
+      warnings: ["This file is not a ASAR financial template. Download the template and keep the Field column."],
     };
   }
 

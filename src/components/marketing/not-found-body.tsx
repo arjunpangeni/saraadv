@@ -14,13 +14,13 @@ export function NotFoundBody() {
   return (
     <div className="container-page py-20 sm:py-28">
       <div className="mx-auto max-w-2xl text-center">
-        <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-2xl bg-brand-sky-muted text-brand-sky">
+        <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-2xl bg-tz-green text-tz-green-deep">
           <SearchX className="size-7" aria-hidden />
         </div>
-        <h1 className="text-pretty font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="heading-soft text-pretty font-heading text-[1.7rem] font-semibold tracking-[-0.015em] text-foreground sm:text-[2rem] md:text-[2.6rem]">
           Page not found
         </h1>
-        <p className="mt-4 text-pretty text-lg leading-relaxed text-foreground/70">
+        <p className="mt-4 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">
           This address is missing or the listing is no longer public. Try one of the pages below, or go home.
         </p>
         <div className="mt-8">
@@ -37,7 +37,7 @@ export function NotFoundBody() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="flex rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium text-foreground shadow-[var(--shadow-card)] transition-colors hover:border-brand hover:text-brand-sky"
+                className="flex rounded-3xl border border-border bg-card px-5 py-4 text-[1.05rem] font-semibold text-foreground shadow-[var(--shadow-card)] transition-colors hover:border-primary/40 hover:text-tz-blue-deep"
               >
                 {item.label}
               </Link>

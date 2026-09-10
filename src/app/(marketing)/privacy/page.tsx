@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
   description: `How ${siteConfig.name} collects, uses, and protects personal and confidential information on saraadvisors.com.`,
   path: "/privacy",
-  ogTitle: "Privacy Policy | SARA Advisors",
+  ogTitle: "Privacy Policy | ASAR Partners",
 });
 
 export default function PrivacyPage() {
@@ -21,14 +21,14 @@ export default function PrivacyPage() {
     >
       <LegalSection title="Who we are">
         <p>
-          {siteConfig.name} (“SARA”, “we”) is a corporate and investment advisory firm. This policy
+          {siteConfig.name} (“ASAR”, “we”) is a corporate and investment advisory firm. This policy
           covers personal information you give us through the site, marketplace, Project Bank, and
           inquiry forms. For privacy questions, email{" "}
-          <a href={`mailto:${SITE_OFFICE.email}`} className="font-medium text-brand-sky hover:underline">
+          <a href={`mailto:${SITE_OFFICE.email}`} className="font-semibold text-tz-blue-deep hover:underline">
             {SITE_OFFICE.email}
           </a>{" "}
           or use the{" "}
-          <Link href="/contact" className="font-medium text-brand-sky hover:underline">
+          <Link href="/contact" className="font-semibold text-tz-blue-deep hover:underline">
             contact form
           </Link>
           .

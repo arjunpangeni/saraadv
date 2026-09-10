@@ -9,6 +9,7 @@ import { ProjectCardGrid } from "@/components/project-bank/project-card-grid";
 import { getPublicProjects } from "@/lib/project-bank";
 import { getSignedDownloadUrl } from "@/lib/storage";
 import { JsonLd } from "@/components/json-ld";
+import { PageHero } from "@/components/marketing/page-hero";
 import { pageMetadata, itemListJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
@@ -49,7 +50,7 @@ export default async function ProjectDiscoverPage({
         <JsonLd
           data={itemListJsonLd({
             name: "Project Bank investment opportunities in Nepal",
-            description: "Curated project teasers. Full dossiers are released by SARA Advisors after vetting and an NDA.",
+            description: "Curated project teasers. Full dossiers are released by ASAR Partners after vetting and an NDA.",
             path: "/project-bank/discover",
             items: projects.map((p) => ({
               name: p.title,
@@ -58,21 +59,16 @@ export default async function ProjectDiscoverPage({
           })}
         />
       ) : null}
-      <div className="container-page py-8 sm:py-10">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-sm font-medium tracking-tight text-brand-sky">Project Bank</p>
-            <h1 className="mt-1 text-pretty font-display text-3xl font-extrabold tracking-tight text-foreground">
-              Discover projects
-            </h1>
-          </div>
-          <SmoothButton asChild variant="candy">
-            <Link href="/project-bank/new">List your idea</Link>
-          </SmoothButton>
-        </div>
+      <PageHero
+        eyebrow="Project Bank"
+        title="Discover projects"
+        description="Browse curated teasers. Full dossiers stay with ASAR Partners until vetting and an NDA."
+        cta={{ label: "List your idea", href: "/project-bank/new" }}
+      />
 
+      <section className="container-page pb-20 sm:pb-28">
         <Suspense
-          fallback={<div className="mb-6 h-10 animate-pulse rounded-lg border border-border bg-card" />}
+          fallback={<div className="mb-6 h-10 animate-pulse rounded-3xl border border-border bg-card" />}
         >
           <ProjectBankFilterBar resultCount={projects.length} />
         </Suspense>
@@ -84,7 +80,7 @@ export default async function ProjectDiscoverPage({
             description={
               hasFilters
                 ? "Try a different sector or investment size, or clear the filters and browse again."
-                : "Have a concept? List a teaser. SARA Advisors review it before it appears here."
+                : "Have a concept? List a teaser. ASAR Partners review it before it appears here."
             }
             action={
               hasFilters ? (
@@ -114,14 +110,14 @@ export default async function ProjectDiscoverPage({
           />
         )}
 
-        <p className="mt-8 text-center text-sm leading-relaxed text-foreground/70">
+        <p className="mt-12 text-center text-[1.05rem] leading-[1.75] text-muted-foreground">
           Have a concept?{" "}
-          <Link href="/project-bank/new" className="font-medium text-brand-sky hover:underline">
+          <Link href="/project-bank/new" className="font-semibold text-tz-blue-deep hover:underline">
             List your idea
           </Link>
           {" — "}we review it before it goes live.
         </p>
-      </div>
+      </section>
     </main>
   );
 }

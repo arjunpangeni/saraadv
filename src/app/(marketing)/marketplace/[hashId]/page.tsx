@@ -42,7 +42,7 @@ export async function generateMetadata({
   return {
     ...pageMetadata({
       title: `${hashId} - Anonymized Business Opportunity`,
-      description: `Confidential M&A opportunity ${hashId} listed via SARA Advisors. Sign an NDA to access full financials and due-diligence data.`,
+      description: `Confidential M&A opportunity ${hashId} listed via ASAR Partners. Sign an NDA to access full financials and due-diligence data.`,
       path: `/marketplace/${hashId}`,
       ogTitle: `${hashId} | Anonymized business opportunity in Nepal`,
     }),
@@ -144,8 +144,8 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
   return (
     <>
       <ViewTracker listingId={listing.id} />
-      <main className="flex-1 bg-background">
-        <div className="container-page py-6 sm:py-8">
+      <main className="flex-1">
+        <div className="container-page py-16 sm:py-20">
           <PageBreadcrumbs
             items={[
               { name: "Marketplace", href: "/marketplace" },
@@ -161,7 +161,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
           <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10 xl:grid-cols-[minmax(0,1fr)_22rem]">
             <div className="order-2 min-w-0 lg:order-1">
               <div className="flex flex-wrap items-center gap-2 text-sm text-foreground/60">
-                <span className="rounded-md bg-brand-sky-muted px-2 py-0.5 text-[11px] font-semibold text-brand-sky">
+                <span className="rounded-md bg-tz-green px-2 py-0.5 text-[11px] font-semibold text-tz-green-deep">
                   {industryLabel(listing.industry)}
                 </span>
                 {modality ? (
@@ -182,10 +182,10 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
                 </span>
               </div>
 
-              <h1 className="mt-3 break-all font-display font-mono text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+              <h1 className="heading-soft mt-3 break-all font-heading font-mono text-[1.7rem] font-semibold tracking-[-0.015em] text-foreground sm:text-[2rem]">
                 {listing.hashId}
               </h1>
-              <p className="mt-2 max-w-2xl text-pretty text-base leading-relaxed text-foreground/75">
+              <p className="mt-4 max-w-2xl text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">
                 Company identity stays gated until an NDA.
               </p>
 

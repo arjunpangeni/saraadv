@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { getBusinessSetupForAdvisor } from "@/lib/business-setup";
+import { normalizePhone } from "@/lib/phone";
 import { prisma } from "@/lib/prisma";
 
 const patchSchema = z.object({
@@ -10,7 +11,10 @@ const patchSchema = z.object({
   phone: z
     .string()
     .trim()
-    .regex(/^(97|98)\d{8}$/, "Enter a 10-digit Nepal mobile starting with 97 or 98")
+    .refine((value) => normalizePhone(value) !== null, {
+      message: "Enter a valid phone number with country code (e.g. +977… or +1…).",
+    })
+    .transform((value) => normalizePhone(value)!)
     .optional(),
   email: z.string().trim().email().max(200).optional(),
   objective: z.enum(["MANUFACTURING", "TRADING", "SERVICE"]).optional(),

@@ -80,7 +80,7 @@ export const EXIT_REASON_LABELS: Record<(typeof EXIT_REASON_OPTIONS)[number], st
   OTHER: "Other",
 };
 
-export const SCRUTINY_CTA_LABEL = "Request Full Profile & Get Quote for SARA M&A Services";
+export const SCRUTINY_CTA_LABEL = "Request Full Profile & Get Quote for ASAR M&A Services";
 export const SCRUTINY_CTA_SHORT = "Request full profile & quote";
 
 export function industryLabel(value?: string | null) {

@@ -27,7 +27,7 @@ function readStoredTheme(): Theme {
   } catch {
     /* ignore */
   }
-  return "dark";
+  return "light";
 }
 
 function applyTheme(theme: Theme) {
@@ -56,7 +56,7 @@ function emit() {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme = useSyncExternalStore(subscribe, readStoredTheme, () => "dark" as const);
+  const theme = useSyncExternalStore(subscribe, readStoredTheme, () => "light" as const);
 
   const setTheme = useCallback((next: Theme) => {
     try {
@@ -80,8 +80,8 @@ export function useTheme() {
   const ctx = useContext(ThemeContext);
   if (!ctx) {
     return {
-      theme: "dark" as const,
-      resolvedTheme: "dark" as const,
+      theme: "light" as const,
+      resolvedTheme: "light" as const,
       setTheme: (_theme: Theme) => {},
     };
   }

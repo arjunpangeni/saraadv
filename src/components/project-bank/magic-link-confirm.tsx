@@ -42,8 +42,8 @@ export function MagicLinkConfirm({ token }: { token: string }) {
         title={alreadyVerified ? "Email already confirmed" : "Email confirmed"}
         body={
           projectTitle
-            ? `SARA Advisors will contact you about "${projectTitle}" after vetting and an NDA. The full dossier is never published on this site.`
-            : "SARA Advisors will contact you after vetting and an NDA. The full dossier is never published on this site."
+            ? `ASAR Partners will contact you about "${projectTitle}" after vetting and an NDA. The full dossier is never published on this site.`
+            : "ASAR Partners will contact you after vetting and an NDA. The full dossier is never published on this site."
         }
         href={projectSlug ? `/project-bank/${projectSlug}` : "/project-bank/discover"}
       />

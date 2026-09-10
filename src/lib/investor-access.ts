@@ -15,7 +15,7 @@ export async function isVerifiedInvestor(userId: string, role: Role): Promise<bo
 }
 
 export function investorVerificationMessage(_role?: Role): string {
-  return "Your investor profile must be verified by SARA Advisors before accessing confidential deal data. Please contact the deal desk or wait for approval.";
+  return "Your investor profile must be verified by ASAR Partners before accessing confidential deal data. Please contact the deal desk or wait for approval.";
 }
 
 /** Owner and desk can open a listing without investor KYC. All other roles need verification. */

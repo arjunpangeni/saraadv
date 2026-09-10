@@ -43,7 +43,7 @@ export function ContactOfficeColumn() {
           const Icon = item.icon;
           const body = (
             <>
-              <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-sky-muted text-brand-sky">
+              <span className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-tz-green text-tz-green-deep">
                 <Icon className="size-3.5" aria-hidden />
               </span>
               <span className="min-w-0 flex-1">

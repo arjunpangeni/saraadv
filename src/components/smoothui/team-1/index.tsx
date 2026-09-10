@@ -15,7 +15,7 @@ interface TeamGridProps {
 
 export function TeamGrid({
   title = "Our Team",
-  description = "The strength of SARA Advisors lies in our highly qualified team of financial experts and strategists, dedicated to driving your business forward.",
+  description = "The strength of ASAR Partners lies in our highly qualified team of financial experts and strategists, dedicated to driving your business forward.",
   members = SARA_TEAM,
 }: TeamGridProps) {
   const shouldReduceMotion = useReducedMotion();

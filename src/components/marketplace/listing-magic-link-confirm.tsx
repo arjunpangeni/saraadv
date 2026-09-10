@@ -40,8 +40,8 @@ export function ListingMagicLinkConfirm({ token }: { token: string }) {
         title={alreadyVerified ? "Email already confirmed" : "Email confirmed"}
         body={
           hashId
-            ? `SARA Advisors will contact you about ${hashId} after vetting and an NDA. The full data room is never published on this site.`
-            : "SARA Advisors will contact you after vetting and an NDA. The full data room is never published on this site."
+            ? `ASAR Partners will contact you about ${hashId} after vetting and an NDA. The full data room is never published on this site.`
+            : "ASAR Partners will contact you after vetting and an NDA. The full data room is never published on this site."
         }
         href={hashId ? `/marketplace/${hashId}` : "/marketplace"}
       />

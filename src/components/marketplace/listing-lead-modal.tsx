@@ -14,11 +14,11 @@ export function ListingLeadReceived({ hashId, name }: { hashId: string; name?: s
         <CheckCircle2 className="size-3.5" aria-hidden />
         Request received
       </p>
-      <h2 className="mt-1 font-display text-xl font-extrabold tracking-tight text-foreground">
+      <h2 className="heading-soft mt-1 font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
         {name ? `Thanks, ${name.split(" ")[0]}.` : "We have your request."}
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-foreground/70">
-        Your work email is confirmed for {hashId}. SARA Advisors will contact you to arrange the NDA.
+      <p className="mt-2 text-[1.05rem] leading-[1.75] text-muted-foreground">
+        Your work email is confirmed for {hashId}. ASAR Partners will contact you to arrange the NDA.
         The full data room stays offline — it is not unlocked on this page.
       </p>
     </aside>
@@ -67,15 +67,15 @@ export function ListingLeadModal({
 
   if (compact) {
     return (
-      <aside className="rounded-2xl border border-brand-sky/30 bg-brand-sky-muted px-5 py-5">
-        <p className="text-[11px] font-semibold tracking-wide text-brand-sky uppercase">Next step</p>
-        <h2 className="mt-1 font-display text-xl font-extrabold tracking-tight text-foreground">
+      <aside className="rounded-3xl border border-border bg-card px-6 py-6 shadow-[var(--shadow-card)]">
+        <p className="text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Next step</p>
+        <h2 className="heading-soft mt-2 font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
           Request the full profile
         </h2>
-        <p className="mt-2 text-sm leading-relaxed text-foreground/70">
+        <p className="mt-2 text-[1.05rem] leading-[1.75] text-muted-foreground">
           {remembered
             ? "Your work email is remembered on this browser for 24 hours. Confirm interest in this listing — no new account."
-            : "Confirm your work email. After vetting and an NDA, SARA Advisors share the data room offline. No password or buyer account."}
+            : "Confirm your work email. After vetting and an NDA, ASAR Partners share the data room offline. No password or buyer account."}
         </p>
         <SmoothButton variant="candy" size="sm" className="mt-4" onClick={() => setOpen(true)}>
           Request Full Profile

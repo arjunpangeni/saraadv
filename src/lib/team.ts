@@ -12,7 +12,7 @@ export const SARA_TEAM: SaraTeamMember[] = [
     credential: "FCA",
     credentialLabel: "Fellow Chartered Accountant",
     focus: "Leadership and strategic vision",
-    bio: "As a Fellow Chartered Accountant, Sudhan Regmi brings extensive leadership and strategic vision to SARA Advisors. With deep expertise in corporate consulting and financial governance, he guides the firm's overarching strategy, ensuring that clients receive top-tier advisory services tailored to their complex financial, investment, and operational needs.",
+    bio: "As a Fellow Chartered Accountant, Sudhan Regmi brings extensive leadership and strategic vision to ASAR Partners. With deep expertise in corporate consulting and financial governance, he guides the firm's overarching strategy, ensuring that clients receive top-tier advisory services tailored to their complex financial, investment, and operational needs.",
   },
   {
     name: "Bhojan Aryal",

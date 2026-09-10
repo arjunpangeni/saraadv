@@ -101,7 +101,7 @@ export function authIntentFromCallback(callbackUrl: string): {
   if (callbackUrl.startsWith("/sell")) {
     return {
       title: "Sign in to list your business",
-      subtitle: "Seller accounts can submit an anonymized listing for the SARA marketplace.",
+      subtitle: "Seller accounts can submit an anonymized listing for the ASAR marketplace.",
       suggestedRole: "SELLER",
     };
   }
@@ -153,7 +153,7 @@ export const ROLE_OPTIONS: { value: SignupRole; label: string; shortLabel: strin
     value: "SELLER",
     label: "Seller",
     shortLabel: "Seller",
-    hint: "List an existing company for sale on the SARA marketplace.",
+    hint: "List an existing company for sale on the ASAR marketplace.",
   },
   {
     value: "ENTREPRENEUR",

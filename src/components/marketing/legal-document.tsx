@@ -24,12 +24,12 @@ export function LegalDocument({
 
   return (
     <main className="flex-1">
-      <article className="container-page max-w-2xl py-12 sm:py-16 lg:py-20">
-        <p className="text-sm font-medium text-foreground/45">Last updated {updated}</p>
-        <h1 className="mt-3 text-pretty font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+      <article className="container-page max-w-2xl py-20 sm:py-28">
+        <p className="text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Last updated {updated}</p>
+        <h1 className="heading-soft mt-3 text-pretty font-heading text-[1.7rem] leading-[1.28] font-semibold tracking-[-0.015em] text-foreground sm:text-[2rem] md:text-[2.6rem]">
           {title}
         </h1>
-        <p className="mt-4 text-pretty text-base leading-relaxed text-foreground/65">{description}</p>
+        <p className="mt-5 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">{description}</p>
 
         <nav aria-label="Legal documents" className="mt-6 flex gap-5 text-sm font-medium">
           {DOCS.map((doc) => (
@@ -82,8 +82,8 @@ export function LegalSection({
 }) {
   return (
     <section className="py-8 first:pt-0">
-      <h2 className="text-base font-semibold tracking-tight text-foreground">{title}</h2>
-      <div className="mt-3 space-y-3 text-pretty text-sm leading-relaxed text-foreground/70 sm:text-[15px]">
+      <h2 className="heading-soft text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">{title}</h2>
+      <div className="mt-3 space-y-3 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">
         {children}
       </div>
     </section>

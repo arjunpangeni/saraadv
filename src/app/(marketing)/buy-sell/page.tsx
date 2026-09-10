@@ -13,13 +13,13 @@ import { BuySellAudience } from "@/components/marketplace/buy-sell-audience";
 export const metadata: Metadata = pageMetadata({
   title: "Buy / Sell a Business in Nepal - M&A Advisory & Brokerage",
   description:
-    "Trusted M&A advisory and business brokerage in Nepal. Browse anonymized business opportunities, request deep scrutiny under NDA, and connect with SARA Advisors for due diligence and deal execution.",
+    "Trusted M&A advisory and business brokerage in Nepal. Browse anonymized business opportunities, request deep scrutiny under NDA, and connect with ASAR Partners for due diligence and deal execution.",
   path: "/buy-sell",
-  ogTitle: "Buy or sell a business in Nepal | SARA Advisors",
+  ogTitle: "Buy or sell a business in Nepal | ASAR Partners",
 });
 
 const INTRO =
-  "SARA Advisors acts as a trusted intermediary for corporate acquisitions, mergers, and business transfers in Nepal — anonymized discovery first, then NDA-gated due diligence.";
+  "ASAR Partners acts as a trusted intermediary for corporate acquisitions, mergers, and business transfers in Nepal — anonymized discovery first, then NDA-gated due diligence.";
 
 const FAQ: FaqItem[] = [
   {
@@ -35,7 +35,7 @@ const FAQ: FaqItem[] = [
   {
     question: "How do I unlock a full profile?",
     answer:
-      "Confirm your work email with a one-time magic link — no buyer account. After SARA Advisors vet the request and arrange an NDA, the data room is shared offline.",
+      "Confirm your work email with a one-time magic link — no buyer account. After ASAR Partners vet the request and arrange an NDA, the data room is shared offline.",
   },
 ];
 
@@ -75,7 +75,6 @@ export default function BuySellPage() {
           eyebrow="M&A Advisory and Business Brokerage"
           title="Buy or sell a business in Nepal"
           description={INTRO}
-          tight
           cta={{ label: "Browse the marketplace", href: "/marketplace" }}
           secondaryCta={{
             label: "List a business",
@@ -83,26 +82,25 @@ export default function BuySellPage() {
           }}
         />
 
-        <section className="container-page py-8 sm:py-10">
+        <section className="container-page py-20 sm:py-28">
           <SectionHeading
             eyebrow="Teaser & Gate"
             title="What buyers see — and what stays locked"
             description="The public card is an anonymized teaser. Line-item books, revaluations, and attachments unlock only after a binding NDA."
             align="center"
-            size="compact"
-            className="mb-6"
+            className="mb-12 sm:mb-14"
           />
 
-          <div className="mb-8 grid gap-3 sm:grid-cols-2 sm:gap-4">
-            <article className="rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5">
-              <div className="flex items-center gap-2 text-sm font-semibold text-brand-sky">
+          <div className="mb-12 grid gap-4 sm:grid-cols-2">
+            <article className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">
                 <Eye className="size-4" aria-hidden />
                 Public teaser
               </div>
-              <h2 className="mt-2 font-display text-xl font-extrabold tracking-tight text-foreground">
+              <h2 className="heading-soft mt-2 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
                 Discovery without the books
               </h2>
-              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/70">
+              <ul className="mt-4 space-y-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 {[
                   "Anonymized reference ID — never the company name",
                   "Sector, legal structure, and province / district",
@@ -110,29 +108,29 @@ export default function BuySellPage() {
                   "Proposed sale value, modality, justification, and exit reason",
                 ].map((item) => (
                   <li key={item} className="flex gap-3">
-                    <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-brand-sky" aria-hidden />
+                    <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-primary" aria-hidden />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </article>
-            <article className="rounded-xl border border-brand-sky/30 bg-brand-sky-muted p-4 sm:p-5">
-              <div className="flex items-center gap-2 text-sm font-semibold text-brand-sky">
+            <article className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+              <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">
                 <Lock className="size-4" aria-hidden />
                 NDA data room
               </div>
-              <h2 className="mt-2 font-display text-xl font-extrabold tracking-tight text-foreground">
+              <h2 className="heading-soft mt-2 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
                 Request, NDA, then unlock
               </h2>
-              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/70">
+              <ul className="mt-4 space-y-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 {[
                   "Confirm your work email with a magic link — no password or buyer account",
-                  "SARA Advisors vet the request and arrange an NDA",
+                  "ASAR Partners vet the request and arrange an NDA",
                   "The full data room is shared offline, never published on the teaser",
-                  "A priority ticket opens on the SARA deal desk",
+                  "A priority ticket opens on the ASAR deal desk",
                 ].map((item) => (
                   <li key={item} className="flex gap-3">
-                    <Lock className="mt-1.5 size-5 shrink-0 text-brand-sky" aria-hidden />
+                    <Lock className="mt-1.5 size-5 shrink-0 text-primary" aria-hidden />
                     <span>{item}</span>
                   </li>
                 ))}
@@ -144,7 +142,7 @@ export default function BuySellPage() {
 
           <FaqList items={FAQ} />
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
             <SmoothButton asChild size="lg" variant="candy">
               <Link href="/marketplace">
                 Browse the marketplace

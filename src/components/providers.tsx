@@ -7,11 +7,13 @@ import { useState } from "react";
 import { ThemeColorMeta } from "@/components/theme-color-meta";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { DevPointerCaptureGuard } from "@/components/dev-pointer-capture-guard";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   return (
     <ThemeProvider>
+      <DevPointerCaptureGuard />
       <ThemeColorMeta />
       <TooltipProvider>
         <SessionProvider>

@@ -1,63 +1,1754 @@
 [
-  { "sector": "Forest", "scope": "Plantation of indigenous saplings, single species, 10-50 hectares", "level": "BRIEF", "sortOrder": 1 },
-  { "sector": "Forest", "scope": "Plantation of indigenous saplings, single species, >50 up to 500 ha (Terai) / 250 ha (hills)", "level": "IEE", "sortOrder": 2 },
-  { "sector": "Forest", "scope": "Plantation of indigenous saplings, single species, exceeding 500 ha (Terai) / 250 ha (hills)", "level": "EIA", "sortOrder": 3 },
-  { "sector": "Forest", "scope": "Construction of forest roads or fire lines, 5-10 km", "level": "BRIEF", "sortOrder": 4 },
-  { "sector": "Forest", "scope": "Construction of forest roads or fire lines, exceeding 10 km", "level": "IEE", "sortOrder": 5 },
-  { "sector": "Forest", "scope": "Hydropower <1MW within forest protection/conservation areas or Ramsar wetlands", "level": "BRIEF", "sortOrder": 6 },
-  { "sector": "Forest", "scope": "Hydropower 1-25MW within forest protection/conservation areas or Ramsar wetlands", "level": "IEE", "sortOrder": 7 },
-  { "sector": "Forest", "scope": "Hydropower exceeding 25MW within forest conservation/protected areas or Ramsar wetlands", "level": "EIA", "sortOrder": 8 },
-  { "sector": "Health", "scope": "Hospital / nursing home / medical service with 16-25 beds", "level": "BRIEF", "sortOrder": 9 },
-  { "sector": "Health", "scope": "Hospital / nursing home / medical service with 25-100 beds", "level": "IEE", "sortOrder": 10 },
-  { "sector": "Health", "scope": "Hospital / nursing home / medical service with more than 100 beds", "level": "EIA", "sortOrder": 11 },
-  { "sector": "Education", "scope": "Teaching hospital up to 50 beds", "level": "BRIEF", "sortOrder": 12 },
-  { "sector": "Education", "scope": "Teaching hospital 50-100 beds", "level": "IEE", "sortOrder": 13 },
-  { "sector": "Education", "scope": "Teaching hospital more than 100 beds", "level": "EIA", "sortOrder": 14 },
-  { "sector": "Tourism", "scope": "Hotel / resort with 25-50 beds", "level": "BRIEF", "sortOrder": 15 },
-  { "sector": "Tourism", "scope": "Hotel / resort with 51-100 beds", "level": "IEE", "sortOrder": 16 },
-  { "sector": "Tourism", "scope": "Hotel / resort with more than 100 beds", "level": "EIA", "sortOrder": 17 },
-  { "sector": "Tourism", "scope": "Construction of new airport", "level": "EIA", "sortOrder": 18 },
-  { "sector": "Tourism", "scope": "Expansion of existing airport area", "level": "IEE", "sortOrder": 19 },
-  { "sector": "Transport", "scope": "Bridge construction up to 250 meters", "level": "BRIEF", "sortOrder": 20 },
-  { "sector": "Transport", "scope": "Bridge construction exceeding 250 meters", "level": "IEE", "sortOrder": 21 },
-  { "sector": "Transport", "scope": "New roads up to 25 km (excluding local roads)", "level": "IEE", "sortOrder": 22 },
-  { "sector": "Transport", "scope": "New roads exceeding 25 km (excluding local roads)", "level": "EIA", "sortOrder": 23 },
-  { "sector": "Transport", "scope": "Operation of railways for public transport", "level": "EIA", "sortOrder": 24 },
-  { "sector": "Energy, Water Resources and Irrigation", "scope": "Hydropower generation 1-50 MW", "level": "IEE", "sortOrder": 25 },
-  { "sector": "Energy, Water Resources and Irrigation", "scope": "Hydropower generation exceeding 50 MW", "level": "EIA", "sortOrder": 26 },
-  { "sector": "Energy, Water Resources and Irrigation", "scope": "Solar power project 1-10 MW", "level": "IEE", "sortOrder": 27 },
-  { "sector": "Energy, Water Resources and Irrigation", "scope": "Solar power project exceeding 10 MW", "level": "EIA", "sortOrder": 28 },
-  { "sector": "Energy, Water Resources and Irrigation", "scope": "Wind power project 1-10 MW", "level": "IEE", "sortOrder": 29 },
-  { "sector": "Energy, Water Resources and Irrigation", "scope": "Wind power project exceeding 10 MW", "level": "EIA", "sortOrder": 30 },
-  { "sector": "Drinking Water", "scope": "Drinking water/sewerage project up to 5 MLD, serving up to 100,000 population", "level": "BRIEF", "sortOrder": 31 },
-  { "sector": "Drinking Water", "scope": "Supply of drinking water to base population 50,000-200,000", "level": "IEE", "sortOrder": 32 },
-  { "sector": "Drinking Water", "scope": "Supply of drinking water to base population exceeding 200,000", "level": "EIA", "sortOrder": 33 },
-  { "sector": "Housing, Building, Settlement Development and Urban Development", "scope": "Building height 20-30 meters", "level": "BRIEF", "sortOrder": 34 },
-  { "sector": "Housing, Building, Settlement Development and Urban Development", "scope": "Building height >30 up to 45 meters", "level": "IEE", "sortOrder": 35 },
-  { "sector": "Housing, Building, Settlement Development and Urban Development", "scope": "Building height exceeding 45 meters", "level": "EIA", "sortOrder": 36 },
-  { "sector": "Housing, Building, Settlement Development and Urban Development", "scope": "Built-up area 3,000-5,000 sqm", "level": "BRIEF", "sortOrder": 37 },
-  { "sector": "Housing, Building, Settlement Development and Urban Development", "scope": "Built-up area >5,000 up to 10,000 sqm", "level": "IEE", "sortOrder": 38 },
-  { "sector": "Housing, Building, Settlement Development and Urban Development", "scope": "Built-up area exceeding 10,000 sqm", "level": "EIA", "sortOrder": 39 },
-  { "sector": "Solid Waste Management", "scope": "Sewerage management project up to 5 MLD", "level": "BRIEF", "sortOrder": 40 },
-  { "sector": "Solid Waste Management", "scope": "Sewerage management project exceeding 5 MLD", "level": "IEE", "sortOrder": 41 },
-  { "sector": "Solid Waste Management", "scope": "Landfilling 1,000-5,000 tons/year", "level": "IEE", "sortOrder": 42 },
-  { "sector": "Solid Waste Management", "scope": "Landfilling exceeding 5,000 tons/year", "level": "EIA", "sortOrder": 43 },
-  { "sector": "Industrial", "scope": "Workshop with investment NPR 10-50 million in machinery", "level": "BRIEF", "sortOrder": 44 },
-  { "sector": "Industrial", "scope": "Workshop with investment exceeding NPR 50 million in machinery", "level": "IEE", "sortOrder": 45 },
-  { "sector": "Industrial", "scope": "Industrial park / SEZ / dry port up to 10 hectares", "level": "BRIEF", "sortOrder": 46 },
-  { "sector": "Industrial", "scope": "Industrial park / SEZ / dry port 10-200 hectares", "level": "IEE", "sortOrder": 47 },
-  { "sector": "Industrial", "scope": "Industrial park / SEZ / dry port exceeding 200 hectares", "level": "EIA", "sortOrder": 48 },
-  { "sector": "Industrial", "scope": "Distillery/brewery/winery boiling & fermentation up to 500,000 L/day", "level": "IEE", "sortOrder": 49 },
-  { "sector": "Industrial", "scope": "Distillery/brewery/winery exceeding 500,000 L/day", "level": "EIA", "sortOrder": 50 },
-  { "sector": "Industrial", "scope": "Pharmaceutical / bulk drug industry up to 50 metric tons/day", "level": "IEE", "sortOrder": 51 },
-  { "sector": "Industrial", "scope": "Bulk drug synthesis exceeding 50 metric tons/day", "level": "EIA", "sortOrder": 52 },
-  { "sector": "Industrial", "scope": "Cement/clinker industry up to 3,000 metric tons/day", "level": "IEE", "sortOrder": 53 },
-  { "sector": "Industrial", "scope": "Cement/clinker industry exceeding 3,000 metric tons/day", "level": "EIA", "sortOrder": 54 },
-  { "sector": "Mining", "scope": "Ordinary construction stone/gravel/sand extraction up to 50 cubic meters/day", "level": "BRIEF", "sortOrder": 55 },
-  { "sector": "Mining", "scope": "Metal production - underground mining up to 1,000 tons/day, surface up to 2,000 tons/day", "level": "IEE", "sortOrder": 56 },
-  { "sector": "Mining", "scope": "Metal production exceeding underground 1,000 tons/day or surface 2,000 tons/day", "level": "EIA", "sortOrder": 57 },
-  { "sector": "Mining", "scope": "Mining of all radioactive metals", "level": "EIA", "sortOrder": 58 },
-  { "sector": "Agriculture", "scope": "Use of national forest land for agriculture up to 5 ha (Terai) / 1 ha (hills)", "level": "IEE", "sortOrder": 59 },
-  { "sector": "Agriculture", "scope": "Dairy processing exceeding 10,000 liters/day", "level": "IEE", "sortOrder": 60 },
-  { "sector": "Agriculture", "scope": "Organic fertilizer production exceeding 10 metric tons/day", "level": "EIA", "sortOrder": 61 }
+  {
+    "sector": "Forest",
+    "scope": "Plantation of indigenous saplings of a single species in a single block covering an area from 10 to 50 hectares.",
+    "level": "BRIEF",
+    "sortOrder": 1
+  },
+  {
+    "sector": "Forest",
+    "scope": "Plantation of indigenous saplings of a single species in a single block covering an area greater than 50 hectares up to 500 hectares in the Terai and greater than 50 hectares up to 250 hectares in the hills.",
+    "level": "IEE",
+    "sortOrder": 2
+  },
+  {
+    "sector": "Forest",
+    "scope": "Plantation of single-species indigenous saplings in a single block over an area exceeding 500 hectares in the Terai and 250 hectares in the hills.",
+    "level": "EIA",
+    "sortOrder": 3
+  },
+  {
+    "sector": "Forest",
+    "scope": "Plantation of imported species saplings that have been tested and found suitable for plantation at the concerned location, in a single block covering up to 10 hectares.",
+    "level": "BRIEF",
+    "sortOrder": 4
+  },
+  {
+    "sector": "Forest",
+    "scope": "Plantation of imported species saplings that have been tested and found suitable for plantation at the concerned location, in a single block covering an area greater than 10 hectares up to 50 hectares in the Terai and greater than 10 hectares up to 25 hectares in the hills.",
+    "level": "IEE",
+    "sortOrder": 5
+  },
+  {
+    "sector": "Forest",
+    "scope": "Plantation of imported species that have been tested and found suitable for plantation at the concerned location, over an area exceeding 50 hectares in the Terai and 25 hectares in the hills.",
+    "level": "EIA",
+    "sortOrder": 6
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of new botanical gardens, forest seed gardens, or zoological gardens (zoos) in an area up to 20 hectares.",
+    "level": "BRIEF",
+    "sortOrder": 7
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of new botanical gardens, forest seed gardens, or zoological gardens (zoos) covering an area of more than 20 hectares.",
+    "level": "IEE",
+    "sortOrder": 8
+  },
+  {
+    "sector": "Forest",
+    "scope": "Allocation of forest area up to 20 hectares in the Terai and up to 5 hectares in the hills as commercial leasehold forest.",
+    "level": "BRIEF",
+    "sortOrder": 9
+  },
+  {
+    "sector": "Forest",
+    "scope": "Allocation of forest land as commercial leasehold forest covering an area greater than 20 hectares up to 100 hectares in the Terai and greater than 5 hectares up to 50 hectares in the hills.",
+    "level": "IEE",
+    "sortOrder": 10
+  },
+  {
+    "sector": "Forest",
+    "scope": "Handing over forest land as commercial leasehold forest covering an area exceeding 100 hectares in the Terai and 50 hectares in the hills.",
+    "level": "EIA",
+    "sortOrder": 11
+  },
+  {
+    "sector": "Forest",
+    "scope": "Clear felling of national forest up to 15 hectares annually by the Government of Nepal for forest research purposes.",
+    "level": "BRIEF",
+    "sortOrder": 12
+  },
+  {
+    "sector": "Forest",
+    "scope": "Clear felling of national forest by the Government of Nepal for forest research purposes covering an area greater than 15 hectares up to 30 hectares annually.",
+    "level": "IEE",
+    "sortOrder": 13
+  },
+  {
+    "sector": "Forest",
+    "scope": "Clear-felling of more than 30 hectares per year of national forest by the Government of Nepal for forest research purposes.",
+    "level": "EIA",
+    "sortOrder": 14
+  },
+  {
+    "sector": "Forest",
+    "scope": "Collection of sand, stone, gravel, and soil up to 50 cubic meters per day from each river or stream located within forest areas, buffer zones, conservation areas, or wetland areas.",
+    "level": "BRIEF",
+    "sortOrder": 15
+  },
+  {
+    "sector": "Forest",
+    "scope": "Collection of sand, stone, gravel, and soil exceeding 50 cubic meters per day from each river or stream flowing through government-managed forests, community forests, leasehold forests, forest protection areas, buffer zones, wetlands within forest areas, or conservation areas.",
+    "level": "IEE",
+    "sortOrder": 16
+  },
+  {
+    "sector": "Forest",
+    "scope": "Extraction of sand, stone, gravel, and soil up to 50 cubic meters per day from the surface of rivers and streams flowing through forest protection areas, conservation areas, buffer zones, environmental protection areas, or Ramsar-listed wetland areas, required for development and construction works operated by the project proponent itself, excluding commercial purposes.",
+    "level": "BRIEF",
+    "sortOrder": 17
+  },
+  {
+    "sector": "Forest",
+    "scope": "Use of forest land up to 1 hectare in forest areas, forest protection areas, conservation areas, buffer zones, and environmental protection areas for purposes other than construction of electricity transmission lines.",
+    "level": "BRIEF",
+    "sortOrder": 18
+  },
+  {
+    "sector": "Forest",
+    "scope": "Use of forest land greater than 1 hectare up to 5 hectares in forest areas, forest protection areas, conservation areas, buffer zones, and environmental protection areas for purposes other than construction of electricity transmission lines. Provided that, in cases where road track construction in forest areas was completed before 1 Ashadh 2077 (mid-June 2020), only the additional forest area required during road upgrading shall be calculated.",
+    "level": "IEE",
+    "sortOrder": 19
+  },
+  {
+    "sector": "Forest",
+    "scope": "Use of more than 5 hectares of forest land within forest areas, forest conservation areas, protected areas, buffer zones, or environmental protection areas for purposes other than electricity transmission lines.",
+    "level": "EIA",
+    "sortOrder": 20
+  },
+  {
+    "sector": "Forest",
+    "scope": "Use of forest land covering an area from 1 to 25 hectares for limestone extraction as raw material for cement industries. Provided that, while preparing an environmental study report for limestone extraction projects used by cement industries, an Environmental Management Plan shall be attached.",
+    "level": "IEE",
+    "sortOrder": 21
+  },
+  {
+    "sector": "Forest",
+    "scope": "Use of more than 25 hectares of forest land for limestone mining as raw material for cement industries.",
+    "level": "EIA",
+    "sortOrder": 22
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction and operation of a landfill site for disposal of solid waste in forest areas.",
+    "level": "EIA",
+    "sortOrder": 23
+  },
+  {
+    "sector": "Forest",
+    "scope": "Collection of resin up to 5 metric tons per year from one district.",
+    "level": "BRIEF",
+    "sortOrder": 24
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of projects operated and implemented by the Government of Nepal, provincial government, or local level through consumer groups in forest protection areas, conservation areas, buffer zones, or environmental protection areas, except on private land.",
+    "level": "BRIEF",
+    "sortOrder": 25
+  },
+  {
+    "sector": "Forest",
+    "scope": "Establishment of herbal centers for commercial production of medicinal herbs or aromatic plants in public barren forest areas.",
+    "level": "IEE",
+    "sortOrder": 26
+  },
+  {
+    "sector": "Forest",
+    "scope": "Access to, utilization of, and benefit sharing of genetic resources.",
+    "level": "BRIEF",
+    "sortOrder": 27
+  },
+  {
+    "sector": "Forest",
+    "scope": "Release of imported wild animals into forest areas.",
+    "level": "BRIEF",
+    "sortOrder": 28
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of forest roads or fire lines with a length of 5 to 10 kilometers.",
+    "level": "BRIEF",
+    "sortOrder": 29
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of forest roads or fire lines with a length exceeding 10 kilometers.",
+    "level": "IEE",
+    "sortOrder": 30
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of hydropower projects with a capacity of less than 1 megawatt in forest protection areas, conservation areas, buffer zones, environmental protection areas, or Ramsar-listed wetland areas.",
+    "level": "BRIEF",
+    "sortOrder": 31
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of hydropower projects with a capacity greater than 1 megawatt up to 25 megawatts in forest protection areas, conservation areas, buffer zones, environmental protection areas, or Ramsar-listed wetlands.",
+    "level": "IEE",
+    "sortOrder": 32
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of hydropower projects exceeding 25 MW capacity within forest conservation areas, protected areas, buffer zones, environmental protection areas, or Ramsar-listed wetlands.",
+    "level": "EIA",
+    "sortOrder": 33
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction of resorts or hotels with up to 25 beds, hospitals with up to 25 beds, or educational institutions with up to 25 rooms within forest areas, conservation areas, buffer zones, wetlands, or environmental protection areas.",
+    "level": "IEE",
+    "sortOrder": 34
+  },
+  {
+    "sector": "Forest",
+    "scope": "Construction within forest areas, forest conservation areas, national parks, wildlife reserves, protected areas, buffer zones, wetlands, or environmental protection areas of: – Resorts or hotels with more than 25 beds, – Hospitals with more than 25 beds, or – Educational institutions with more than 25 rooms.",
+    "level": "EIA",
+    "sortOrder": 35
+  },
+  {
+    "sector": "Forest",
+    "scope": "Collection of forest products from 20 to 100 tons per species per district, in the case of species permitted for extraction and export after processing under prevailing law.",
+    "level": "IEE",
+    "sortOrder": 36
+  },
+  {
+    "sector": "Forest",
+    "scope": "Collection of more than 100 tons per species per district of forest products permitted for export after processing and extraction of essence as per prevailing laws.",
+    "level": "EIA",
+    "sortOrder": 37
+  },
+  {
+    "sector": "Forest",
+    "scope": "Extraction of roots and stumps of trees felled from forest areas exceeding 5 hectares, in accordance with approved forest management plans.",
+    "level": "IEE",
+    "sortOrder": 38
+  },
+  {
+    "sector": "Forest",
+    "scope": "Establishment, dissemination, and research related to exotic and invasive wild animals and plants, including the introduction of GMO (Genetically Modified Organisms) and LMO (Living Modified Organisms) affected species and technologies.",
+    "level": "IEE",
+    "sortOrder": 39
+  },
+  {
+    "sector": "Forest",
+    "scope": "Establishment or expansion of national parks, wildlife reserves, buffer zones, forest protection areas, conservation areas, or environmental protection areas.",
+    "level": "IEE",
+    "sortOrder": 40
+  },
+  {
+    "sector": "Forest",
+    "scope": "Preparation of management plans for national parks, wildlife reserves, hunting reserves, wetlands within forest areas, or protected watershed areas.",
+    "level": "IEE",
+    "sortOrder": 41
+  },
+  {
+    "sector": "Forest",
+    "scope": "Preparation of district-level five-year forest management plans, buffer zone or conservation area management plans, or forest protection area action plans involving collection of forest products in the following quantities: (a) Collection of roots and tubers up to 50 metric tons annually; (b) Collection of bark up to 150 metric tons annually; (c) Collection of leaves or stems up to 150 metric tons annually (excluding Sal seed, soapnut, amla, tendu leaf, bhoorla leaf, and bay leaf); (d) Collection of flowers or fluff up to 150 metric tons annually; (e) Collection of fruits or seeds up to 200 metric tons annually; (f) Collection of seedlings up to 150 metric tons annually; (g) Collection of gum, resin (excluding pine resin), or latex up to 200 metric tons annually; (h) Production and collection of timber exceeding 200,000 cubic feet annually.",
+    "level": "IEE",
+    "sortOrder": 42
+  },
+  {
+    "sector": "Forest",
+    "scope": "Preparation of a five-year forest operational plan, buffer zone or protected area management plan, or forest conservation area action plan involving collection of forest products as follows: (a) Collection of more than 50 metric tons of roots or rhizomes per year, (b) Collection of more than 150 metric tons of bark per year, (c) Collection of more than 150 metric tons of leaves or stems per year (excluding sal seed, soapnut, gooseberry, tendu leaf, and bay leaf), (d) Collection of more than 150 metric tons of flowers or floss per year, (e) Collection of more than 200 metric tons of fruits or seeds per year, (f) Collection of more than 150 metric tons of saplings per year, (g) Collection of more than 200 metric tons of gum, resin (excluding pine resin), or catechu per year.",
+    "level": "EIA",
+    "sortOrder": 43
+  },
+  {
+    "sector": "Forest",
+    "scope": "Collection of resin exceeding 5 metric tons annually from one district.",
+    "level": "IEE",
+    "sortOrder": 44
+  },
+  {
+    "sector": "Forest",
+    "scope": "Implementation of any proposal within national parks, wildlife reserves, or hunting reserve areas.",
+    "level": "EIA",
+    "sortOrder": 45
+  },
+  {
+    "sector": "Health",
+    "scope": "Operation of hospitals, nursing homes, or medical services with 16 to 25 beds.",
+    "level": "BRIEF",
+    "sortOrder": 46
+  },
+  {
+    "sector": "Health",
+    "scope": "Operation of hospitals, nursing homes, or medical services with 25 to 100 beds.",
+    "level": "IEE",
+    "sortOrder": 47
+  },
+  {
+    "sector": "Health",
+    "scope": "Operation of hospitals, nursing homes, or medical services with more than 100 beds.",
+    "level": "EIA",
+    "sortOrder": 48
+  },
+  {
+    "sector": "Education",
+    "scope": "Operation of teaching hospitals with up to 50 beds.",
+    "level": "BRIEF",
+    "sortOrder": 49
+  },
+  {
+    "sector": "Education",
+    "scope": "Operation of teaching hospitals with more than 50 beds up to 100 beds.",
+    "level": "IEE",
+    "sortOrder": 50
+  },
+  {
+    "sector": "Education",
+    "scope": "Operation of teaching hospitals with more than 100 beds.",
+    "level": "EIA",
+    "sortOrder": 51
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction, establishment, and operation of hotels or resorts with 25 to 50 beds.",
+    "level": "BRIEF",
+    "sortOrder": 52
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction, establishment, and operation of hotels or resorts with 51 to 100 beds.",
+    "level": "IEE",
+    "sortOrder": 53
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction, establishment, and operation of hotels or resorts with more than 100 beds.",
+    "level": "EIA",
+    "sortOrder": 54
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction and operation of bungee jumping, swing, canyoning, skydiving, zip flyer, high ropes, sky walk, paragliding, ultralight, amusement parks, fun parks, and other adventure and tourism infrastructure projects with an investment ranging from NPR 20 million to NPR 50 million.",
+    "level": "BRIEF",
+    "sortOrder": 55
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction and operation of bungee jumping, swing, canyoning, skydiving, zip-flyer, high ropes, sky walk, paragliding, ultralight, amusement parks, fun parks, and other adventure and tourism infrastructure projects with an investment exceeding NPR 50 million.",
+    "level": "IEE",
+    "sortOrder": 56
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Expansion of area in existing airports.",
+    "level": "IEE",
+    "sortOrder": 57
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction of a new airport",
+    "level": "EIA",
+    "sortOrder": 58
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Operation of rafting or cruise services using engine-powered equipment and fuel combustion in rivers or lakes containing fish or other aquatic life.",
+    "level": "IEE",
+    "sortOrder": 59
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Operation of houseboats (floating houses) established in lakes.",
+    "level": "IEE",
+    "sortOrder": 60
+  },
+  {
+    "sector": "Tourism",
+    "scope": "Construction and operation of commercial Himalayan Adventure Sports Clubs.",
+    "level": "EIA",
+    "sortOrder": 61
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of bridges up to 250 meters in length.",
+    "level": "BRIEF",
+    "sortOrder": 62
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of bridges with a length exceeding 250 meters.",
+    "level": "IEE",
+    "sortOrder": 63
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of local roads.",
+    "level": "BRIEF",
+    "sortOrder": 64
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of new roads with a length of up to 25 kilometers, excluding local roads.",
+    "level": "IEE",
+    "sortOrder": 65
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of new roads exceeding 25 km in length, excluding local roads",
+    "level": "EIA",
+    "sortOrder": 66
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of ropeways with a length ranging from 5 to 50 kilometers.",
+    "level": "IEE",
+    "sortOrder": 67
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of ropeways exceeding 50 km",
+    "level": "EIA",
+    "sortOrder": 68
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of cable car routes with a length ranging from 1 to 5 kilometers.",
+    "level": "IEE",
+    "sortOrder": 69
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of cable car routes exceeding 5 km",
+    "level": "EIA",
+    "sortOrder": 70
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of tunnels for road purposes with a length ranging from 1 to 3 kilometers.",
+    "level": "IEE",
+    "sortOrder": 71
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of flyovers (elevated bridges) for the operation of four-wheeled vehicles.",
+    "level": "IEE",
+    "sortOrder": 72
+  },
+  {
+    "sector": "Transport",
+    "scope": "Operation of monorail systems for public transportation.",
+    "level": "IEE",
+    "sortOrder": 73
+  },
+  {
+    "sector": "Transport",
+    "scope": "Upgrading, rehabilitation, or reconstruction of national highways or feeder roads with length exceeding 10 kilometers up to 50 kilometers, involving widening of the road.",
+    "level": "IEE",
+    "sortOrder": 74
+  },
+  {
+    "sector": "Transport",
+    "scope": "Upgrading, rehabilitation, or reconstruction of national highways or feeder roads exceeding 50 km involving widening.",
+    "level": "EIA",
+    "sortOrder": 75
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of inland waterways.",
+    "level": "IEE",
+    "sortOrder": 76
+  },
+  {
+    "sector": "Transport",
+    "scope": "Operation of railways for public transport",
+    "level": "EIA",
+    "sortOrder": 77
+  },
+  {
+    "sector": "Transport",
+    "scope": "Construction of road tunnels exceeding 3 km",
+    "level": "EIA",
+    "sortOrder": 78
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Use of forest land for electricity transmission line projects up to 66 KV.",
+    "level": "BRIEF",
+    "sortOrder": 79
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Generation of electricity from magnetic energy.",
+    "level": "BRIEF",
+    "sortOrder": 80
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Use of forest land for the establishment of hydrological and meteorological measurement centers or weather radar installations.",
+    "level": "BRIEF",
+    "sortOrder": 81
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Construction of lift irrigation projects up to 100 hectares.",
+    "level": "BRIEF",
+    "sortOrder": 82
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Electricity transmission lines and substations: (a) Construction of electricity transmission lines with a capacity of 132 kV or above. (b) Construction of new outdoor substations by tapping from existing electricity transmission lines of 220 kV or above capacity.",
+    "level": "IEE",
+    "sortOrder": 83
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Electricity generation: (a) Construction of hydropower generation projects with a capacity ranging from 1 to 50 megawatts. (b) Operation of electricity generation projects using mineral oil or gas with a capacity ranging from 1 to 5 megawatts.",
+    "level": "IEE",
+    "sortOrder": 84
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Electricity Generation: (a) Construction of hydropower projects exceeding 50 MW, (b) Operation of coal-based or nuclear power generation projects, (c) Operation of power generation projects using mineral oil or gas exceeding 5 MW.",
+    "level": "EIA",
+    "sortOrder": 85
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "New irrigation systems: (a) Irrigation of areas ranging from 200 to 2,000 hectares in the Terai or Inner Madhesh. (b) Irrigation of areas ranging from 25 to 500 hectares in hill valleys and tars. (c) Irrigation of areas ranging from 25 to 200 hectares in hilly slopes or mountainous regions. (d) Construction of lift irrigation projects covering areas exceeding 100 hectares.",
+    "level": "IEE",
+    "sortOrder": 86
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "New Irrigation Systems: (a) Irrigation of more than 2,000 hectares in the Terai or Inner Terai, (b) Irrigation of more than 500 hectares in hill valleys and plains, (c) Irrigation of more than 200 hectares in steep hill slopes or mountainous regions.",
+    "level": "EIA",
+    "sortOrder": 87
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Irrigation rehabilitation systems: Operation of any rehabilitation project involving construction of new headworks or change of main canals in existing irrigation systems.",
+    "level": "IEE",
+    "sortOrder": 88
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Carrying out any water resource development activity that displaces a permanently settled population ranging from 25 to 100 persons.",
+    "level": "IEE",
+    "sortOrder": 89
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Any water resources development activity causing displacement of more than 100 permanently settled persons.",
+    "level": "EIA",
+    "sortOrder": 90
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Carrying out river control works with a length exceeding 10 kilometers.",
+    "level": "IEE",
+    "sortOrder": 91
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Renewable energy sector: (a) Operation of solar energy electricity generation projects with a capacity ranging from 1 to 10 megawatts. (b) Operation of wind energy electricity generation projects with a capacity ranging from 1 to 10 megawatts. (c) Operation of bio-energy electricity generation projects with a capacity ranging from 0.5 to 2 megawatts. (d) Operation of cogeneration projects producing electricity from bagasse generated after crushing sugarcane within sugar industries. (e) Construction of biogas plants with a capacity ranging from 1,500 to 10,000 cubic meters.",
+    "level": "IEE",
+    "sortOrder": 92
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Renewable Energy Sector: (a) Operation of solar power projects exceeding 10 MW, (b) Operation of wind power projects exceeding 10 MW, (c) Operation of biomass power projects exceeding 2 MW, (d) Construction of biogas plants exceeding 10,000 cubic meters capacity.",
+    "level": "EIA",
+    "sortOrder": 93
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Construction of multipurpose reservoirs",
+    "level": "EIA",
+    "sortOrder": 94
+  },
+  {
+    "sector": "Energy, Water Resources and Irrigation",
+    "scope": "Use of inter-basin water transfer systems.",
+    "level": "EIA",
+    "sortOrder": 95
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Operation of drinking water projects including sewerage systems with treatment facilities up to 5 MLD capacity, serving up to 100,000 base year population.",
+    "level": "BRIEF",
+    "sortOrder": 96
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Collection of rainwater spread over an area ranging from 100 to 500 hectares, and utilization of water sources within that area.",
+    "level": "IEE",
+    "sortOrder": 97
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Rainwater harvesting and use of water resources spread over an area exceeding 500 hectares",
+    "level": "EIA",
+    "sortOrder": 98
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Utilization of surface water sources with a safe yield exceeding 100 liters per second (LPS) and supplying 50 to 75 percent of such water during the dry season.",
+    "level": "IEE",
+    "sortOrder": 99
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Use of surface water sources with safe yield exceeding 100 liters per second (LPS) supplying more than 75% during dry season",
+    "level": "EIA",
+    "sortOrder": 100
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Treatment of water at a rate exceeding 100 liters per second.",
+    "level": "IEE",
+    "sortOrder": 101
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Recharge of 50 to 75 percent of the total aquifer for groundwater source development.",
+    "level": "IEE",
+    "sortOrder": 102
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Recharge of more than 75% of total aquifer for groundwater development",
+    "level": "EIA",
+    "sortOrder": 103
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Operation of drinking water projects by constructing tunnels ranging from 1 to 3 kilometers in length.",
+    "level": "IEE",
+    "sortOrder": 104
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Operation of drinking water projects involving 25 to 100 persons.",
+    "level": "IEE",
+    "sortOrder": 105
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Displacement of more than 100 persons for drinking water project operation",
+    "level": "EIA",
+    "sortOrder": 106
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Settlement of a population of up to 500 persons in the upstream area of drinking water sources.",
+    "level": "IEE",
+    "sortOrder": 107
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Settlement of more than 500 persons in upstream catchment areas of drinking water sources",
+    "level": "EIA",
+    "sortOrder": 108
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Supply of drinking water to a base year population ranging from 50,000 to 200,000.",
+    "level": "IEE",
+    "sortOrder": 109
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Supply of drinking water to a base year population exceeding 200,000",
+    "level": "EIA",
+    "sortOrder": 110
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Supply of drinking water to a base year population ranging from 50,000 to 200,000 by connecting new sources.",
+    "level": "IEE",
+    "sortOrder": 111
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Expansion of drinking water supply systems serving more than 200,000 base year population by adding new sources",
+    "level": "EIA",
+    "sortOrder": 112
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Carrying out diversion-related works exceeding 1 kilometer in length.",
+    "level": "IEE",
+    "sortOrder": 113
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Operation of drinking water projects including sewerage systems with treatment facilities having a capacity exceeding 5 MLD, serving a base year population exceeding 100,000.",
+    "level": "IEE",
+    "sortOrder": 114
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Use of groundwater sources affected or likely to be affected by biological or chemical pollution",
+    "level": "EIA",
+    "sortOrder": 115
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Operation of multi-purpose water supply projects using more than 500 liters per second",
+    "level": "EIA",
+    "sortOrder": 116
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Construction of tunnels exceeding 3 km for drinking water projects",
+    "level": "EIA",
+    "sortOrder": 117
+  },
+  {
+    "sector": "Drinking Water",
+    "scope": "Implementation of any proposal affecting major public drinking water sources.",
+    "level": "EIA",
+    "sortOrder": 118
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of buildings with a height ranging from 20 to 30 meters.",
+    "level": "BRIEF",
+    "sortOrder": 119
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of buildings with a height exceeding 30 meters up to 45 meters.",
+    "level": "IEE",
+    "sortOrder": 120
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of buildings with a height exceeding 45 meters",
+    "level": "EIA",
+    "sortOrder": 121
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of residential, commercial, or mixed residential and commercial buildings with a built-up area or floor area ranging from 3,000 to 5,000 square meters.",
+    "level": "BRIEF",
+    "sortOrder": 122
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of residential, commercial, or mixed residential-commercial buildings having a built-up area or floor area exceeding 5,000 square meters up to 10,000 square meters.",
+    "level": "IEE",
+    "sortOrder": 123
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of residential, commercial, or mixed-use buildings with built-up or floor area exceeding 10,000 square meters",
+    "level": "EIA",
+    "sortOrder": 124
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of cinema halls, theatres, community buildings, stadiums, concert halls, and sports complexes with a simultaneous entry and exit capacity of 500 to 1,000 persons.",
+    "level": "BRIEF",
+    "sortOrder": 125
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of cinema halls, theatres, community buildings, stadiums, concert halls, and sports complexes with simultaneous entry and exit capacity ranging from 1,000 to 2,000 persons.",
+    "level": "IEE",
+    "sortOrder": 126
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of cinema halls, theaters, community buildings, stadiums, concert halls, or sports complexes accommodating more than 2,000 persons at a time",
+    "level": "EIA",
+    "sortOrder": 127
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Operation of projects on land areas ranging from 5 to 10 hectares.",
+    "level": "BRIEF",
+    "sortOrder": 128
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Operation of projects on land areas ranging from 10 to 100 hectares.",
+    "level": "IEE",
+    "sortOrder": 129
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Operation of land development projects exceeding 100 hectares",
+    "level": "EIA",
+    "sortOrder": 130
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of 1 to 5 hectares of hard surface pavement (dry port, bus park, parking lot, etc.).",
+    "level": "BRIEF",
+    "sortOrder": 131
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction of more than 5 hectares of hard surface pavement (dry port, port, bus park, parking lot, etc.).",
+    "level": "IEE",
+    "sortOrder": 132
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction and operation of buildings using 5,000 to 10,000 liters of groundwater per day.",
+    "level": "BRIEF",
+    "sortOrder": 133
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction and operation of buildings using more than 10,000 liters up to 20,000 liters per day of groundwater.",
+    "level": "IEE",
+    "sortOrder": 134
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Construction and operation of buildings using more than 20,000 liters of groundwater per day",
+    "level": "EIA",
+    "sortOrder": 135
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Housing development in areas ranging from 1 to 5 hectares.",
+    "level": "IEE",
+    "sortOrder": 136
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Housing development over an area exceeding 5 hectares",
+    "level": "EIA",
+    "sortOrder": 137
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Filling or cutting of soil exceeding 20,000 cubic meters for site development.",
+    "level": "IEE",
+    "sortOrder": 138
+  },
+  {
+    "sector": "Housing, Building, Settlement Development, and Urban Development",
+    "scope": "Urbanization as per prevailing land-use laws.",
+    "level": "EIA",
+    "sortOrder": 139
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Operation of sewerage management projects with a capacity of up to 5 MLD.",
+    "level": "BRIEF",
+    "sortOrder": 140
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Operation of sewerage management projects with a capacity exceeding 5 MLD.",
+    "level": "IEE",
+    "sortOrder": 141
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Operation of sewerage sanitation or solid waste management activities intended to support a population of up to 50,000 base year population.",
+    "level": "BRIEF",
+    "sortOrder": 142
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Operation of sewerage disposal, sanitation, or solid waste management activities intended to support a base year population exceeding 50,000.",
+    "level": "IEE",
+    "sortOrder": 143
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Final disposal management of biologically hazardous waste generated from health centers, hospitals, or nursing homes with 25 beds.",
+    "level": "BRIEF",
+    "sortOrder": 144
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Landfilling of solid waste ranging from 1,000 to 5,000 tons annually.",
+    "level": "IEE",
+    "sortOrder": 145
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Operation of transfer stations and resource recovery areas spread over 5 to 10 hectares.",
+    "level": "IEE",
+    "sortOrder": 146
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Sorting, segregation, layering, and recycling of solid waste through chemical, mechanical, or biological methods over areas ranging from 5 to 10 hectares.",
+    "level": "IEE",
+    "sortOrder": 147
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Operation of compost plants spread over 5 to 10 hectares.",
+    "level": "IEE",
+    "sortOrder": 148
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Final disposal management of biologically hazardous waste generated from health centers, hospitals, or nursing homes having more than 25 beds up to 100 beds.",
+    "level": "IEE",
+    "sortOrder": 149
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "For household and residential waste, the following activities: (a) Landfilling of more than 5,000 tons of waste per year, (b) Operation of transfer stations and resource recovery areas exceeding 10 hectares, (c) Waste segregation, processing, treatment, and reuse over more than 10 hectares using chemical, mechanical, or biological methods, (d) Operation of compost plants exceeding 10 hectares, (e) Disposal of waste generated from urban areas with population of at least 10,000.",
+    "level": "EIA",
+    "sortOrder": 150
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Construction activities related to hazardous waste of any type or scale: (a) Waste treatment plant construction, (b) Waste recovery plant construction, (c) Construction of waste dumping, stacking, or landfill sites, (d) Construction of waste storage facilities, (e) Construction of waste treatment facilities.",
+    "level": "EIA",
+    "sortOrder": 151
+  },
+  {
+    "sector": "Solid Waste Management",
+    "scope": "Activities related to hazardous waste: (a) Disposal and management of radioactive materials with half-life exceeding 25 years, (b) Disposal and management of radioactive materials with lethal dose of 50, (c) Final disposal of biological hazardous waste from health facilities, hospitals, or nursing homes with more than 100 beds, (d) Use of 1 hectare or more of land for incineration or recycling of hazardous substances and related energy activities.",
+    "level": "EIA",
+    "sortOrder": 152
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment and operation of workshops (including repair and maintenance) with an investment of NPR 10 million to NPR 50 million in machinery and equipment.",
+    "level": "BRIEF",
+    "sortOrder": 153
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment and operation of storage yards for construction-related industries with an investment exceeding NPR 50 million in machinery and equipment.",
+    "level": "IEE",
+    "sortOrder": 154
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industrial villages/industrial areas, industrial parks, special economic zones, cross-border special economic zones, dry ports, and commercial areas covering up to 10 hectares, excluding forest areas.",
+    "level": "BRIEF",
+    "sortOrder": 155
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industrial villages, industrial areas, industrial parks, special economic zones, cross-border special economic zones, dry ports, and commercial areas covering more than 10 hectares up to 200 hectares, excluding forest areas.",
+    "level": "IEE",
+    "sortOrder": 156
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Processing of sand up to 25 metric tons per day.",
+    "level": "BRIEF",
+    "sortOrder": 157
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of distillery, brewery, or winery industries producing alcohol through blending processes or having boiling and fermentation facilities with a capacity of up to 500,000 liters per day.",
+    "level": "IEE",
+    "sortOrder": 158
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing carbonated or non-carbonated beverages, juices, etc.",
+    "level": "IEE",
+    "sortOrder": 159
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing vegetable ghee or edible oil.",
+    "level": "IEE",
+    "sortOrder": 160
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries processing more than 1 metric ton per day of tea, coffee, herbs, etc.",
+    "level": "IEE",
+    "sortOrder": 161
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing khandsari or sugar with a capacity of up to 3,000 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 162
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing more than 10 metric tons per day of food products.",
+    "level": "IEE",
+    "sortOrder": 163
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries processing bones, horns, or hooves with a capacity of up to 25 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 164
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries processing hides up to 15,000 square feet per day.",
+    "level": "IEE",
+    "sortOrder": 165
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for water treatment at a rate exceeding 10 liters per second for commercial purposes, excluding pipelines.",
+    "level": "IEE",
+    "sortOrder": 166
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for the production, storage, filling, and refilling of cooking (LPG) gas and natural gas.",
+    "level": "IEE",
+    "sortOrder": 167
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for the production and refilling of carbon dioxide, oxygen, nitrogen, acetylene, etc.",
+    "level": "IEE",
+    "sortOrder": 168
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing fired bricks, tiles, etc., with an annual production capacity of up to 30 million pieces.",
+    "level": "IEE",
+    "sortOrder": 169
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 10,000 compressed bricks or hollow bricks/blocks per day.",
+    "level": "IEE",
+    "sortOrder": 170
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a crusher industry with a capacity of up to 1,000 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 171
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for sand processing exceeding 25 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 172
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing acid or alkali with a production capacity of up to 100 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 173
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing chemicals (plasticizer, chlorine, sodium hypochlorite, etc.), glue, and adhesives.",
+    "level": "IEE",
+    "sortOrder": 174
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing zinc oxide.",
+    "level": "IEE",
+    "sortOrder": 175
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing paints and coatings, excluding cosmetic products.",
+    "level": "IEE",
+    "sortOrder": 176
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing lubricants through blending, reprocessing, or reclamation processes.",
+    "level": "IEE",
+    "sortOrder": 177
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for the production and refilling of bitumen or bitumen emulsion through blending processes.",
+    "level": "IEE",
+    "sortOrder": 178
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing mosquito repellents (liquid, coil, tablet, lotion, etc.) and incense (dhup).",
+    "level": "IEE",
+    "sortOrder": 179
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 5 metric tons per day of detergents, shampoo, liquid cleaners, cleaning powder, sanitizer, freshener, etc.",
+    "level": "IEE",
+    "sortOrder": 180
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 1 metric ton per day of soap.",
+    "level": "IEE",
+    "sortOrder": 181
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing batteries (dry, wet, or lithium-ion).",
+    "level": "IEE",
+    "sortOrder": 182
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for battery recycling (dry or wet) with a capacity of up to 50 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 183
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a foam production industry with a capacity of up to 5 metric tons per day (including industries producing more than 2 metric tons of goods using foam).",
+    "level": "IEE",
+    "sortOrder": 184
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a pulp or paper industry (excluding traditional cottage industries) with a production capacity of up to 100 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 185
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 1 metric ton per day of stationery items (pen, dot pen, pencil, notebook, register, etc.).",
+    "level": "IEE",
+    "sortOrder": 186
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 5 metric tons per day of packaging materials (corrugated boxes, cardboard, etc.).",
+    "level": "IEE",
+    "sortOrder": 187
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for yarn and fabric dyeing, washing, or printing (including carpet and pashmina), excluding traditional cottage industries.",
+    "level": "IEE",
+    "sortOrder": 188
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing fabric using more than 5 metric tons of yarn per day.",
+    "level": "IEE",
+    "sortOrder": 189
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a spinning mill.",
+    "level": "IEE",
+    "sortOrder": 190
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a jute industry.",
+    "level": "IEE",
+    "sortOrder": 191
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing coir rope or coir mattress.",
+    "level": "IEE",
+    "sortOrder": 192
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a clinker or cement industry based on limestone or clinker with a production capacity of up to 3,000 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 193
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a lime industry with a production capacity of up to 3,000 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 194
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of khandsari or sugar industries producing more than 3,000 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 195
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for processing mineral substances having a production capacity of more than 10 metric tons per day, or involving an investment in machinery and equipment ranging from NPR 200 million to NPR 2 billion.",
+    "level": "IEE",
+    "sortOrder": 196
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a pharmaceutical industry, or establishment of an industry synthesizing bulk drugs (formulation) for medicines with a capacity of up to 50 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 197
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 500 kilograms per day of Ayurvedic medicines.",
+    "level": "IEE",
+    "sortOrder": 198
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 5 metric tons per day of plastic goods (including pipes, fittings, yarn, wrappers, etc.), based on waste plastic raw materials or virgin granules, resin, or compounds.",
+    "level": "IEE",
+    "sortOrder": 199
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for processing and producing tires, tubes, and rubber products.",
+    "level": "IEE",
+    "sortOrder": 200
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry extracting fuel (oil) by processing used tires and plastics.",
+    "level": "IEE",
+    "sortOrder": 201
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries conducting anodizing, electroplating, and galvanizing, excluding household industries plating gold and silver.",
+    "level": "IEE",
+    "sortOrder": 202
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a rolling mill industry.",
+    "level": "IEE",
+    "sortOrder": 203
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry performing cut-to-length processing and utensil manufacturing with a capacity exceeding 10 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 204
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a foundry industry with a production capacity exceeding 50 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 205
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing ferrous and non-ferrous products through primary smelting up to 500 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 206
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry performing metal remelting, rerolling, or alloying with a capacity of up to 750 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 207
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry carrying out fabrication (including structures) from more than 10 metric tons of metal or non-metal.",
+    "level": "IEE",
+    "sortOrder": 208
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry assembling cars, motorcycles, autorickshaws, and assembling more than 100 bicycles/rickshaws per day (without fuel or electricity).",
+    "level": "IEE",
+    "sortOrder": 209
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry assembling electrical and electronic goods using machinery and equipment worth more than NPR 10 million.",
+    "level": "IEE",
+    "sortOrder": 210
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 1 metric ton per day of electric wires (for wiring and transmission).",
+    "level": "IEE",
+    "sortOrder": 211
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a workshop (including repair and maintenance) with an investment of more than NPR 50 million in machinery and equipment.",
+    "level": "IEE",
+    "sortOrder": 212
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing all types of gas cylinders.",
+    "level": "IEE",
+    "sortOrder": 213
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Generation of electric energy through cogeneration using renewable energy technologies (solar, wind, biomass, etc.) with a capacity ranging from 5 to 40 megawatts for industrial self-use.",
+    "level": "IEE",
+    "sortOrder": 214
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Installation and operation of thermal energy systems for industrial use through biomass or coal-based gasifiers, with capacity ranging from 100 kilowatts to 1 megawatt.",
+    "level": "IEE",
+    "sortOrder": 215
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a sawmill using 25,000 to 500,000 cubic feet of timber annually.",
+    "level": "IEE",
+    "sortOrder": 216
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of sawmills using more than 500,000 cubic feet of timber per year.",
+    "level": "EIA",
+    "sortOrder": 217
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing furniture items such as doors and windows using more than 500 cubic feet of timber per day.",
+    "level": "IEE",
+    "sortOrder": 218
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing rosin, turpentine, and catechu (kattha).",
+    "level": "IEE",
+    "sortOrder": 219
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing veneer, plywood, plyboard, etc. using up to 200,000 cubic feet of timber or timber products annually.",
+    "level": "IEE",
+    "sortOrder": 220
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 5 metric tons per day of bamboo and cane products.",
+    "level": "IEE",
+    "sortOrder": 221
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 500 kilograms per day of tobacco-based pan masala.",
+    "level": "IEE",
+    "sortOrder": 222
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing cigarettes and bidis (including tobacco drying).",
+    "level": "IEE",
+    "sortOrder": 223
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a matchstick industry.",
+    "level": "IEE",
+    "sortOrder": 224
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 10 kiloliters of biodiesel per day.",
+    "level": "IEE",
+    "sortOrder": 225
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing oil other than edible oil through solvent extraction processes.",
+    "level": "IEE",
+    "sortOrder": 226
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing essential oils through extraction, distillation, or similar technologies.",
+    "level": "IEE",
+    "sortOrder": 227
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing petroleum products up to 200 metric tons per day using semi-processed oil or fossil fuels.",
+    "level": "IEE",
+    "sortOrder": 228
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a diagnostic laboratory using more than 5 liters per day of chemicals and reagents.",
+    "level": "IEE",
+    "sortOrder": 229
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of a glass processing industry.",
+    "level": "IEE",
+    "sortOrder": 230
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 1 metric ton per day of animal or poultry feed.",
+    "level": "IEE",
+    "sortOrder": 231
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry producing more than 200 pairs of shoes or slippers per day.",
+    "level": "IEE",
+    "sortOrder": 232
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Operation of a printing press printing more than 100,000 pages per day.",
+    "level": "IEE",
+    "sortOrder": 233
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry handling more than 100 metric tons of cargo per day.",
+    "level": "IEE",
+    "sortOrder": 234
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry with machinery and equipment investment ranging from NPR 250 million to NPR 2 billion, excluding activities such as software development, online services, internet, radio, cable networks, training, or consultancy, even if computers, software, or electronic equipment are used.",
+    "level": "IEE",
+    "sortOrder": 235
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment and operation of an asphalt batching plant.",
+    "level": "IEE",
+    "sortOrder": 236
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of an industry for the production, storage, and filling of biogas with a capacity ranging from 25 to 100 tons per day.",
+    "level": "IEE",
+    "sortOrder": 237
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industrial villages/areas, industrial parks, special economic zones, cross-border special economic zones, dry ports, or commercial areas covering more than 200 hectares outside forest areas.",
+    "level": "EIA",
+    "sortOrder": 238
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of distillery, brewery, or winery industries with boiling and fermentation facilities exceeding 500,000 liters per day.",
+    "level": "EIA",
+    "sortOrder": 239
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries processing more than 25 metric tons per day of bones, horns, or hooves.",
+    "level": "EIA",
+    "sortOrder": 240
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of leather processing industries exceeding 15,000 square feet per day.",
+    "level": "EIA",
+    "sortOrder": 241
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of brick, tile, etc. industries with annual production exceeding 30 million pieces.",
+    "level": "EIA",
+    "sortOrder": 242
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of crusher industries with capacity exceeding 1,000 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 243
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of acid or alkali industries with production capacity exceeding 100 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 244
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of bitumen or bitumen emulsion industries excluding blending processes.",
+    "level": "EIA",
+    "sortOrder": 245
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of chemical fertilizer industries excluding blending processes.",
+    "level": "EIA",
+    "sortOrder": 246
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of pesticide manufacturing industries excluding blending processes.",
+    "level": "EIA",
+    "sortOrder": 247
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of battery recycling industries (dry or wet) exceeding 50 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 248
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of foam production industries exceeding 5 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 249
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of pulp or paper industries exceeding 100 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 250
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of clinker or cement industries based on limestone or clinker with production capacity exceeding 3,000 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 251
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of lime industries exceeding 3,000 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 252
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of mineral processing industries involving investment exceeding NPR 2 billion in machinery and equipment.",
+    "level": "EIA",
+    "sortOrder": 253
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of bulk drug (formulation) synthesis industries producing more than 50 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 254
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing ferrous and non-ferrous products through primary smelting exceeding 500 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 255
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries performing metal remelting, rerolling, or alloying exceeding 750 metric tons per day.",
+    "level": "EIA",
+    "sortOrder": 256
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Generation of electrical energy through cogeneration using renewable energy technologies exceeding 40 MW for industrial self-use.",
+    "level": "EIA",
+    "sortOrder": 257
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Installation and operation of gasifier-based thermal energy systems exceeding 1 MW using biomass or coal.",
+    "level": "EIA",
+    "sortOrder": 258
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of veneer, plywood, or plyboard industries using more than 200,000 cubic feet of timber annually.",
+    "level": "EIA",
+    "sortOrder": 259
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of petroleum product industries producing more than 200 metric tons per day using semi-processed oil or fossil fuels.",
+    "level": "EIA",
+    "sortOrder": 260
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing highly toxic substances, such as isocyanates and mercury compounds.",
+    "level": "EIA",
+    "sortOrder": 261
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries involving radioactive emissions (nuclear/atomic processing).",
+    "level": "EIA",
+    "sortOrder": 262
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of biogas production, storage, filling, or refilling industries exceeding 100 tons per day.",
+    "level": "EIA",
+    "sortOrder": 263
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries producing explosives such as bullets, cartridges, ammunition, excluding those produced by Nepal Army, Nepal Police, or Armed Police Force.",
+    "level": "EIA",
+    "sortOrder": 264
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Construction of petroleum pipelines.",
+    "level": "EIA",
+    "sortOrder": 265
+  },
+  {
+    "sector": "Industrial",
+    "scope": "Establishment of industries with investment exceeding NPR 2 billion in machinery and equipment, excluding software development, online services, internet, radio, cable networks, training, or consultancy services.",
+    "level": "EIA",
+    "sortOrder": 266
+  },
+  {
+    "sector": "Mining",
+    "scope": "Extraction of ordinary construction stone, decorative stone, gravel, sand, and industrial ordinary soil up to 50 cubic meters per day.",
+    "level": "BRIEF",
+    "sortOrder": 267
+  },
+  {
+    "sector": "Mining",
+    "scope": "Carrying out mining excavation by relocating or rehabilitating a permanently settled population of up to 100 persons.",
+    "level": "IEE",
+    "sortOrder": 268
+  },
+  {
+    "sector": "Mining",
+    "scope": "Carrying out excavation works for construction stone, decorative stone, sand, gravel, industrial soil, and ordinary soil, ranging from 50 to 500 cubic meters per day.",
+    "level": "IEE",
+    "sortOrder": 269
+  },
+  {
+    "sector": "Mining",
+    "scope": "For production of metals (excluding radioactive metals): – Underground mining up to 1,000 tons per day, and – Surface mining up to 2,000 tons per day.",
+    "level": "IEE",
+    "sortOrder": 270
+  },
+  {
+    "sector": "Mining",
+    "scope": "For production of non-metal minerals: – Underground mining up to 2,000 tons per day, and – Surface mining up to 4,800 metric tons per day.",
+    "level": "IEE",
+    "sortOrder": 271
+  },
+  {
+    "sector": "Mining",
+    "scope": "For coal and lignite production: – Underground mining up to 1,000 tons per day, and – Surface mining up to 2,000 tons per day.",
+    "level": "IEE",
+    "sortOrder": 272
+  },
+  {
+    "sector": "Mining",
+    "scope": "Production of natural gas up to 200,000 cubic meters per day.",
+    "level": "IEE",
+    "sortOrder": 273
+  },
+  {
+    "sector": "Mining",
+    "scope": "Extraction of sand, gravel, and soil from riverbeds ranging from more than 100 cubic meters up to 300 cubic meters per day.",
+    "level": "IEE",
+    "sortOrder": 274
+  },
+  {
+    "sector": "Mining",
+    "scope": "Mining operations involving relocation or rehabilitation of more than 100 permanently settled persons,",
+    "level": "EIA",
+    "sortOrder": 275
+  },
+  {
+    "sector": "Mining",
+    "scope": "Excavation exceeding 500 cubic meters per day for construction stone, decorative stone, sand, gravel, industrial soil, or ordinary soil,",
+    "level": "EIA",
+    "sortOrder": 276
+  },
+  {
+    "sector": "Mining",
+    "scope": "Mining of all radioactive metals,",
+    "level": "EIA",
+    "sortOrder": 277
+  },
+  {
+    "sector": "Mining",
+    "scope": "For non-radioactive metals: underground mining exceeding 1,000 tons per day or surface mining exceeding 2,000 tons per day,",
+    "level": "EIA",
+    "sortOrder": 278
+  },
+  {
+    "sector": "Mining",
+    "scope": "For non-metal minerals: underground mining exceeding 2,000 metric tons per day or surface mining exceeding 4,800 metric tons per day,",
+    "level": "EIA",
+    "sortOrder": 279
+  },
+  {
+    "sector": "Mining",
+    "scope": "For coal and lignite: underground mining exceeding 1,000 tons per day or surface mining exceeding 2,000 tons per day,",
+    "level": "EIA",
+    "sortOrder": 280
+  },
+  {
+    "sector": "Mining",
+    "scope": "Production of biogenic natural gas exceeding 200,000 cubic meters per day,",
+    "level": "EIA",
+    "sortOrder": 281
+  },
+  {
+    "sector": "Mining",
+    "scope": "Extraction of more than 300 cubic meters per day of sand, gravel, or soil from riverbeds",
+    "level": "EIA",
+    "sortOrder": 282
+  },
+  {
+    "sector": "Mining",
+    "scope": "Petroleum extraction and processing activities.",
+    "level": "EIA",
+    "sortOrder": 283
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Use of national forest land for agriculture up to 5 hectares in the Terai and up to 1 hectare in the hills.",
+    "level": "IEE",
+    "sortOrder": 284
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Carrying out the following construction-related works: (a) Construction for rearing more than 30,000 poultry birds, (b) Construction for rearing more than 1,000 large livestock, (c) Construction for rearing more than 5,000 small livestock (sheep, goats), (d) Construction for rearing more than 2,000 pigs, (e) Establishment of an agricultural wholesale market exceeding 1 hectare in Terai local levels and 0.5 hectare in other local levels, (f) Construction of ponds for fish hatcheries producing more than 25 crore fingerlings annually, (g) Construction of laboratories for animal and poultry disease investigation and control, collecting and testing more than 3,000 samples per day, (h) Construction of a slaughterhouse, (i) Construction for parent and grand-parent poultry rearing and hatchery operation.",
+    "level": "IEE",
+    "sortOrder": 285
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Disposal of expired pesticides, limited to notified hazardous pesticides only.",
+    "level": "IEE",
+    "sortOrder": 286
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Establishment of industries for chemical fertilizer production, synthesis (formulation), mixing (blending), packing/canning, and storage.",
+    "level": "IEE",
+    "sortOrder": 287
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Establishment of industries for the production, synthesis (formulation), blending, packing, and storage of pesticides and pesticide-based substances, including those used for control of ectoparasites such as lice and ticks in animals.",
+    "level": "IEE",
+    "sortOrder": 288
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Establishment of the following agro-based industries: (a) Dairy processing industries with a capacity exceeding 10,000 liters per day (including milk products), (b) Industries processing more than 5 metric tons per day of fish or meat, (c) Establishment of cold storage with storage capacity exceeding 1,000 metric tons, (d) Establishment of veterinary medicine and vaccine industries, excluding traditional and household veterinary medicines, (e) Establishment of industries processing more than 10 metric tons per day of fruits or vegetables, (f) Establishment of industries producing organic fertilizer ranging from 2 to 10 metric tons per day, (g) Establishment of industries producing more than 12 metric tons per day of animal, poultry, or fish feed.",
+    "level": "IEE",
+    "sortOrder": 289
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Use of national forest land exceeding 1 hectare in hills and 5 hectares in the Terai for agriculture,",
+    "level": "EIA",
+    "sortOrder": 290
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Establishment of toxic pesticide plants (only for notified pesticides),",
+    "level": "EIA",
+    "sortOrder": 291
+  },
+  {
+    "sector": "Agriculture",
+    "scope": "Establishment of industries producing more than 10 metric tons per day of organic fertilizer.",
+    "level": "EIA",
+    "sortOrder": 292
+  }
 ]

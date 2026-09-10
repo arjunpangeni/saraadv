@@ -9,6 +9,7 @@ import SmoothButton from "@/components/smoothui/smooth-button";
 import { getPublicListings, parseMarketplaceSort } from "@/lib/listings";
 import type { DealValueBand } from "@/lib/calc";
 import { JsonLd } from "@/components/json-ld";
+import { PageHero } from "@/components/marketing/page-hero";
 import { pageMetadata, itemListJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 
@@ -38,7 +39,7 @@ export default async function MarketplacePage({
   });
 
   return (
-    <main className="flex-1 bg-background">
+    <main className="flex-1">
       {listings.length > 0 ? (
         <JsonLd
           data={itemListJsonLd({
@@ -53,19 +54,14 @@ export default async function MarketplacePage({
         />
       ) : null}
 
-      <div className="container-page py-8 sm:py-10">
-        <div className="mb-6 min-w-0">
-          <p className="text-sm font-medium tracking-tight text-brand-sky">M&A Marketplace</p>
-          <h1 className="mt-1 text-pretty font-display text-3xl font-extrabold tracking-tight text-foreground">
-            Anonymized opportunities
-          </h1>
-          <p className="mt-2 max-w-2xl text-pretty text-sm leading-relaxed text-foreground/70">
-            Company names stay hidden. Request a profile with a work email — SARA arranges an NDA before
-            anything confidential is shared.
-          </p>
-        </div>
+      <PageHero
+        eyebrow="M&A Marketplace"
+        title="Anonymized opportunities"
+        description="Company names stay hidden. Request a profile with a work email — ASAR Partners arranges an NDA before anything confidential is shared."
+      />
 
-        <Suspense fallback={<div className="mb-6 h-28 animate-pulse rounded-2xl border border-border bg-card sm:h-24" />}>
+      <section className="container-page pb-20 sm:pb-28">
+        <Suspense fallback={<div className="mb-6 h-28 animate-pulse rounded-3xl border border-border bg-card sm:h-24" />}>
           <MarketplaceFilterBar resultCount={listings.length} />
         </Suspense>
 
@@ -94,13 +90,13 @@ export default async function MarketplacePage({
           <ListingCardGrid listings={listings} />
         )}
 
-        <p className="mt-8 text-center text-sm leading-relaxed text-foreground/70">
+        <p className="mt-12 text-center text-[1.05rem] leading-[1.75] text-muted-foreground">
           Looking to sell?{" "}
-          <Link href="/sell/new" className="font-medium text-brand-sky hover:underline">
+          <Link href="/sell/new" className="font-semibold text-tz-blue-deep hover:underline">
             List a business confidentially
           </Link>
         </p>
-      </div>
+      </section>
     </main>
   );
 }

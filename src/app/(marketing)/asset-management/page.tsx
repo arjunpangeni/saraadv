@@ -8,7 +8,7 @@ export const metadata: Metadata = pageMetadata({
   description:
     "Targeted intervention strategies to restructure, revive, and optimize distressed or underperforming assets in Nepal - deep scrutiny, turnaround planning, and continuous review.",
   path: "/asset-management",
-  ogTitle: "Asset revival and restructuring in Nepal | SARA Advisors",
+  ogTitle: "Asset revival and restructuring in Nepal | ASAR Partners",
 });
 
 export default function AssetManagementPage() {
@@ -16,9 +16,9 @@ export default function AssetManagementPage() {
     <PillarPage
       title="Asset revival and restructuring in Nepal"
       focus="Corporate Revival & Restructuring"
-      intro="For distressed assets or businesses performing below their potential, SARA Advisors provides targeted intervention strategies to restructure, revive, and optimize operations - turning underperformance into sustained profitability."
+      intro="For distressed assets or businesses performing below their potential, ASAR Partners provides targeted intervention strategies to restructure, revive, and optimize operations - turning underperformance into sustained profitability."
       serviceType="Corporate Revival & Restructuring Advisory"
-      cta={{ label: "Contact the SARA team", href: "/contact?topic=ASSET_MANAGEMENT" }}
+      cta={{ label: "Contact the ASAR team", href: "/contact?topic=ASSET_MANAGEMENT" }}
       showFooterCta={false}
       faq={[
         {

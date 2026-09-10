@@ -11,7 +11,7 @@ import { MARKETING_SERVICES } from "@/lib/marketing-nav";
 import { SARA_TEAM } from "@/lib/team";
 
 const DESCRIPTION =
-  "SARA Advisors is a corporate and investment advisory firm — company formation, M&A, asset revival, Project Bank matchmaking, and carbon finance.";
+  "ASAR Partners is a corporate and investment advisory firm — company formation, M&A, asset revival, Project Bank matchmaking, and carbon finance.";
 
 const WHO = [
   {
@@ -40,10 +40,10 @@ const PRACTICES: Record<(typeof MARKETING_SERVICES)[number]["href"], string> = {
 };
 
 export const metadata: Metadata = pageMetadata({
-  title: "About SARA Advisors",
+  title: "About ASAR Partners",
   description: DESCRIPTION,
   path: "/about",
-  ogTitle: "About SARA Advisors | Corporate & investment consulting",
+  ogTitle: "About ASAR Partners | Corporate & investment consulting",
 });
 
 export default function AboutPage() {
@@ -53,7 +53,7 @@ export default function AboutPage() {
         data={{
           "@context": "https://schema.org",
           "@type": "AboutPage",
-          name: "About SARA Advisors",
+          name: "About ASAR Partners",
           description: DESCRIPTION,
           url: `${siteConfig.url}/about`,
           isPartOf: { "@type": "WebSite", name: siteConfig.name, url: siteConfig.url },
@@ -72,9 +72,8 @@ export default function AboutPage() {
 
       <PageHero
         eyebrow="About"
-        title="About SARA Advisors"
+        title="About ASAR Partners"
         description="A single-window advisory firm for the full investment lifecycle — form a company, buy or sell one, revive an asset, raise capital, or monetise carbon."
-        compact
       />
 
       <section className="container-page py-20 sm:py-28">
@@ -89,21 +88,21 @@ export default function AboutPage() {
           {WHO.map((item) => (
             <article
               key={item.title}
-              className="h-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]"
+              className="h-full rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]"
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-md bg-brand-sky-muted text-brand-sky">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-tz-green text-tz-green-deep">
                 <item.icon className="h-[1.125rem] w-[1.125rem]" aria-hidden />
               </div>
-              <h3 className="text-pretty font-display text-2xl font-extrabold tracking-tight text-foreground">
+              <h3 className="heading-soft text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
                 {item.title}
               </h3>
-              <p className="mt-2.5 text-pretty text-lg leading-relaxed text-foreground/70">{item.desc}</p>
+              <p className="mt-2.5 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">{item.desc}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="border-y border-border-subtle bg-surface-muted/50 py-20 sm:py-28">
+      <section className="border-y border-border/60 bg-card/50 py-20 sm:py-28">
         <div className="container-page">
           <SectionHeading
             eyebrow="What we do"
@@ -112,17 +111,17 @@ export default function AboutPage() {
             align="center"
             className="mb-12 sm:mb-14"
           />
-          <ul className="mx-auto max-w-3xl divide-y divide-border rounded-2xl border border-border bg-card shadow-[var(--shadow-card)]">
+          <ul className="mx-auto max-w-3xl divide-y divide-border rounded-3xl border border-border bg-card shadow-[var(--shadow-card)]">
             {MARKETING_SERVICES.map((service) => (
               <li key={service.href}>
                 <Link
                   href={service.href}
                   className="flex flex-col gap-1 px-6 py-5 transition-colors hover:bg-surface-muted/60 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
                 >
-                  <span className="font-display text-xl font-extrabold tracking-tight text-foreground">
+                  <span className="heading-soft font-heading text-lg font-semibold tracking-[-0.015em] text-foreground">
                     {service.label}
                   </span>
-                  <span className="text-lg leading-relaxed text-foreground/70 sm:text-right">
+                  <span className="text-[1.05rem] leading-[1.75] text-muted-foreground sm:text-right">
                     {PRACTICES[service.href]}
                   </span>
                 </Link>
@@ -136,22 +135,22 @@ export default function AboutPage() {
         <SectionHeading
           eyebrow="Our team"
           title="The people on the desk"
-          description="The strength of SARA Advisors lies in our team of financial experts and strategists."
+          description="The strength of ASAR Partners lies in our team of financial experts and strategists."
           align="center"
           className="mb-12 sm:mb-14"
         />
         <ul className="grid gap-4 lg:grid-cols-2">
           {SARA_TEAM.map((member) => (
             <li key={member.name}>
-              <article className="h-full rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
-                <h3 className="text-pretty font-display text-2xl font-extrabold tracking-tight text-foreground">
+              <article className="h-full rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
+                <h3 className="heading-soft text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
                   {member.name}
                 </h3>
-                <p className="mt-1 text-sm font-medium tracking-tight text-brand-sky">
+                <p className="mt-1 text-sm font-medium tracking-tight text-tz-blue-deep">
                   {member.credential} · {member.credentialLabel}
                 </p>
                 <p className="mt-1 text-sm font-medium tracking-tight text-foreground/55">{member.focus}</p>
-                <p className="mt-4 text-pretty text-lg leading-relaxed text-foreground/70">{member.bio}</p>
+                <p className="mt-4 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">{member.bio}</p>
               </article>
             </li>
           ))}
@@ -159,28 +158,28 @@ export default function AboutPage() {
       </section>
 
       <section className="container-page pb-20 sm:pb-24">
-        <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-brand-solid px-6 py-12 text-white sm:px-12 sm:py-14">
+        <div className="relative overflow-hidden rounded-3xl border border-border bg-card px-6 py-12 sm:px-12 sm:py-14">
           <div
-            className="pointer-events-none absolute inset-0 opacity-40"
-            style={{
-              background:
-                "radial-gradient(ellipse 70% 80% at 100% 0%, rgb(80 152 208 / 0.4) 0%, transparent 55%)",
-            }}
             aria-hidden
+            className="pointer-events-none absolute -top-16 -right-10 hidden size-56 rounded-full bg-tz-green-deep/15 blur-3xl lg:block"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-16 -left-10 hidden size-52 rounded-full bg-tz-pink-deep/12 blur-3xl lg:block"
           />
           <div className="relative grid gap-8 lg:grid-cols-[1.2fr_auto] lg:items-end">
             <div className="max-w-xl">
-              <p className="mb-4 text-sm font-medium tracking-tight text-white/80">Next step</p>
-              <h2 className="text-pretty font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+              <p className="mb-4 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Next step</p>
+              <h2 className="heading-soft text-pretty font-heading text-[1.7rem] font-semibold tracking-[-0.015em] sm:text-[2rem] md:text-[2.35rem]">
                 Start a conversation
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-white/70">
+              <p className="mt-4 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 Formation, a transaction, a distressed asset, a project, or carbon. The desk follows up
                 by message or call.
               </p>
             </div>
             <SmoothButton asChild size="lg" variant="candy" className="w-full sm:w-auto">
-              <Link href="/contact">Contact SARA Advisors</Link>
+              <Link href="/contact">Contact ASAR Partners</Link>
             </SmoothButton>
           </div>
         </div>

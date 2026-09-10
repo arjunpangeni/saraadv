@@ -82,7 +82,6 @@ export function PillarPage({
           description={intro}
           cta={cta}
           secondaryCta={secondaryCta}
-          compact
         />
 
         <section className="container-page py-20 sm:py-28">
@@ -99,11 +98,11 @@ export function PillarPage({
             maskSize={280}
             items={sections.map((s, i) => ({
               id: s.heading,
-              theme: { hue: 210, saturation: 78, lightness: 42 },
+              theme: { hue: 152, saturation: 55, lightness: 42 },
               element: (
                 <motion.article
                   className={cn(
-                    "flex h-full flex-col rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)]",
+                    "flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]",
                     sections.length % 2 === 1 &&
                       i === sections.length - 1 &&
                       "sm:col-span-2 sm:mx-auto sm:w-full sm:max-w-xl"
@@ -113,14 +112,14 @@ export function PillarPage({
                   viewport={{ margin: "-80px", once: true }}
                   whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                 >
-                  <p className="text-sm font-medium tracking-tight text-brand-sky">Advisory</p>
-                  <h3 className="mt-1.5 text-pretty font-display text-2xl font-extrabold tracking-tight text-foreground">
+                  <p className="text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Advisory</p>
+                  <h3 className="heading-soft mt-1.5 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
                     {s.heading}
                   </h3>
                   <ul className="mt-4 flex-1 space-y-3">
                     {s.items.map((item) => (
-                      <li key={item} className="flex gap-3 text-lg leading-relaxed text-foreground/70">
-                        <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-brand-sky" aria-hidden />
+                      <li key={item} className="flex gap-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
+                        <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-primary" aria-hidden />
                         <span>{item}</span>
                       </li>
                     ))}

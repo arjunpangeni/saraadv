@@ -16,7 +16,7 @@ export async function POST(req: Request) {
 
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success || !isSignupRole(parsed.data.role)) {
-    return NextResponse.json({ error: "Choose what you want to do on SARA." }, { status: 400 });
+    return NextResponse.json({ error: "Choose what you want to do on ASAR." }, { status: 400 });
   }
 
   const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { role: true } });

@@ -22,7 +22,7 @@ const AUDIENCE = [
     items: [
       "Discovery grid — filterable project cards by sector and investment size",
       "High-level financials — CAPEX range, target ROI/IRR, funding stage",
-      "Request Full Project Dossier — confirm your email with a magic link; SARA vets you, arranges the NDA, and shares the Vault directly",
+      "Request Full Project Dossier — confirm your email with a magic link; ASAR vets you, arranges the NDA, and shares the Vault directly",
     ],
   },
 ] as const;

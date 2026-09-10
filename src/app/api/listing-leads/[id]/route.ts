@@ -58,7 +58,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       await notifyUsers([lead.buyerId], {
         type: "listing.lead_vetted",
         title: `Your inquiry for ${lead.listing.hashId} is under review`,
-        body: "The SARA deal desk will contact you to arrange the NDA.",
+        body: "The ASAR deal desk will contact you to arrange the NDA.",
         href: listingUrl,
         emailAdmin: false,
       }).catch((err) => console.error("[marketplace] failed to notify buyer on vet", err));
@@ -66,7 +66,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     await sendInvestorNoticeEmail({
       to: lead.email,
       name: lead.name,
-      subject: `SARA Advisors: your inquiry for ${lead.listing.hashId} is under review`,
+      subject: `ASAR Partners: your inquiry for ${lead.listing.hashId} is under review`,
       body: "Our deal desk has reviewed your profile request and will be in touch to arrange the NDA.",
       href: listingUrl,
     });

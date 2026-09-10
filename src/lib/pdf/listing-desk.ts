@@ -278,7 +278,7 @@ class DeskPdfWriter {
     this.page = this.pdf.addPage([PAGE_W, PAGE_H]);
     this.pageNo += 1;
     this.page.drawRectangle({ x: 0, y: PAGE_H - 32, width: PAGE_W, height: 32, color: NAVY });
-    this.page.drawText("SARA ADVISORS", {
+    this.page.drawText("ASAR PARTNERS", {
       x: MARGIN,
       y: PAGE_H - 20,
       size: 9,
@@ -785,6 +785,6 @@ export async function generateListingDeskPdf(data: DeskListingPdfInput): Promise
     );
   }
 
-  doc.note("This file is for the SARA deal desk only. Do not forward the legal name or line-item books.");
+  doc.note("This file is for the ASAR deal desk only. Do not forward the legal name or line-item books.");
   return doc.save();
 }

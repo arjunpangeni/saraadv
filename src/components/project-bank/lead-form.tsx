@@ -190,7 +190,7 @@ export function ProjectLeadForm({ projectId, projectSlug }: { projectId: string;
         </SmoothButton>
         <p className="inline-flex items-start gap-1.5 text-xs leading-relaxed text-foreground/50">
           <Lock className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-          After you confirm, SARA Advisors vet the request, arrange an NDA, and share the dossier
+          After you confirm, ASAR Partners vet the request, arrange an NDA, and share the dossier
           offline. This form is not shown on the public teaser.
         </p>
       </div>

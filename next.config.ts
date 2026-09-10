@@ -37,7 +37,7 @@ const extraDevOrigins = (process.env.ALLOWED_DEV_ORIGINS ?? "")
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  allowedDevOrigins: ["192.168.1.5", "172.29.192.1", ...extraDevOrigins],
+  allowedDevOrigins: ["192.168.1.5", "192.168.1.6", "172.29.192.1", ...extraDevOrigins],
   async headers() {
     return [
       {

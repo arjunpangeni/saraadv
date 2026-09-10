@@ -8,10 +8,10 @@ const INITIAL_TILE = 1;
 const TILES_TO_CLONE = TOTAL_TILES - INITIAL_TILE;
 
 const HOVER_COLORS: [string, string, string, string] = [
-  "color-mix(in oklab, var(--brand-sky) 55%, transparent)",
-  "color-mix(in oklab, var(--brand-navy) 45%, transparent)",
-  "color-mix(in oklab, var(--brand-gold) 40%, transparent)",
-  "color-mix(in oklab, var(--brand-sky) 35%, transparent)",
+  "color-mix(in oklab, var(--tz-green-deep) 55%, transparent)",
+  "color-mix(in oklab, var(--tz-pink-deep) 45%, transparent)",
+  "color-mix(in oklab, var(--tz-gold) 40%, transparent)",
+  "color-mix(in oklab, var(--tz-blue-deep) 45%, transparent)",
 ];
 
 export function InteractiveHeroGrid() {

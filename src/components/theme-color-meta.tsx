@@ -7,7 +7,7 @@ export function ThemeColorMeta() {
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    const color = resolvedTheme === "light" ? "#f4f8fc" : "#020617";
+    const color = resolvedTheme === "light" ? "#fff6f8" : "#1e2a38";
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) {
       meta = document.createElement("meta");

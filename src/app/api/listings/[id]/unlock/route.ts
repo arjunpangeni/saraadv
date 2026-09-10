@@ -43,7 +43,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
   if (parsed.data.servicesSelected.length === 0 && !parsed.data.advisoryOptOut) {
     return NextResponse.json(
-      { error: "Select at least one advisory service, or confirm you do not require SARA services." },
+      { error: "Select at least one advisory service, or confirm you do not require ASAR services." },
       { status: 400 }
     );
   }

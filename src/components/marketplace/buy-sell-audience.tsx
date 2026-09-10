@@ -22,7 +22,7 @@ const AUDIENCE = [
     items: [
       "Filter by sector, deal value, profitability, province, and district",
       "Public teaser only — capacity, turnover, BS size, sale value, and modality",
-      "Request the full profile with a work-email magic link, then NDA with SARA Advisors",
+      "Request the full profile with a work-email magic link, then NDA with ASAR Partners",
     ],
   },
 ] as const;

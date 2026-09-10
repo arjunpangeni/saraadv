@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import SmoothButton from "@/components/smoothui/smooth-button";
 import { FormError } from "@/components/ui/status-banner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,17 +14,23 @@ import {
   LICENSE_NEEDED_INDUSTRIES,
   MIN_FDI_CAPITAL_NPR,
   FDI_NEGATIVE_LIST,
+  INDUSTRY_SIZE_GUIDE,
+  COTTAGE_ACTIVITIES,
+  capitalSizeBracket,
+  checkIndustrySizeClassification,
+  industrySizeChecklist,
+  fixedCapitalNpr,
   evaluateEligibility,
   type EligibilityIssue,
+  type IndustrySizeCategory,
+  type IndustrySizeFacts,
   type StartABusinessInput,
 } from "@/lib/rules/startABusiness";
 import { formatNpr } from "@/lib/calc";
 import { saveGuidePayload, type SetupGuidePayload } from "@/lib/start-a-business-guide";
 import {
   NEPAL_DISTRICTS,
-  NEPAL_MOBILE,
   NEPAL_PROVINCES,
-  digitsOnly,
   districtsInProvince,
   isValidEmail,
   localBodiesInDistrict,
@@ -32,6 +38,7 @@ import {
   promoterCountValue,
   provinceOfDistrict,
 } from "@/lib/nepal-locations";
+import { normalizePhone, sanitizePhoneInput } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 
 export const WIZARD_PATH = "/start-a-business/wizard";
@@ -56,12 +63,19 @@ export const SECTOR_TAGS = [
   { value: "labor_intensive", label: "Labor-Intensive Manufacturing" },
 ];
 
+const STEP_HEADING =
+  "heading-soft mb-3 font-heading text-lg font-semibold tracking-[-0.015em] text-foreground sm:text-xl";
+const STEP_COPY = "mb-4 text-[1.05rem] leading-[1.75] text-muted-foreground";
+
 const STEPS = [
   "Basic details",
   "Addresses",
   "Investment",
+  "Proposed application",
   "Shareholders",
-  "Classification",
+  "Industry size",
+  "Objective category",
+  "Licensing",
   "Environment",
   "Review",
 ];
@@ -118,6 +132,11 @@ export interface WizardFormState {
   plantMachineryCost: string;
   netCurrentAssets: string;
   sizeCategory: string;
+  ownerOperated: boolean;
+  workerCount: string;
+  annualTurnover: string;
+  powerKw: string;
+  cottageActivityConfirmed: boolean;
   objectiveCategory: string;
   licenseIndustries: string[];
   fdiNegativeCodes: string[];
@@ -140,6 +159,11 @@ export const INITIAL_FORM: WizardFormState = {
   plantMachineryCost: "",
   netCurrentAssets: "",
   sizeCategory: "SMALL",
+  ownerOperated: false,
+  workerCount: "",
+  annualTurnover: "",
+  powerKw: "",
+  cottageActivityConfirmed: false,
   objectiveCategory: "SERVICE",
   licenseIndustries: [],
   fdiNegativeCodes: [],
@@ -271,6 +295,19 @@ function engineInputFromForm(form: WizardFormState, shareholders: ShareholderRow
   };
 }
 
+function sizeFactsFromForm(form: WizardFormState): IndustrySizeFacts {
+  return {
+    sizeCategory: form.sizeCategory as IndustrySizeCategory,
+    fixedAssets: Number(form.fixedAssets || 0),
+    plantMachineryCost: Number(form.plantMachineryCost || 0),
+    ownerOperated: form.ownerOperated,
+    workerCount: Number(form.workerCount || 0),
+    annualTurnover: Number(form.annualTurnover || 0),
+    powerKw: form.powerKw === "" ? Number.NaN : Number(form.powerKw),
+    cottageActivityConfirmed: form.cottageActivityConfirmed,
+  };
+}
+
 function eligibilityIssues(form: WizardFormState, shareholders: ShareholderRow[]): EligibilityIssue[] {
   return evaluateEligibility(engineInputFromForm(form, shareholders), FDI_NEGATIVE_LIST, {
     equityInvestment: Number(form.equityInvestment || 0),
@@ -281,24 +318,28 @@ function eligibilityIssues(form: WizardFormState, shareholders: ShareholderRow[]
   });
 }
 
-function investmentWarnings(form: WizardFormState): string[] {
-  const warnings: string[] = [];
-  const total = Number(form.equityInvestment || 0) + Number(form.loanInvestment || 0);
-  const assets =
-    Number(form.fixedAssets || 0) +
-    Number(form.plantMachineryCost || 0) +
-    Number(form.netCurrentAssets || 0);
-  if (assets > 0 && Math.abs(total - assets) > 1) {
-    warnings.push("Equity + loan should equal fixed assets + plant & machinery + net current assets.");
-  }
-  if (form.objective === "MANUFACTURING" && assets <= 0 && total <= 0) {
-    warnings.push("Manufacturing ventures require investment and asset details.");
-  }
-  return warnings;
+function investmentBlockers(form: WizardFormState, shareholders: ShareholderRow[]): EligibilityIssue[] {
+  return eligibilityIssues(form, shareholders).filter(
+    (i) =>
+      i.severity === "BLOCKER" &&
+      (i.code === "INVESTMENT-TOTAL-MISMATCH" ||
+        i.code === "INVESTMENT-MFG-REQUIRED" ||
+        i.code === "INVESTMENT-MFG-MACHINERY")
+  );
 }
 
 function promoterMin(category: string) {
   return category === "PUBLIC" ? 0 : 1;
+}
+
+function filterIeeCriteria(list: IeeCriterion[], sector: string, query: string): IeeCriterion[] {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  return list.filter((item) => {
+    if (sector && item.sector !== sector) return false;
+    if (words.length === 0) return true;
+    const hay = `${item.sector} ${item.scope} ${item.level}`.toLowerCase();
+    return words.every((word) => hay.includes(word));
+  });
 }
 
 function localBodyOptions(district: string, current: string) {
@@ -355,15 +396,20 @@ const INTAKE_FIELD_META: Record<string, { label: string; step: number }> = {
   addresses: { label: "Addresses", step: 1 },
   equityInvestment: { label: "Equity investment", step: 2 },
   loanInvestment: { label: "Loan investment", step: 2 },
-  fixedAssets: { label: "Fixed assets", step: 2 },
-  plantMachineryCost: { label: "Plant & machinery cost", step: 2 },
-  netCurrentAssets: { label: "Net current assets", step: 2 },
-  shareholders: { label: "Shareholders", step: 3 },
-  sizeCategory: { label: "Industry size", step: 4 },
-  objectiveCategory: { label: "Industry objective category", step: 4 },
-  licenseIndustries: { label: "License-needed industry", step: 4 },
-  ieeEiaCriterionId: { label: "IEE / EIA screening", step: 5 },
-  ieeEiaLevel: { label: "IEE / EIA screening", step: 5 },
+  fixedAssets: { label: "Fixed assets", step: 3 },
+  plantMachineryCost: { label: "Plant & machinery cost", step: 3 },
+  netCurrentAssets: { label: "Net current assets", step: 3 },
+  shareholders: { label: "Shareholders", step: 4 },
+  sizeCategory: { label: "Industry size", step: 5 },
+  ownerOperated: { label: "Owner-operated (Micro)", step: 5 },
+  workerCount: { label: "Number of workers (Micro)", step: 5 },
+  annualTurnover: { label: "Annual turnover (Micro)", step: 5 },
+  powerKw: { label: "Power use (kW)", step: 5 },
+  cottageActivityConfirmed: { label: "Cottage activity confirmation", step: 5 },
+  objectiveCategory: { label: "Industry objective category", step: 6 },
+  licenseIndustries: { label: "License-needed industry", step: 7 },
+  ieeEiaCriterionId: { label: "IEE / EIA screening", step: 8 },
+  ieeEiaLevel: { label: "IEE / EIA screening", step: 8 },
 };
 
 function rootFieldKey(path: string) {
@@ -384,13 +430,13 @@ function humanizeFieldMessage(label: string, raw: string) {
 
 function parseIntakeError(error: unknown): { message: string; step: number } | null {
   if (typeof error === "string" && error.trim()) {
-    return { message: error, step: 6 };
+    return { message: error, step: 9 };
   }
   if (!error || typeof error !== "object") return null;
 
   const record = error as { fieldErrors?: Record<string, unknown>; formErrors?: unknown };
   const lines: string[] = [];
-  let firstStep = 6;
+  let firstStep = 9;
 
   if (record.fieldErrors && typeof record.fieldErrors === "object") {
     for (const [rawKey, rawMsgs] of Object.entries(record.fieldErrors)) {
@@ -400,7 +446,7 @@ function parseIntakeError(error: unknown): { message: string; step: number } | n
       if (msgs.length === 0) continue;
       const meta = INTAKE_FIELD_META[rootFieldKey(rawKey)] ?? {
         label: prettyLabel(rootFieldKey(rawKey)),
-        step: 6,
+        step: 9,
       };
       lines.push(humanizeFieldMessage(meta.label, msgs[0]));
       firstStep = Math.min(firstStep, meta.step);
@@ -434,6 +480,7 @@ export function BusinessSetupWizardForm() {
   const [loading, setLoading] = useState(false);
   const [ready, setReady] = useState(false);
   const [ieeSector, setIeeSector] = useState("");
+  const [ieeQuery, setIeeQuery] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
   const shouldScrollOnStep = useRef(false);
 
@@ -568,8 +615,10 @@ export function BusinessSetupWizardForm() {
   }
 
   function validatePhoneField(value: string): string | null {
-    if (!value) return "Contact number is required.";
-    if (!NEPAL_MOBILE.test(value)) return "Enter a 10-digit mobile starting with 97 or 98.";
+    if (!value.trim()) return "Contact number is required.";
+    if (!normalizePhone(value)) {
+      return "Enter a valid phone number with country code (e.g. +977… or +1…).";
+    }
     return null;
   }
 
@@ -610,9 +659,14 @@ export function BusinessSetupWizardForm() {
         return null;
       }
       case 2: {
+        if (form.objective === "MANUFACTURING") {
+          const capital =
+            Number(form.equityInvestment || 0) + Number(form.loanInvestment || 0);
+          if (capital <= 0) {
+            return "Manufacturing ventures require equity and/or loan investment.";
+          }
+        }
         const issues = eligibilityIssues(form, shareholders).filter((i) => i.severity === "BLOCKER");
-        const mfg = issues.find((i) => i.code === "INVESTMENT-MFG-REQUIRED");
-        if (mfg) return mfg.message;
         const fdiMin = issues.find((i) => i.code === "FDI-MIN-CAPITAL");
         if (fdiMin) {
           return `FDI requires a minimum investment of Rs 2 crore (${formatNpr(MIN_FDI_CAPITAL_NPR)}).`;
@@ -620,6 +674,13 @@ export function BusinessSetupWizardForm() {
         return null;
       }
       case 3: {
+        const investmentIssue = investmentBlockers(form, shareholders).find(
+          (i) => i.code === "INVESTMENT-MFG-MACHINERY" || i.code === "INVESTMENT-TOTAL-MISMATCH"
+        );
+        if (investmentIssue) return investmentIssue.message;
+        return null;
+      }
+      case 4: {
         if (shareholders.length === 0) return "Add at least one shareholder category.";
         for (const s of shareholders) {
           const min = promoterMin(s.category);
@@ -636,15 +697,28 @@ export function BusinessSetupWizardForm() {
         if (sh) return sh.message;
         return null;
       }
-      case 4: {
+      case 5: {
         if (!isAllowed(form.sizeCategory, SIZE_VALUES)) return "Select industry size.";
-        if (!isAllowed(form.objectiveCategory, OBJECTIVE_CATEGORY_VALUES)) {
-          return "Select an industry objective category.";
-        }
+        const sizeClass = checkIndustrySizeClassification(sizeFactsFromForm(form));
+        if (sizeClass[0]) return sizeClass[0].message;
         const sizeBlock = eligibilityIssues(form, shareholders).find((i) => i.code === "FDI-B");
         if (sizeBlock) return sizeBlock.message;
         return null;
       }
+      case 6: {
+        if (!isAllowed(form.objectiveCategory, OBJECTIVE_CATEGORY_VALUES)) {
+          return "Select an industry objective category.";
+        }
+        if (form.objective === "TRADING" && form.objectiveCategory !== "TRADING") {
+          return "Trading businesses must use the Trading industry objective category.";
+        }
+        if (form.fdiRequested && form.objectiveCategory === "TRADING") {
+          return "FDI is not permitted for Trading. Change the industry objective category, or turn FDI off.";
+        }
+        return null;
+      }
+      case 7:
+        return null;
       default:
         return null;
     }
@@ -655,7 +729,7 @@ export function BusinessSetupWizardForm() {
   }
 
   function firstInvalidStep(): { step: number; message: string } | null {
-    for (let i = 0; i <= 4; i++) {
+    for (let i = 0; i <= 7; i++) {
       const message = validateStepAt(i);
       if (message) return { step: i, message };
     }
@@ -717,9 +791,27 @@ export function BusinessSetupWizardForm() {
   const totalCapital = Number(form.equityInvestment || 0) + Number(form.loanInvestment || 0);
   const assetTotal =
     Number(form.fixedAssets || 0) + Number(form.plantMachineryCost || 0) + Number(form.netCurrentAssets || 0);
-  const warnings = investmentWarnings(form);
+  const plantMachineryMissing =
+    form.objective === "MANUFACTURING" && Number(form.plantMachineryCost || 0) <= 0;
+  const investmentMismatch = Math.abs(totalCapital - assetTotal) > 1 && (totalCapital > 0 || assetTotal > 0);
+  const sizeGuide = isAllowed(form.sizeCategory, SIZE_VALUES)
+    ? INDUSTRY_SIZE_GUIDE[form.sizeCategory as keyof typeof INDUSTRY_SIZE_GUIDE]
+    : null;
+  const proposedFixedCapital = fixedCapitalNpr({
+    fixedAssets: Number(form.fixedAssets || 0),
+    plantMachineryCost: Number(form.plantMachineryCost || 0),
+  });
+  const suggestedBracket = capitalSizeBracket(proposedFixedCapital);
+  const sizeFacts = isAllowed(form.sizeCategory, SIZE_VALUES) ? sizeFactsFromForm(form) : null;
+  const sizeClassIssues = sizeFacts ? checkIndustrySizeClassification(sizeFacts) : [];
+  const sizeChecks = sizeFacts
+    ? industrySizeChecklist(sizeFacts, { fdiRequested: form.fdiRequested })
+    : [];
+  const ieeExemptSize = form.sizeCategory === "MICRO" || form.sizeCategory === "COTTAGE";
   const selectedCriterion = criteria.find((c) => c.id === form.ieeEiaCriterionId);
-  const ieeActivities = ieeSector ? criteria.filter((c) => c.sector === ieeSector) : criteria;
+  const ieeSectors = Array.from(new Set(criteria.map((c) => c.sector)));
+  const ieeActivities = filterIeeCriteria(criteria, ieeSector, ieeQuery);
+  const ieeNeedsFilter = !ieeSector && !ieeQuery.trim();
   const nameMissing = form.contactName.trim().length < 2;
   const phoneMissing = Boolean(validatePhoneField(form.phone));
   const emailMissing = Boolean(validateEmailField(form.email));
@@ -733,17 +825,17 @@ export function BusinessSetupWizardForm() {
   const listedAddresses = form.addresses.filter((a) => a.district || a.localBody);
 
   return (
-    <Card ref={cardRef} className="relative scroll-mt-28">
-      <CardContent className="pt-6">
+    <Card ref={cardRef} className="relative scroll-mt-28 rounded-3xl">
+      <CardContent className="px-5 pt-6 sm:px-8">
         <WizardSteps steps={STEPS} current={step} />
 
         <form onSubmit={onSubmit} className="space-y-6">
           {step === 0 && (
             <>
               <div>
-                <h2 className="font-semibold text-foreground mb-3">A. Basic Details</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
+                <h2 className={STEP_HEADING}>A. Basic Details</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-1.5">
                     <Label>Your name *</Label>
                     <Input
                       required
@@ -758,26 +850,27 @@ export function BusinessSetupWizardForm() {
                       {form.contactName.length} / {CONTACT_NAME_MAX}
                     </p>
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <Label>Contact number *</Label>
                     <Input
                       required
                       type="tel"
-                      inputMode="numeric"
+                      inputMode="tel"
                       autoComplete="tel"
-                      maxLength={10}
+                      maxLength={16}
                       value={form.phone}
                       onChange={(e) => {
-                        const phone = digitsOnly(e.target.value, 10);
+                        const phone = sanitizePhoneInput(e.target.value);
                         setForm({ ...form, phone });
-                        setPhoneError(phone.length === 10 ? validatePhoneField(phone) : null);
+                        const digits = phone.replace(/\D/g, "");
+                        setPhoneError(digits.length >= 7 ? validatePhoneField(phone) : null);
                       }}
                       onBlur={() => setPhoneError(validatePhoneField(form.phone))}
-                      placeholder="98XXXXXXXX"
+                      placeholder="+977 98XXXXXXXX"
                     />
                     {phoneError && <p className="mt-1 text-xs text-destructive">{phoneError}</p>}
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <Label>Email *</Label>
                     <Input
                       type="email"
@@ -798,7 +891,7 @@ export function BusinessSetupWizardForm() {
                     />
                     {emailError && <p className="mt-1 text-xs text-destructive">{emailError}</p>}
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <Label>Business name *</Label>
                     <Input
                       required
@@ -810,7 +903,7 @@ export function BusinessSetupWizardForm() {
                       {form.name.length} / {BUSINESS_NAME_MAX}
                     </p>
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <Label>Objective</Label>
                     <SelectField
                       value={form.objective}
@@ -822,7 +915,7 @@ export function BusinessSetupWizardForm() {
                       ]}
                     />
                   </div>
-                  <div>
+                  <div className="space-y-1.5">
                     <Label>Type of Business</Label>
                     <SelectField
                       value={form.businessType}
@@ -860,8 +953,10 @@ export function BusinessSetupWizardForm() {
                   <p className="mt-2 text-xs text-destructive">FDI is not permitted for Trading objective.</p>
                 )}
                 {form.fdiRequested && (
-                  <div className="mt-4 rounded-lg border border-border-subtle p-3">
-                    <p className="text-sm font-medium text-foreground mb-1">FDI Negative List</p>
+                  <div className="mt-4 rounded-2xl border border-border p-4">
+                    <p className="heading-soft mb-1 font-heading text-sm font-semibold tracking-[-0.015em] text-foreground">
+                      FDI Negative List
+                    </p>
                     <p className="text-xs text-muted-foreground mb-3">
                       Tick any activity that matches your project. FDI is not allowed in these sectors.
                     </p>
@@ -887,7 +982,7 @@ export function BusinessSetupWizardForm() {
                 )}
               </div>
               <div>
-                <h2 className="font-semibold text-foreground mb-3">Sector Tags</h2>
+                <h2 className={STEP_HEADING}>Sector Tags</h2>
                 <div className="flex flex-wrap gap-2">
                   {SECTOR_TAGS.map((t) => (
                     <button
@@ -910,8 +1005,8 @@ export function BusinessSetupWizardForm() {
 
           {step === 1 && (
             <div>
-              <h2 className="font-semibold text-foreground mb-3">B. Address Details</h2>
-              <p className="text-sm text-muted-foreground mb-4">
+              <h2 className={STEP_HEADING}>B. Address Details</h2>
+              <p className={STEP_COPY}>
                 Head office is required. Choose province, then district, then local body.
               </p>
               {form.addresses.map((addr, idx) => {
@@ -919,7 +1014,7 @@ export function BusinessSetupWizardForm() {
                 return (
                   <div
                     key={idx}
-                    className="mb-3 grid gap-3 rounded-lg border border-border-subtle bg-background/50 p-3 sm:grid-cols-2"
+                    className="mb-3 grid gap-3 rounded-2xl border border-border bg-card p-4 sm:grid-cols-2"
                   >
                     <SelectField
                       value={addr.kind}
@@ -964,7 +1059,7 @@ export function BusinessSetupWizardForm() {
                   </div>
                 );
               })}
-              <Button
+              <SmoothButton
                 type="button"
                 variant="outline"
                 size="sm"
@@ -979,26 +1074,29 @@ export function BusinessSetupWizardForm() {
                 }
               >
                 + Add address
-              </Button>
+              </SmoothButton>
             </div>
           )}
 
           {step === 2 && (
             <div>
-              <h2 className="font-semibold text-foreground mb-3">C. Investment Details (Rs)</h2>
-              <p className="mb-4 text-sm text-muted-foreground">Amounts cannot be negative.</p>
+              <h2 className={STEP_HEADING}>C. Investment Details (Rs)</h2>
+              <p className={STEP_COPY}>
+                Equity + loan must later equal the proposed application total.
+                {form.objective === "MANUFACTURING" ? " Required for manufacturing." : ""}
+              </p>
               <div className="grid sm:grid-cols-2 gap-4">
                 {(
                   [
                     ["equityInvestment", "Equity Investment"],
                     ["loanInvestment", "Loan Investment"],
-                    ["fixedAssets", "Fixed Assets (excl. Plant & Machinery)"],
-                    ["plantMachineryCost", "Plant & Machinery Cost"],
-                    ["netCurrentAssets", "Net Current Assets"],
                   ] as const
                 ).map(([key, label]) => (
-                  <div key={key}>
-                    <Label>{label}</Label>
+                  <div key={key} className="space-y-1.5">
+                    <Label>
+                      {label}
+                      {form.objective === "MANUFACTURING" ? " *" : ""}
+                    </Label>
                     <Input
                       type="number"
                       min={0}
@@ -1011,12 +1109,9 @@ export function BusinessSetupWizardForm() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 text-sm text-muted-foreground space-y-1">
+              <div className="mt-4 space-y-1 text-sm text-muted-foreground">
                 <p>
-                  Proposed capital: <strong>{formatNpr(totalCapital)}</strong>
-                </p>
-                <p>
-                  Asset breakdown total: <strong>{formatNpr(assetTotal)}</strong>
+                  Total: <strong>{formatNpr(totalCapital)}</strong>
                 </p>
                 {form.fdiRequested && (
                   <p>
@@ -1026,22 +1121,85 @@ export function BusinessSetupWizardForm() {
                     )}
                   </p>
                 )}
-                {warnings.map((w) => (
-                  <p key={w} className="text-xs text-warning-fg">
-                    {w}
-                  </p>
-                ))}
               </div>
             </div>
           )}
 
           {step === 3 && (
             <div>
-              <h2 className="font-semibold text-foreground mb-3">D. Shareholder Details</h2>
+              <h2 className={STEP_HEADING}>D. Proposed Application (Rs)</h2>
+              <p className={STEP_COPY}>
+                {form.objective === "MANUFACTURING"
+                  ? "How the capital will be applied. Plant & machinery is compulsory for manufacturing, and this total must equal investment."
+                  : "How the capital will be applied. This total must equal equity + loan."}
+              </p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {(
+                  [
+                    ["fixedAssets", "Fixed Assets (excl. Plant & Machinery)", false],
+                    ["plantMachineryCost", "Plant & Machinery Cost", form.objective === "MANUFACTURING"],
+                    ["netCurrentAssets", "Net Current Assets", false],
+                  ] as const
+                ).map(([key, label, required]) => (
+                  <div key={key} className="space-y-1.5">
+                    <Label>
+                      {label}
+                      {required ? " *" : ""}
+                    </Label>
+                    <Input
+                      type="number"
+                      min={0}
+                      step={1}
+                      inputMode="numeric"
+                      placeholder="0"
+                      value={form[key]}
+                      onChange={(e) => setForm({ ...form, [key]: nonNegativeAmount(e.target.value) })}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 space-y-1 text-sm text-muted-foreground">
+                <p>
+                  Total: <strong>{formatNpr(assetTotal)}</strong>
+                  {totalCapital > 0 && (
+                    <>
+                      {" "}
+                      · Investment: <strong>{formatNpr(totalCapital)}</strong>
+                    </>
+                  )}
+                </p>
+                {investmentMismatch && (
+                  <p className="text-xs text-destructive">
+                    Investment total and proposed application total must be equal.
+                  </p>
+                )}
+                {plantMachineryMissing && (
+                  <p className="text-xs text-destructive">
+                    Manufacturing ventures must declare plant & machinery cost.
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div>
+              <h2 className={STEP_HEADING}>E. Shareholder Details</h2>
+              <p className={STEP_COPY}>
+                {form.businessType === "PRIVATE_LIMITED" && "Private Limited: maximum 100 shareholders."}
+                {form.businessType === "PUBLIC_LIMITED" && "Public Limited: minimum 7 shareholders."}
+                {form.businessType === "PROPRIETORSHIP" &&
+                  "Proprietorship: one Nepali citizen owner only — no foreign or public capital."}
+                {form.businessType === "PARTNERSHIP" &&
+                  "Partnership: at least 2 partners; no foreign parties or public / secondary-market shares."}
+              </p>
               {shareholders.map((s, idx) => {
                 const min = promoterMin(s.category);
                 return (
-                  <div key={idx} className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <div
+                    key={idx}
+                    className="mb-3 grid grid-cols-1 items-center gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto]"
+                  >
                     <SelectField
                       value={s.category}
                       onValueChange={(category) => {
@@ -1089,10 +1247,23 @@ export function BusinessSetupWizardForm() {
                         updateShareholder(idx, "committedCapital", nonNegativeAmount(e.target.value))
                       }
                     />
+                    <SmoothButton
+                      type="button"
+                      variant="outline"
+                      color="destructive"
+                      size="sm"
+                      className="h-11 w-full lg:w-auto"
+                      disabled={shareholders.length === 1}
+                      onClick={() =>
+                        setShareholders((prev) => prev.filter((_, i) => i !== idx))
+                      }
+                    >
+                      Remove
+                    </SmoothButton>
                   </div>
                 );
               })}
-              <Button
+              <SmoothButton
                 type="button"
                 variant="outline"
                 size="sm"
@@ -1104,7 +1275,7 @@ export function BusinessSetupWizardForm() {
                 }
               >
                 + Add shareholder category
-              </Button>
+              </SmoothButton>
               <div className="mt-4 space-y-1 text-sm text-muted-foreground">
                 <p>
                   Total promoters:{" "}
@@ -1129,182 +1300,383 @@ export function BusinessSetupWizardForm() {
             </div>
           )}
 
-          {step === 4 && (
-            <>
+          {step === 5 && (
+            <div className="space-y-6">
               <div>
-                <h2 className="font-semibold text-foreground mb-3">E. Industry Size</h2>
+                <h2 className={STEP_HEADING}>F. Category of Industry — Size</h2>
+                <p className={STEP_COPY}>
+                  Classify by fixed capital excluding land. Cottage is a special artisan category, not only a
+                  capital band.
+                </p>
+              </div>
+
+              <IndustrySizeOverview selected={form.sizeCategory} />
+
+              <div className="space-y-3">
+                <Label>Your classification *</Label>
                 <SelectField
                   value={form.sizeCategory}
-                  onValueChange={(sizeCategory) => setForm({ ...form, sizeCategory })}
-                  options={[
-                    { value: "MICRO", label: "Micro Enterprise" },
-                    { value: "COTTAGE", label: "Cottage Industry" },
-                    { value: "SMALL", label: "Small Industry" },
-                    { value: "MEDIUM", label: "Medium Industry" },
-                    { value: "LARGE", label: "Large Industry" },
-                  ]}
+                  onValueChange={(sizeCategory) =>
+                    setForm({
+                      ...form,
+                      sizeCategory,
+                      cottageActivityConfirmed:
+                        sizeCategory === "COTTAGE" ? form.cottageActivityConfirmed : false,
+                    })
+                  }
+                  options={(Object.keys(INDUSTRY_SIZE_GUIDE) as Array<keyof typeof INDUSTRY_SIZE_GUIDE>).map(
+                    (value) => ({
+                      value,
+                      label: `${INDUSTRY_SIZE_GUIDE[value].letter}. ${INDUSTRY_SIZE_GUIDE[value].label}`,
+                    })
+                  )}
                 />
-                {form.fdiRequested && ["MICRO", "COTTAGE", "SMALL"].includes(form.sizeCategory) && (
-                  <p className="mt-2 text-xs text-destructive">
-                    Cottage, micro, and small industries are on the FDI Negative List. Choose Medium or Large,
-                    or turn FDI off.
+                <div className="grid gap-2 rounded-xl border border-border-subtle bg-muted/40 px-4 py-3 text-sm sm:grid-cols-2">
+                  <p className="text-muted-foreground">
+                    Proposed fixed capital
+                    <span className="mt-0.5 block font-medium text-foreground">
+                      {formatNpr(proposedFixedCapital)}
+                    </span>
                   </p>
-                )}
-              </div>
-              <div>
-                <h2 className="font-semibold text-foreground mb-3">F. Industry Objective Category</h2>
-                <SelectField
-                  value={form.objectiveCategory}
-                  onValueChange={(objectiveCategory) => setForm({ ...form, objectiveCategory })}
-                  options={[
-                    { value: "ENERGY", label: "Energy-based" },
-                    { value: "MANUFACTURING", label: "Manufacturing" },
-                    { value: "AGRICULTURE_FOREST", label: "Agriculture & Forest" },
-                    { value: "MINERAL", label: "Mineral" },
-                    { value: "INFRASTRUCTURE", label: "Infrastructure" },
-                    { value: "TOURISM", label: "Tourism" },
-                    { value: "ICT", label: "Information & Communication Technology" },
-                    { value: "SERVICE", label: "Service" },
-                    { value: "TRADING", label: "Trading" },
-                  ]}
-                />
-              </div>
-              <div>
-                <h2 className="font-semibold text-foreground mb-3">G. License-Needed Industry (if applicable)</h2>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  {LICENSE_NEEDED_INDUSTRIES.map((label) => (
-                    <label key={label} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <input
-                        type="checkbox"
-                        checked={form.licenseIndustries.includes(label)}
-                        onChange={() => toggleLicense(label)}
-                        className="mt-0.5"
-                      />
-                      {label}
-                    </label>
-                  ))}
+                  <p className="text-muted-foreground">
+                    Capital band
+                    <span className="mt-0.5 block font-medium text-foreground">
+                      {suggestedBracket
+                        ? `${prettyLabel(suggestedBracket)} — Cottage only if it is on the artisan list`
+                        : "Enter proposed application amounts to test the band"}
+                    </span>
+                  </p>
                 </div>
               </div>
-            </>
+
+              {sizeGuide && (
+                <section className="space-y-4 rounded-2xl border border-border p-4 sm:p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                        {sizeGuide.letter}. Selected rules
+                      </p>
+                      <h3 className="mt-1 font-heading text-base font-semibold text-foreground">
+                        {sizeGuide.label}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted-foreground">{sizeGuide.capital}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <StatusChip ok={sizeGuide.fdiAllowed} label={sizeGuide.fdiAllowed ? "FDI yes" : "FDI no"} />
+                      <span className="inline-flex rounded-full bg-muted px-2.5 py-1 text-[11px] font-semibold tracking-wide text-muted-foreground">
+                        {sizeGuide.ieeTypical ? "IEE by activity" : "IEE typically no"}
+                      </span>
+                    </div>
+                  </div>
+                  <ol className="space-y-2 text-sm text-foreground">
+                    {sizeGuide.rules.map((rule, index) => (
+                      <li key={rule} className="flex gap-3">
+                        <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-muted text-[11px] font-semibold text-muted-foreground">
+                          {index + 1}
+                        </span>
+                        <span className="leading-relaxed">{rule}</span>
+                      </li>
+                    ))}
+                  </ol>
+
+                  {form.sizeCategory === "MICRO" && (
+                    <div className="space-y-3 border-t border-border-subtle pt-4">
+                      <p className="text-sm font-medium text-foreground">Confirm every Micro test</p>
+                      <label className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <input
+                          type="checkbox"
+                          className="mt-0.5"
+                          checked={form.ownerOperated}
+                          onChange={(e) => setForm({ ...form, ownerOperated: e.target.checked })}
+                        />
+                        Owner-operated and managed by the entrepreneur
+                      </label>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="space-y-1.5">
+                          <Label>Workers including entrepreneur *</Label>
+                          <Input
+                            type="number"
+                            min={1}
+                            max={9}
+                            step={1}
+                            inputMode="numeric"
+                            placeholder="1–9"
+                            value={form.workerCount}
+                            onChange={(e) =>
+                              setForm({ ...form, workerCount: promoterCountValue(e.target.value, 0) })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label>Annual turnover (Rs) *</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            step={1}
+                            inputMode="numeric"
+                            placeholder="Under 1,000,000"
+                            value={form.annualTurnover}
+                            onChange={(e) =>
+                              setForm({ ...form, annualTurnover: nonNegativeAmount(e.target.value) })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-1.5 sm:col-span-2">
+                          <Label>Power if machinery is used (kW)</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            step={1}
+                            inputMode="numeric"
+                            placeholder="0 if none — maximum 20"
+                            value={form.powerKw}
+                            onChange={(e) => setForm({ ...form, powerKw: nonNegativeAmount(e.target.value) })}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {form.sizeCategory === "COTTAGE" && (
+                    <div className="space-y-3 border-t border-border-subtle pt-4">
+                      <details className="rounded-xl border border-border-subtle bg-muted/30">
+                        <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-foreground">
+                          Cottage / artisan activity list
+                        </summary>
+                        <ol className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                          {COTTAGE_ACTIVITIES.map((item, index) => (
+                            <li key={item} className="flex gap-2">
+                              <span className="shrink-0 tabular-nums text-foreground/50">{index + 1}.</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </details>
+                      <div className="space-y-1.5">
+                        <Label>Power if machinery is used (kW)</Label>
+                        <Input
+                          type="number"
+                          min={0}
+                          step={1}
+                          inputMode="numeric"
+                          placeholder="0 if none — maximum 50"
+                          value={form.powerKw}
+                          onChange={(e) => setForm({ ...form, powerKw: nonNegativeAmount(e.target.value) })}
+                        />
+                      </div>
+                      <label className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <input
+                          type="checkbox"
+                          className="mt-0.5"
+                          checked={form.cottageActivityConfirmed}
+                          onChange={(e) =>
+                            setForm({ ...form, cottageActivityConfirmed: e.target.checked })
+                          }
+                        />
+                        This activity is on the cottage list and uses traditional or local skills
+                      </label>
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {sizeChecks.length > 0 && (
+                <ul className="space-y-2 rounded-2xl border border-border px-4 py-3">
+                  {sizeChecks.map((check) => (
+                    <li
+                      key={check.id}
+                      className={cn(
+                        "grid grid-cols-[1.25rem_minmax(0,1fr)] items-start gap-3 text-sm leading-6",
+                        check.done ? "text-success-fg" : "text-destructive"
+                      )}
+                    >
+                      <span aria-hidden className="pt-0.5 font-semibold">
+                        {check.done ? "✓" : "•"}
+                      </span>
+                      <span>{check.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           )}
 
-          {step === 5 && (
+          {step === 6 && (
             <div>
-              <h2 className="font-semibold text-foreground mb-3">H. IEE / EIA Screening</h2>
-              <p className="text-sm text-muted-foreground mb-3">
-                Filter by sector, then select the activity that best matches your project — or leave blank if
-                unsure.
+              <h2 className={STEP_HEADING}>G. Category of Industry — Objective</h2>
+              <p className={STEP_COPY}>
+                Choose the sector path. Trading cannot take FDI. If the business objective is Trading, this
+                category must be Trading.
               </p>
-              <div className="hidden space-y-3 sm:block">
-                <SelectField
-                  aria-label="IEE / EIA sector"
-                  value={ieeSector}
-                  onValueChange={(sector) => {
-                    setIeeSector(sector);
-                    setForm({ ...form, ieeEiaCriterionId: "" });
-                  }}
-                  options={[
-                    { value: "", label: "All sectors" },
-                    ...Array.from(new Set(criteria.map((c) => c.sector))).map((sector) => ({
-                      value: sector,
-                      label: sector,
-                    })),
-                  ]}
-                />
-                <SelectField
-                  aria-label="IEE / EIA activity"
-                  value={form.ieeEiaCriterionId}
-                  onValueChange={(ieeEiaCriterionId) => setForm({ ...form, ieeEiaCriterionId })}
-                  options={[
-                    { value: "", label: "Not applicable / unsure — advisor will confirm" },
-                    ...ieeActivities.map((c) => ({
-                      value: c.id,
-                      label: `[${c.level}] ${c.sector}: ${c.scope}`,
-                    })),
-                  ]}
-                />
+              <SelectField
+                value={form.objectiveCategory}
+                onValueChange={(objectiveCategory) => setForm({ ...form, objectiveCategory })}
+                options={[
+                  { value: "ENERGY", label: "Energy-based" },
+                  { value: "MANUFACTURING", label: "Manufacturing" },
+                  { value: "AGRICULTURE_FOREST", label: "Agriculture & Forest" },
+                  { value: "MINERAL", label: "Mineral" },
+                  { value: "INFRASTRUCTURE", label: "Infrastructure" },
+                  { value: "TOURISM", label: "Tourism" },
+                  { value: "ICT", label: "Information & Communication Technology" },
+                  { value: "SERVICE", label: "Service" },
+                  { value: "TRADING", label: "Trading" },
+                ]}
+              />
+              {form.objective === "TRADING" && form.objectiveCategory !== "TRADING" && (
+                <p className="mt-2 text-xs text-destructive">
+                  Trading businesses must use the Trading industry objective category.
+                </p>
+              )}
+              {form.fdiRequested && form.objectiveCategory === "TRADING" && (
+                <p className="mt-2 text-xs text-destructive">
+                  FDI is not permitted for Trading. Change the category, or turn FDI off.
+                </p>
+              )}
+            </div>
+          )}
+
+          {step === 7 && (
+            <div>
+              <h2 className={STEP_HEADING}>H. License-Needed Industry</h2>
+              <p className={STEP_COPY}>
+                Tick any controlled sector, or leave blank if none apply. These require special government
+                permission before normal registration.
+              </p>
+              <div className="space-y-3 rounded-2xl border border-border p-4">
+                {LICENSE_NEEDED_INDUSTRIES.map((label) => (
+                  <label key={label} className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-start gap-3 text-sm leading-6 text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      className="mt-1 size-4"
+                      checked={form.licenseIndustries.includes(label)}
+                      onChange={() => toggleLicense(label)}
+                    />
+                    <span>{label}</span>
+                  </label>
+                ))}
               </div>
-              <div className="space-y-4 sm:hidden">
+            </div>
+          )}
+
+          {step === 8 && (
+            <div className="space-y-4">
+              <div>
+                <h2 className={STEP_HEADING}>I. IEE / EIA Screening</h2>
+                <p className={STEP_COPY}>
+                  {ieeExemptSize
+                    ? "Micro and cottage industries are typically exempt. Search only if your activity is listed."
+                    : "Choose a category, then search by activity or scale — for example hotel, crusher, or 10 MW."}
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <Label>Sector</Label>
+                  <Label>Category</Label>
                   <SelectField
                     wrapItems
-                    aria-label="IEE / EIA sector"
+                    aria-label="IEE / EIA category"
                     value={ieeSector}
                     onValueChange={(sector) => {
                       setIeeSector(sector);
                       setForm({ ...form, ieeEiaCriterionId: "" });
                     }}
                     options={[
-                      { value: "", label: "All sectors" },
-                      ...Array.from(new Set(criteria.map((c) => c.sector))).map((sector) => ({
-                        value: sector,
-                        label: sector,
-                      })),
+                      { value: "", label: "All categories" },
+                      ...ieeSectors.map((sector) => ({ value: sector, label: sector })),
                     ]}
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label>IEE / EIA activity</Label>
-                  <div className="max-h-[min(22rem,55vh)] overflow-y-auto rounded-lg border border-border-subtle">
-                    <label className="flex cursor-pointer items-start gap-3 border-b border-border-subtle px-3 py-3 text-sm">
-                      <input
-                        type="radio"
-                        name="iee-eia-activity"
-                        className="mt-1 shrink-0"
-                        checked={!form.ieeEiaCriterionId}
-                        onChange={() => setForm({ ...form, ieeEiaCriterionId: "" })}
-                      />
-                      <span className="min-w-0 leading-snug text-muted-foreground">
-                        Not applicable / unsure — advisor will confirm
-                      </span>
-                    </label>
+                  <Label>Search activity or scale</Label>
+                  <Input
+                    type="search"
+                    value={ieeQuery}
+                    onChange={(e) => setIeeQuery(e.target.value)}
+                    placeholder="hotel, hydropower, 50 beds…"
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+              <div className="overflow-hidden rounded-2xl border border-border">
+                <label className="flex cursor-pointer items-start gap-3 border-b border-border-subtle px-4 py-3 text-sm">
+                  <input
+                    type="radio"
+                    name="iee-eia-activity"
+                    className="mt-1 size-4 shrink-0"
+                    checked={!form.ieeEiaCriterionId}
+                    onChange={() => setForm({ ...form, ieeEiaCriterionId: "" })}
+                  />
+                  <span className="leading-6 text-muted-foreground">
+                    Not applicable / unsure — advisor will confirm
+                  </span>
+                </label>
+                {ieeNeedsFilter ? (
+                  <p className="px-4 py-6 text-sm text-muted-foreground">
+                    Choose a category or type a few words to see matching scopes and the study type.
+                  </p>
+                ) : ieeActivities.length === 0 ? (
+                  <p className="px-4 py-6 text-sm text-muted-foreground">
+                    No match. Try another category or fewer words.
+                  </p>
+                ) : (
+                  <div className="max-h-[min(26rem,55vh)] overflow-y-auto">
+                    <p className="border-b border-border-subtle px-4 py-2 text-xs text-muted-foreground">
+                      {ieeActivities.length} matching {ieeActivities.length === 1 ? "scope" : "scopes"}
+                    </p>
                     {ieeActivities.map((c) => {
                       const selected = form.ieeEiaCriterionId === c.id;
                       return (
                         <label
                           key={c.id}
-                          className={`flex cursor-pointer items-start gap-3 border-b border-border-subtle px-3 py-3 last:border-b-0 ${
-                            selected ? "bg-brand-sky-muted/50" : ""
-                          }`}
+                          className={cn(
+                            "grid cursor-pointer grid-cols-[1.25rem_minmax(0,1fr)] items-start gap-3 border-b border-border-subtle px-4 py-3 last:border-b-0",
+                            selected && "bg-brand-sky-muted/50"
+                          )}
                         >
                           <input
                             type="radio"
                             name="iee-eia-activity"
-                            className="mt-1 shrink-0"
+                            className="mt-1 size-4"
                             checked={selected}
                             onChange={() => setForm({ ...form, ieeEiaCriterionId: c.id })}
                           />
                           <span className="min-w-0 space-y-1">
-                            <span className="inline-flex rounded-full border border-border-subtle px-2 py-0.5 text-[11px] font-medium text-foreground">
-                              {c.level}
+                            <span className="flex flex-wrap items-center gap-2">
+                              <span
+                                className={cn(
+                                  "inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                                  c.level === "EIA"
+                                    ? "bg-destructive/10 text-destructive"
+                                    : c.level === "IEE"
+                                      ? "bg-brand-sky-muted text-brand-sky"
+                                      : "bg-muted text-muted-foreground"
+                                )}
+                              >
+                                {c.level === "BRIEF" ? "Brief" : c.level}
+                              </span>
+                              <span className="text-xs font-medium text-muted-foreground">{c.sector}</span>
                             </span>
-                            <span className="block text-sm font-medium leading-snug text-foreground">
-                              {c.sector}
-                            </span>
-                            <span className="block text-xs leading-relaxed text-muted-foreground">
-                              {c.scope}
-                            </span>
+                            <span className="block text-sm leading-6 text-foreground">{c.scope}</span>
                           </span>
                         </label>
                       );
                     })}
                   </div>
-                </div>
+                )}
               </div>
               {selectedCriterion && (
-                <p className="mt-2 text-xs text-brand-sky">
-                  Indicative screening level: <strong>{selectedCriterion.level}</strong>
+                <p className="text-sm text-brand-sky">
+                  Indicative screening level: <strong>{selectedCriterion.level === "BRIEF" ? "Brief" : selectedCriterion.level}</strong>
                 </p>
               )}
             </div>
           )}
 
-          {step === 6 && (
+          {step === 9 && (
             <div className="space-y-6 text-sm">
               <div>
-                <h2 className="font-semibold text-foreground">Review your inquiry</h2>
-                <p className="mt-1 text-muted-foreground">
+                <h2 className={STEP_HEADING}>Review your inquiry</h2>
+                <p className="text-[1.05rem] leading-[1.75] text-muted-foreground">
                   Check every section before submitting. Use Edit to jump back and correct a step.
                 </p>
               </div>
@@ -1363,17 +1735,32 @@ export function BusinessSetupWizardForm() {
                 )}
               </ReviewBlock>
 
-              <ReviewBlock title="Investment (Rs)" onEdit={() => goToStep(2)}>
+              <ReviewBlock
+                title="Investment (Rs)"
+                onEdit={() => goToStep(2)}
+                incomplete={investmentMismatch || (form.objective === "MANUFACTURING" && totalCapital <= 0)}
+              >
                 <ReviewItem label="Equity" value={formatNpr(Number(form.equityInvestment || 0))} />
                 <ReviewItem label="Loan" value={formatNpr(Number(form.loanInvestment || 0))} />
                 <ReviewItem label="Total capital" value={formatNpr(totalCapital)} />
-                <ReviewItem label="Fixed assets" value={formatNpr(Number(form.fixedAssets || 0))} />
-                <ReviewItem label="Plant & machinery" value={formatNpr(Number(form.plantMachineryCost || 0))} />
-                <ReviewItem label="Net current assets" value={formatNpr(Number(form.netCurrentAssets || 0))} />
-                <ReviewItem label="Asset total" value={formatNpr(assetTotal)} />
               </ReviewBlock>
 
-              <ReviewBlock title="Shareholders" onEdit={() => goToStep(3)}>
+              <ReviewBlock
+                title="Proposed application (Rs)"
+                onEdit={() => goToStep(3)}
+                incomplete={plantMachineryMissing || investmentMismatch}
+              >
+                <ReviewItem label="Fixed assets" value={formatNpr(Number(form.fixedAssets || 0))} />
+                <ReviewItem
+                  label="Plant & machinery"
+                  value={formatNpr(Number(form.plantMachineryCost || 0))}
+                  missing={plantMachineryMissing}
+                />
+                <ReviewItem label="Net current assets" value={formatNpr(Number(form.netCurrentAssets || 0))} />
+                <ReviewItem label="Total" value={formatNpr(assetTotal)} missing={investmentMismatch} />
+              </ReviewBlock>
+
+              <ReviewBlock title="Shareholders" onEdit={() => goToStep(4)}>
                 {shareholders.map((s, i) => (
                   <ReviewItem
                     key={`${s.category}-${i}`}
@@ -1384,39 +1771,50 @@ export function BusinessSetupWizardForm() {
               </ReviewBlock>
 
               <ReviewBlock
-                title="Classification"
-                onEdit={() => goToStep(4)}
-                incomplete={sizeMissing || objectiveCategoryMissing}
+                title="Industry size"
+                onEdit={() => goToStep(5)}
+                incomplete={sizeMissing || sizeClassIssues.length > 0}
               >
                 <ReviewItem
                   label="Industry size"
                   value={prettyLabel(form.sizeCategory)}
-                  missing={sizeMissing}
+                  missing={sizeMissing || sizeClassIssues.length > 0}
                 />
+                <ReviewItem label="Fixed capital (excl. land)" value={formatNpr(proposedFixedCapital)} />
+              </ReviewBlock>
+
+              <ReviewBlock
+                title="Industry objective category"
+                onEdit={() => goToStep(6)}
+                incomplete={objectiveCategoryMissing}
+              >
                 <ReviewItem
                   label="Objective category"
                   value={prettyLabel(form.objectiveCategory)}
                   missing={objectiveCategoryMissing}
                 />
+              </ReviewBlock>
+
+              <ReviewBlock title="License-needed industry" onEdit={() => goToStep(7)}>
                 <ReviewItem
                   label="License industries"
                   value={form.licenseIndustries.length ? form.licenseIndustries.join("; ") : "None selected"}
                 />
               </ReviewBlock>
 
-              <ReviewBlock title="Environment screening" onEdit={() => goToStep(5)}>
+              <ReviewBlock title="Environment screening" onEdit={() => goToStep(8)}>
                 <ReviewItem
                   label="IEE / EIA"
                   value={
                     selectedCriterion
-                      ? `${selectedCriterion.level} — ${selectedCriterion.sector}: ${selectedCriterion.scope}`
+                      ? `${selectedCriterion.level === "BRIEF" ? "Brief" : selectedCriterion.level} — ${selectedCriterion.sector}: ${selectedCriterion.scope}`
                       : "Advisor will confirm"
                   }
                 />
               </ReviewBlock>
 
-              <p className="text-muted-foreground">
-                Submit to save this inquiry. A SARA Advisors team member will also follow up using the phone
+              <p className="text-[1.05rem] leading-[1.75] text-muted-foreground">
+                Submit to save this inquiry. An ASAR Partners team member will also follow up using the phone
                 and email you provided.
               </p>
             </div>
@@ -1431,26 +1829,80 @@ export function BusinessSetupWizardForm() {
 
           <div className="flex flex-col-reverse gap-3 sm:flex-row">
             {step > 0 && (
-              <Button type="button" variant="outline" className="w-full sm:w-auto" onClick={prevStep} disabled={loading}>
+              <SmoothButton
+                type="button"
+                variant="outline"
+                className="w-full sm:w-auto"
+                onClick={prevStep}
+                disabled={loading}
+              >
                 Back
-              </Button>
+              </SmoothButton>
             )}
-            <Button
-              type="submit"
-              variant="sky"
-              className="flex-1"
-              disabled={loading}
-            >
+            <SmoothButton type="submit" variant="candy" className="flex-1" disabled={loading}>
               {loading
                 ? "Submitting..."
                 : step < STEPS.length - 1
                   ? "Continue"
                   : "Get my registration guide"}
-            </Button>
+            </SmoothButton>
           </div>
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+function StatusChip({ ok, label }: { ok: boolean; label: string }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide",
+        ok ? "bg-success-bg text-success-fg" : "bg-destructive/10 text-destructive"
+      )}
+    >
+      {label}
+    </span>
+  );
+}
+
+function IndustrySizeOverview({ selected }: { selected: string }) {
+  return (
+    <div className="rounded-2xl border border-border">
+      <div className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-x-3 border-b border-border bg-muted/50 px-3 py-2 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase sm:px-4">
+        <span>Cat.</span>
+        <span>Size</span>
+        <span className="inline-flex w-[7.25rem] justify-between sm:w-[9.5rem]">
+          <span>FDI</span>
+          <span>IEE</span>
+        </span>
+      </div>
+      {(Object.keys(INDUSTRY_SIZE_GUIDE) as Array<keyof typeof INDUSTRY_SIZE_GUIDE>).map((key) => {
+        const row = INDUSTRY_SIZE_GUIDE[key];
+        const active = selected === key;
+        return (
+          <div
+            key={key}
+            className={cn(
+              "grid grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-x-3 border-b border-border-subtle px-3 py-3 last:border-b-0 sm:px-4",
+              active && "bg-brand-sky-muted/40"
+            )}
+          >
+            <span className="pt-0.5 text-xs font-semibold tabular-nums text-muted-foreground">{row.letter}</span>
+            <div className="min-w-0">
+              <p className="text-sm font-medium leading-5 text-foreground">{row.label}</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">{row.capital}</p>
+            </div>
+            <span className="inline-flex w-[7.25rem] shrink-0 items-start justify-between whitespace-nowrap pt-0.5 text-xs font-semibold sm:w-[9.5rem]">
+              <span className={row.fdiAllowed ? "text-success-fg" : "text-destructive"}>
+                {row.fdiAllowed ? "Yes" : "No"}
+              </span>
+              <span className="text-muted-foreground">{row.ieeTypical ? "By activity" : "No"}</span>
+            </span>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
@@ -1468,15 +1920,15 @@ function ReviewBlock({
   return (
     <section
       className={cn(
-        "rounded-lg border p-4",
-        incomplete ? "border-destructive/40" : "border-border-subtle"
+        "rounded-3xl border p-5",
+        incomplete ? "border-destructive/40" : "border-border"
       )}
     >
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h3 className="font-semibold text-foreground">{title}</h3>
-        <Button type="button" variant="ghost" size="sm" onClick={onEdit}>
+        <h3 className="heading-soft font-heading font-semibold tracking-[-0.015em] text-foreground">{title}</h3>
+        <SmoothButton type="button" variant="ghost" size="sm" onClick={onEdit}>
           Edit
-        </Button>
+        </SmoothButton>
       </div>
       <dl className="grid gap-3 sm:grid-cols-2">{children}</dl>
     </section>

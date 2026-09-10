@@ -4,7 +4,6 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import SmoothButton from "@/components/smoothui/smooth-button";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -44,26 +43,24 @@ function initials(name?: string | null, email?: string | null): string {
   return "U";
 }
 
-/** Stable slot so session hydration cannot shift the sticky header. */
-const AUTH_SLOT = "flex h-9 min-w-9 shrink-0 items-center justify-end sm:min-w-[5.5rem]";
+/** Fixed width so session hydration cannot shift the theme toggle or hamburger. */
+const AUTH_SLOT = "flex h-9 w-[5.5rem] shrink-0 items-center justify-end";
+
+function LoginButton() {
+  return (
+    <SmoothButton asChild variant="candy" size="sm" className="h-9 w-full rounded-full">
+      <Link href="/login">Log in</Link>
+    </SmoothButton>
+  );
+}
 
 export function AuthNav() {
   const { data: session, status } = useSession();
 
-  if (status === "loading") {
-    return (
-      <div className={AUTH_SLOT} aria-hidden>
-        <Skeleton className="h-9 w-full rounded-full" />
-      </div>
-    );
-  }
-
-  if (!session?.user) {
+  if (status === "loading" || !session?.user) {
     return (
       <div className={AUTH_SLOT}>
-        <SmoothButton asChild variant="candy" size="sm" className="h-9 w-full rounded-full">
-          <Link href="/login">Log in</Link>
-        </SmoothButton>
+        <LoginButton />
       </div>
     );
   }
@@ -83,7 +80,7 @@ export function AuthNav() {
             aria-label="Account menu"
           >
             <Avatar className="size-9">
-              <AvatarFallback className="bg-primary text-[11px] font-semibold text-white">
+              <AvatarFallback className="bg-primary text-[11px] font-semibold text-primary-foreground">
                 {initials(session.user.name, session.user.email)}
               </AvatarFallback>
             </Avatar>
