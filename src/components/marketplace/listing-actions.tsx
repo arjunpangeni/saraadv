@@ -41,8 +41,8 @@ export function InvestorVerificationBanner() {
     <StatusBanner variant="warning" title="Investor verification pending" className="mt-4 mb-0">
       Your account must be verified by ASAR Partners before you can sign NDAs, download teasers, or open
       another company’s data room. Contact{" "}
-      <a href="mailto:advisor@saraadvisors.com" className="font-medium underline">
-        advisor@saraadvisors.com
+      <a href="mailto:advisor@asarpartners.com" className="font-medium underline">
+        advisor@asarpartners.com
       </a>
       .
     </StatusBanner>

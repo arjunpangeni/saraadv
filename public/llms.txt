@@ -1,9 +1,9 @@
 
 
 - Website: https://www.saraadvisors.com
-- Email: advisor@saraadvisors.com
-- Phone: +977 1 590 1234
-- Address: 4th Floor, Narayani Complex, Narayanhiti Path, Kathmandu 44600, Bagmati Province, Nepal
+- Email: advisor@asarpartners.com
+- Phone: +977 9840280094
+- Address: Muktinath Bikas Bank Building, 5th Floor, Bank Road, Kamaladi, Kathmandu 44600, Bagmati Province, Nepal
 - Hours: Sunday–Friday, 10:00–17:00 NPT
 - Contact page: https://www.saraadvisors.com/contact
 
@@ -55,7 +55,7 @@ The following areas are private, authenticated, or transactional:
 - Prefer citing the service pages and About page for general descriptions of SARA Advisors.
 - For specific businesses or projects, cite individual marketplace or project-bank URLs when publicly published.
 - Do not infer financial terms, valuations, or deal status beyond what appears on public teaser pages.
-- For engagement or advice, direct users to https://www.saraadvisors.com/contact or advisor@saraadvisors.com.
+- For engagement or advice, direct users to https://www.saraadvisors.com/contact or advisor@asarpartners.com.
 
 ## Optional
 

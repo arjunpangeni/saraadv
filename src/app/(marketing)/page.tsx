@@ -5,7 +5,6 @@ import { SaraHeroGrid } from "@/components/marketing/sara-hero-grid";
 import { HomeServiceCards } from "@/components/marketing/home-service-cards";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { siteConfig } from "@/lib/site-config";
-import { LogoMarquee } from "@/components/smoothui/logo-cloud-3";
 import SmoothButton from "@/components/smoothui/smooth-button";
 import { pageMetadata } from "@/lib/seo";
 
@@ -23,32 +22,10 @@ const TRUST_SIGNALS = [
   { icon: Building2, title: "FDI Ready", desc: "Proven pathways for full capital repatriation compliance." },
 ];
 
-const CREDENTIALS = [
-  "Department of Industry",
-  "Office of the Company Registrar",
-  "Nepal Rastra Bank",
-  "Inland Revenue Department",
-  "Social Security Fund",
-  "Verified Carbon Standard",
-  "Gold Standard",
-];
-
 export default function HomePage() {
   return (
     <main className="flex-1">
         <SaraHeroGrid />
-
-        <LogoMarquee
-          speed="slow"
-          logos={CREDENTIALS.map((name) => ({
-            name,
-            logo: (
-              <span className="whitespace-nowrap text-sm font-medium tracking-tight text-foreground/70">
-                {name}
-              </span>
-            ),
-          }))}
-        />
 
         <section className="container-page py-20 sm:py-28">
           <SectionHeading

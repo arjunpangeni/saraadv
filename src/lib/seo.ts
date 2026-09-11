@@ -3,19 +3,19 @@ import { siteConfig } from "@/lib/site-config";
 
 export const SITE_OFFICE = {
   name: siteConfig.name,
-  street: "4th Floor, Narayani Complex",
-  streetLine: "Narayanhiti Path",
+  street: "Muktinath Bikas Bank Building, 5th Floor",
+  streetLine: "Bank Road, Kamaladi",
   locality: "Kathmandu",
   postalCode: "44600",
   region: "Bagmati",
   country: "NP",
   countryName: "Nepal",
-  email: "advisor@saraadvisors.com",
-  phone: "+977 1 590 1234",
-  phoneTel: "+97715901234",
+  email: "advisor@asarpartners.com",
+  phone: "+977 9840280094",
+  phoneTel: "+9779840280094",
   hours: "Sunday–Friday, 10:00–17:00 NPT",
-  lat: 27.7172,
-  lng: 85.324,
+  lat: 27.710029937931804,
+  lng: 85.32077703956494,
 } as const;
 
 export const SITE_OFFICE_LINES = [
@@ -26,8 +26,7 @@ export const SITE_OFFICE_LINES = [
 ] as const;
 
 export function googleMapsEmbedSrc() {
-  const query = `${SITE_OFFICE.lat},${SITE_OFFICE.lng}`;
-  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&hl=en&z=15&output=embed`;
+  return `https://www.google.com/maps?q=${SITE_OFFICE.lat},${SITE_OFFICE.lng}&hl=en&z=17&output=embed`;
 }
 
 export function googleMapsDirectionsUrl() {

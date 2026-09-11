@@ -82,7 +82,7 @@ export function ContactOfficeColumn() {
           src={googleMapsEmbedSrc()}
           className="h-40 w-full border-0 sm:h-48 lg:h-full lg:min-h-[200px]"
           loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
+          referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
         />
       </div>

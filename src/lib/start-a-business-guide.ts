@@ -18,7 +18,7 @@ export const SARA_SERVICE_CODES = new Set([
   "REG-39",
 ]);
 
-export const SARA_ADVISOR_MAIL = "advisor@saraadvisors.com";
+export const SARA_ADVISOR_MAIL = "advisor@asarpartners.com";
 
 export interface SetupGuidePayload {
   contactName: string;

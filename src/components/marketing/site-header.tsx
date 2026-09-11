@@ -118,7 +118,7 @@ export function SiteHeader() {
         : null}
       <nav
         className={cn(
-          "header-scrolled relative transition-[background-color,backdrop-filter] duration-300",
+          "header-scrolled relative transition-[background-color] duration-300",
           scrolled && "header-is-stuck"
         )}
         aria-label="Primary"

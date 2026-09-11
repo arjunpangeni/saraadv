@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
-import { SITE_OFFICE, SITE_OFFICE_LINES, googleMapsDirectionsUrl } from "@/lib/seo";
+import { SITE_OFFICE, googleMapsDirectionsUrl } from "@/lib/seo";
 import { MARKETING_PLATFORM_LINKS, MARKETING_SERVICES } from "@/lib/marketing-nav";
 import { SocialIcons } from "@/components/marketing/social-icons";
 import { BackToTop } from "@/components/marketing/back-to-top";
@@ -40,6 +40,38 @@ function FooterTagline() {
   );
 }
 
+function FooterOffice({ align = "left" }: { align?: "left" | "center" }) {
+  const centered = align === "center";
+  return (
+    <div className={centered ? "text-center" : undefined}>
+      <FooterHeading>Office</FooterHeading>
+      <div className={centered ? "mx-auto flex max-w-xs items-start justify-center gap-2.5 text-left" : "flex items-start gap-2.5"}>
+        <MapPin className="mt-0.5 size-4 shrink-0 text-tz-green-deep" aria-hidden />
+        <address className="text-sm leading-relaxed text-muted-foreground not-italic">
+          {SITE_OFFICE.street}
+          <br />
+          {SITE_OFFICE.streetLine}
+          <br />
+          {SITE_OFFICE.locality}
+        </address>
+      </div>
+      <a
+        href={googleMapsDirectionsUrl()}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={
+          centered
+            ? "mt-3 inline-flex items-center justify-center gap-1 text-sm font-medium text-foreground"
+            : "mt-3 inline-flex items-center gap-1 text-sm font-medium text-foreground hover:text-foreground/75"
+        }
+      >
+        Directions
+        <ArrowUpRight className="size-3.5" aria-hidden />
+      </a>
+    </div>
+  );
+}
+
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
@@ -57,29 +89,13 @@ function MobileFooter() {
       <FooterTagline />
       <SocialIcons className="mt-5 justify-center" />
 
-      <div className="mt-6 space-y-2.5 text-sm">
-        <address className="leading-relaxed text-foreground/80 not-italic">
-          {SITE_OFFICE.street}
-          <br />
-          {SITE_OFFICE.streetLine}
-          <br />
-          {SITE_OFFICE.locality} {SITE_OFFICE.postalCode}
-        </address>
-        <p className="text-muted-foreground">{SITE_OFFICE.hours}</p>
-        <a href={`mailto:${SITE_OFFICE.email}`} className="block break-all text-foreground">
+      <div className="mt-6 flex w-full flex-col items-center gap-3 text-sm">
+        <FooterOffice align="center" />
+        <a href={`mailto:${SITE_OFFICE.email}`} className="break-all text-foreground">
           {SITE_OFFICE.email}
         </a>
-        <a href={`tel:${SITE_OFFICE.phoneTel}`} className="block text-foreground">
+        <a href={`tel:${SITE_OFFICE.phoneTel}`} className="text-foreground">
           {SITE_OFFICE.phone}
-        </a>
-        <a
-          href={googleMapsDirectionsUrl()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-1 font-medium text-foreground"
-        >
-          View on Google Maps
-          <ArrowUpRight className="size-3.5" aria-hidden />
         </a>
       </div>
 
@@ -170,22 +186,7 @@ export function SiteFooter() {
           </nav>
 
           <div className="lg:col-span-3">
-            <FooterHeading>Office</FooterHeading>
-            <p className="text-sm font-medium text-foreground">{SITE_OFFICE.name}</p>
-            <address className="mt-1 text-sm leading-relaxed whitespace-pre-line text-muted-foreground not-italic">
-              {SITE_OFFICE_LINES.join("\n")}
-            </address>
-            <p className="mt-3 text-sm text-muted-foreground">{SITE_OFFICE.hours}</p>
-            <a
-              href={googleMapsDirectionsUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-foreground transition-colors hover:text-foreground/80"
-            >
-              <MapPin className="size-4 shrink-0" aria-hidden />
-              View on Google Maps
-              <ArrowUpRight className="size-3.5 shrink-0" aria-hidden />
-            </a>
+            <FooterOffice />
           </div>
         </div>
       </div>
