@@ -981,7 +981,7 @@ html.dark .brand-logo-wash {
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     scrollbar-gutter: stable;
     @apply font-sans;
   }

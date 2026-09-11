@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { SITE_OFFICE, SITE_OFFICE_LINES, googleMapsDirectionsUrl } from "@/lib/seo";
 import { MARKETING_PLATFORM_LINKS, MARKETING_SERVICES } from "@/lib/marketing-nav";
 import { SocialIcons } from "@/components/marketing/social-icons";
+import { BackToTop } from "@/components/marketing/back-to-top";
 
 const COMPANY_LINKS = [
   { href: "/about", label: "About" },
@@ -99,13 +100,7 @@ function MobileFooter() {
         ))}
       </nav>
 
-      <a
-        href="#main-content"
-        className="mt-8 inline-flex items-center justify-center gap-1.5 text-sm font-medium text-foreground"
-      >
-        Back to top
-        <ArrowUp className="size-4" aria-hidden />
-      </a>
+      <BackToTop />
     </div>
   );
 }
