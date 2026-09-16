@@ -1,9 +1,9 @@
 import type { EligibilityIssue, GeneratedTask } from "@/lib/rules/startABusiness";
 
-export const BUSINESS_SETUP_GUIDE_KEY = "sara:business-setup-guide";
+export const BUSINESS_SETUP_GUIDE_KEY = "asar:business-setup-guide";
 
 /** Optional / ancillary items ASAR can deliver as paid single-window services. */
-export const SARA_SERVICE_CODES = new Set([
+export const ASAR_SERVICE_CODES = new Set([
   "REG-23",
   "REG-24",
   "REG-27",
@@ -18,7 +18,7 @@ export const SARA_SERVICE_CODES = new Set([
   "REG-39",
 ]);
 
-export const SARA_ADVISOR_MAIL = "advisor@asarpartners.com";
+export const ASAR_ADVISOR_MAIL = "advisor@asarpartners.com";
 
 export interface SetupGuidePayload {
   contactName: string;
@@ -57,9 +57,9 @@ export function loadGuidePayload(): SetupGuidePayload | null {
   }
 }
 
-export function saraMailto(tasks: GeneratedTask[], businessName: string) {
+export function asarMailto(tasks: GeneratedTask[], businessName: string) {
   const list = tasks.map((t) => `- ${t.title}`).join("\n");
   const subject = `Start a Business services: ${businessName}`;
   const body = `Hello ASAR Partners,\n\nPlease handle the following items for ${businessName}:\n\n${list}\n\nThank you.`;
-  return `mailto:${SARA_ADVISOR_MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${ASAR_ADVISOR_MAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

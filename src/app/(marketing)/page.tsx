@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Building2, Globe, Scale, Shield } from "lucide-react";
-import { SaraHeroGrid } from "@/components/marketing/sara-hero-grid";
+import { AsarHeroGrid } from "@/components/marketing/asar-hero-grid";
 import { HomeServiceCards } from "@/components/marketing/home-service-cards";
 import { SectionHeading } from "@/components/marketing/section-heading";
 import { siteConfig } from "@/lib/site-config";
@@ -25,9 +25,9 @@ const TRUST_SIGNALS = [
 export default function HomePage() {
   return (
     <main className="flex-1">
-        <SaraHeroGrid />
+        <AsarHeroGrid />
 
-        <section className="container-page py-20 sm:py-28">
+        <section className="container-page pt-12 pb-20 sm:pt-25 sm:pb-28">
           <SectionHeading
             eyebrow="What we do"
             title="Advisory across the full investment lifecycle"

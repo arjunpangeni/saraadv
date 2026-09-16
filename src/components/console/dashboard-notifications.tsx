@@ -63,7 +63,7 @@ export function DashboardNotifications({
         })
       );
       setUnread((c) => (ids?.length ? Math.max(0, c - ids.length) : 0));
-      window.dispatchEvent(new Event("sara:desk-counts"));
+      window.dispatchEvent(new Event("asar:desk-counts"));
       router.refresh();
     } finally {
       setBusy(false);

@@ -3,20 +3,20 @@
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { SectionHeading } from "@/components/marketing/section-heading";
-import { SARA_TEAM, teamInitials, type SaraTeamMember } from "@/lib/team";
+import { ASAR_TEAM, teamInitials, type AsarTeamMember } from "@/lib/team";
 
 const STAGGER_DELAY = 0.1;
 
 interface TeamGridProps {
   description?: string;
-  members?: SaraTeamMember[];
+  members?: AsarTeamMember[];
   title?: string;
 }
 
 export function TeamGrid({
   title = "Our Team",
   description = "The strength of ASAR Partners lies in our highly qualified team of financial experts and strategists, dedicated to driving your business forward.",
-  members = SARA_TEAM,
+  members = ASAR_TEAM,
 }: TeamGridProps) {
   const shouldReduceMotion = useReducedMotion();
   const ref = useRef(null);

@@ -123,9 +123,7 @@ function NavGroup({
                     href={item.href}
                     onClick={() => isMobile && setOpenMobile(false)}
                     aria-label={
-                      item.badge === "count" && unread > 0
-                        ? `${item.label}, ${unread} unread`
-                        : item.label
+                      unread > 0 ? `${item.label}, ${unread} unread` : item.label
                     }
                   >
                     {item.badge === "count" ? (

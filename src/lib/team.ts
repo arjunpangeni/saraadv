@@ -1,4 +1,4 @@
-export type SaraTeamMember = {
+export type AsarTeamMember = {
   name: string;
   credential: string;
   credentialLabel: string;
@@ -6,7 +6,7 @@ export type SaraTeamMember = {
   bio: string;
 };
 
-export const SARA_TEAM: SaraTeamMember[] = [
+export const ASAR_TEAM: AsarTeamMember[] = [
   {
     name: "Sudhan Regmi",
     credential: "FCA",

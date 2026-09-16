@@ -10,7 +10,7 @@ import SmoothButton from "@/components/smoothui/smooth-button";
 
 export function AppTopbar() {
   return (
-    <header className="header-scrolled header-is-stuck sticky top-0 z-30 flex h-[4.5rem] items-center gap-3 border-b border-border/40 px-4 sm:h-20 sm:px-6">
+    <header className="header-scrolled header-is-stuck sticky top-0 z-[70] flex h-[4.5rem] items-center gap-3 border-b border-border/40 px-4 sm:h-20 sm:px-6">
       <SidebarTrigger className="size-9 shrink-0 rounded-full text-foreground hover:bg-black/[0.04] dark:hover:bg-white/10 lg:hidden" />
       <div className="min-w-0 flex-1">
         <div className="lg:hidden">

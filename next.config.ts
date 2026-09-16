@@ -2,9 +2,26 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV !== "production";
 
+/**
+ * Production must allow 'unsafe-inline' for Next.js bootstrap scripts.
+ * Do not mix script hashes/nonces here: when a hash or nonce is present,
+ * browsers ignore 'unsafe-inline' and Next's inline scripts get blocked,
+ * leaving Motion UI stuck at opacity: 0.
+ *
+ * For a stricter nonce-based CSP later, use proxy.ts per Next.js docs
+ * (requires dynamic rendering on every page).
+ */
+const scriptSrc = [
+  "script-src 'self' 'unsafe-inline'",
+  ...(isDev ? ["'unsafe-eval'"] : []),
+  "https://accounts.google.com",
+  "https://www.googletagmanager.com",
+  "https://www.google-analytics.com",
+].join(" ");
+
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://www.googletagmanager.com https://www.google-analytics.com",
+  scriptSrc,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
@@ -37,7 +54,16 @@ const extraDevOrigins = (process.env.ALLOWED_DEV_ORIGINS ?? "")
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  allowedDevOrigins: ["192.168.1.5", "192.168.1.6", "172.29.192.1", ...extraDevOrigins],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
+  },
+  allowedDevOrigins: ["192.168.1.3", "192.168.1.6", "172.29.192.1", ...extraDevOrigins],
   async headers() {
     return [
       {

@@ -10,8 +10,11 @@ import {
   PROJECT_SECTOR_LABELS,
   PROJECT_SECTOR_OPTIONS,
 } from "@/types/project-bank";
-import { cn } from "@/lib/utils";
-import { FilterChips } from "@/components/marketing/discover-search";
+import {
+  CollapsibleDiscoverFilters,
+  FilterChips,
+  FilterField,
+} from "@/components/marketing/discover-search";
 
 export function ProjectBankFilterBar({ resultCount }: { resultCount?: number }) {
   const router = useRouter();
@@ -25,7 +28,7 @@ export function ProjectBankFilterBar({ resultCount }: { resultCount?: number }) 
       mutate(params);
       startTransition(() => {
         const qs = params.toString();
-        router.push(qs ? `${pathname}?${qs}` : pathname);
+        router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
       });
     },
     [pathname, router, searchParams]
@@ -65,59 +68,57 @@ export function ProjectBankFilterBar({ resultCount }: { resultCount?: number }) 
   }, [searchParams]);
 
   function clearFilters() {
-    startTransition(() => router.push(pathname));
+    startTransition(() => router.push(pathname, { scroll: false }));
   }
 
   return (
-    <div className={cn("mb-6", isPending && "opacity-80")}>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <SelectField
-          aria-label="Sector"
-          className="sm:w-56"
-          value={searchParams.get("sector") || ""}
-          onValueChange={(value) => update("sector", value)}
-          options={[{ value: "", label: "All sectors" }, ...PROJECT_SECTOR_OPTIONS]}
-          wrapItems
-        />
-        <SelectField
-          aria-label="Investment size"
-          className="sm:w-48"
-          value={searchParams.get("capexRange") || searchParams.get("capexBand") || ""}
-          onValueChange={(value) => {
-            pushParams((params) => {
-              params.delete("capexBand");
-              if (value) params.set("capexRange", value);
-              else params.delete("capexRange");
-            });
-          }}
-          options={[{ value: "", label: "Any investment size" }, ...CAPEX_RANGE_OPTIONS]}
-        />
-        <SelectField
-          aria-label="Funding stage"
-          className="sm:w-48"
-          value={searchParams.get("fundingStage") || ""}
-          onValueChange={(value) => update("fundingStage", value)}
-          options={[{ value: "", label: "Any stage" }, ...FUNDING_STAGE_OPTIONS]}
-        />
-
-        {typeof resultCount === "number" && (
-          <p className="shrink-0 text-sm text-foreground/60 sm:ml-auto">
-            <span className="font-semibold text-foreground">{resultCount}</span>{" "}
-            {resultCount === 1 ? "project" : "projects"}
-            {isPending ? " · updating…" : ""}
-          </p>
-        )}
-      </div>
-
-      {activeChips.length > 0 ? (
-        <div className="mt-3">
-          <FilterChips
-            chips={activeChips}
-            onRemove={(key) => update(key, "")}
-            onClear={clearFilters}
+    <CollapsibleDiscoverFilters
+      pending={isPending}
+      resultCount={resultCount}
+      resultNoun={{ one: "project", many: "projects" }}
+      activeFilterCount={activeChips.length}
+      chips={
+        activeChips.length > 0 ? (
+          <FilterChips chips={activeChips} onRemove={(key) => update(key, "")} onClear={clearFilters} />
+        ) : null
+      }
+    >
+      <div className="grid gap-3 sm:grid-cols-3">
+        <FilterField label="Sector">
+          <SelectField
+            aria-label="Sector"
+            className="h-10"
+            value={searchParams.get("sector") || ""}
+            onValueChange={(value) => update("sector", value)}
+            options={[{ value: "", label: "All sectors" }, ...PROJECT_SECTOR_OPTIONS]}
+            wrapItems
           />
-        </div>
-      ) : null}
-    </div>
+        </FilterField>
+        <FilterField label="Investment size">
+          <SelectField
+            aria-label="Investment size"
+            className="h-10"
+            value={searchParams.get("capexRange") || searchParams.get("capexBand") || ""}
+            onValueChange={(value) => {
+              pushParams((params) => {
+                params.delete("capexBand");
+                if (value) params.set("capexRange", value);
+                else params.delete("capexRange");
+              });
+            }}
+            options={[{ value: "", label: "Any investment size" }, ...CAPEX_RANGE_OPTIONS]}
+          />
+        </FilterField>
+        <FilterField label="Funding stage">
+          <SelectField
+            aria-label="Funding stage"
+            className="h-10"
+            value={searchParams.get("fundingStage") || ""}
+            onValueChange={(value) => update("fundingStage", value)}
+            options={[{ value: "", label: "Any stage" }, ...FUNDING_STAGE_OPTIONS]}
+          />
+        </FilterField>
+      </div>
+    </CollapsibleDiscoverFilters>
   );
 }

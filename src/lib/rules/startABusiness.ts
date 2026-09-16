@@ -96,7 +96,7 @@ export function checkFdiNegativeList(
   const selected = new Set(input.fdiNegativeCodes ?? []);
 
   const sizeBlocksFdi =
-    Boolean(input.sizeCategory) && ["MICRO", "COTTAGE", "SMALL"].includes(input.sizeCategory!);
+    Boolean(input.sizeCategory) && ["MICRO", "COTTAGE"].includes(input.sizeCategory!);
 
   for (const item of negativeList) {
     if (item.code === "FDI-B" && sizeBlocksFdi) continue;
@@ -114,7 +114,7 @@ export function checkFdiNegativeList(
       severity: "BLOCKER",
       code: "FDI-B",
       message:
-        "Cottage, micro, and small industries are on the FDI Negative List. FDI is not permitted at this industry size.",
+        "Cottage and micro industries are on the FDI Negative List. FDI is not permitted at this industry size.",
     });
   }
 
@@ -206,7 +206,24 @@ export function checkShareholderConditions(input: StartABusinessInput): Eligibil
   return issues;
 }
 
-const MIN_FDI_CAPITAL_NPR = 20_000_000; // 2 crore
+const MIN_FDI_CAPITAL_NPR = 20_000_000; // 2 crore — general FITTA floor
+/** Sector tags / objective categories treated as IT for the FDI minimum exemption. */
+export const FDI_IT_EXEMPT_SECTOR_TAGS = ["telecom_it"] as const;
+
+/**
+ * Nepal allows FDI below the general Rs 2 crore minimum for IT / ICT industries.
+ * Other sectors still need at least NPR 20,000,000.
+ */
+export function isFdiItMinimumExempt(input: Pick<StartABusinessInput, "sectorTags" | "objectiveCategory">): boolean {
+  if (input.objectiveCategory === "ICT") return true;
+  return input.sectorTags.some((tag) =>
+    (FDI_IT_EXEMPT_SECTOR_TAGS as readonly string[]).includes(tag)
+  );
+}
+
+export function minFdiCapitalNpr(input: Pick<StartABusinessInput, "sectorTags" | "objectiveCategory">): number {
+  return isFdiItMinimumExempt(input) ? 0 : MIN_FDI_CAPITAL_NPR;
+}
 
 export function checkFdiCapitalRequirement(input: StartABusinessInput): EligibilityIssue[] {
   if (!input.fdiRequested) return [];
@@ -228,11 +245,12 @@ export function checkFdiCapitalRequirement(input: StartABusinessInput): Eligibil
   }
 
   const totalCapital = input.investment.equityInvestment + input.investment.loanInvestment;
-  if (totalCapital < MIN_FDI_CAPITAL_NPR) {
+  const minCapital = minFdiCapitalNpr(input);
+  if (minCapital > 0 && totalCapital < minCapital) {
     issues.push({
       severity: "BLOCKER",
       code: "FDI-MIN-CAPITAL",
-      message: `FDI requires a minimum investment of Rs 2 crore (20,000,000). Proposed total capital is below this threshold.`,
+      message: `FDI requires a minimum investment of Rs 2 crore (20,000,000), except for IT / ICT industries. Proposed total capital is below this threshold.`,
     });
   }
 
@@ -311,12 +329,12 @@ export const INDUSTRY_SIZE_GUIDE: Record<
     label: "Small Industry",
     threshold: "Not Micro or Cottage, capital up to NPR 15 crore",
     capital: "Fixed capital up to NPR 15 crore (150 million)",
-    fdiAllowed: false,
+    fdiAllowed: true,
     ieeTypical: true,
     rules: [
       "Any industry that is not Micro or Cottage",
       "Fixed capital up to NPR 15 crore (150 million)",
-      "FDI is not permitted",
+      "FDI is permitted if other FDI rules also pass",
       "IEE / EIA is decided by the environment sheet (sector + scale), not by size alone",
     ],
   },
@@ -467,10 +485,10 @@ export function industrySizeChecklist(
     });
   }
 
-  if (extras?.fdiRequested && ["MICRO", "COTTAGE", "SMALL"].includes(facts.sizeCategory)) {
+  if (extras?.fdiRequested && ["MICRO", "COTTAGE"].includes(facts.sizeCategory)) {
     items.push({
       id: "FDI-B",
-      label: "FDI is off, or size is Medium or Large",
+      label: "FDI is off, or size is Small, Medium, or Large",
       done: false,
     });
   }

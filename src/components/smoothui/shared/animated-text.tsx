@@ -19,6 +19,8 @@ export function AnimatedText({
   const shouldReduceMotion = useReducedMotion();
   const MotionTag = motion.create(Tag);
 
+  // Keep opacity at 1 in the initial state so copy stays readable if JS/CSP
+  // blocks Motion from running the enter animation.
   return (
     <MotionTag
       animate={
@@ -30,7 +32,7 @@ export function AnimatedText({
       initial={
         shouldReduceMotion
           ? { opacity: 1 }
-          : { filter: "blur(12px)", opacity: 0, y: 12 }
+          : { filter: "blur(12px)", opacity: 1, y: 12 }
       }
       transition={
         shouldReduceMotion

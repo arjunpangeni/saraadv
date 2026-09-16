@@ -32,7 +32,7 @@ export function OnboardingRoleForm({ callbackUrl, initialRole }: { callbackUrl: 
       return;
     }
     await update();
-    router.push(next);
+    router.push(`/onboarding/profile?callbackUrl=${encodeURIComponent(next)}`);
     router.refresh();
   }
 

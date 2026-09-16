@@ -125,7 +125,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.emailVerified = true;
       }
 
-      if (token.id && (trigger === "update" || process.env.NEXT_RUNTIME !== "edge")) {
+      if (token.id && trigger === "update") {
         try {
           const dbUser = await prisma.user.findUnique({
             where: { id: token.id as string },

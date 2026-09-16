@@ -82,27 +82,28 @@ export function PillarPage({
           description={intro}
           cta={cta}
           secondaryCta={secondaryCta}
+          compact
         />
 
-        <section className="container-page py-20 sm:py-28">
+        <section className="container-page py-14 sm:py-20 lg:py-28">
           <SectionHeading
             eyebrow="What's included"
             title="How this engagement works"
             description="The same advisory process we use on live Nepal mandates — scoped, documented, and confidential."
             align="center"
-            className="mb-12 sm:mb-14"
+            className="mb-10 sm:mb-12 lg:mb-14"
           />
           <GlowHover
-            className="grid gap-4 sm:grid-cols-2 sm:gap-5"
-            glowIntensity={0.18}
-            maskSize={280}
+            className="grid gap-12 sm:grid-cols-2 sm:gap-5"
+            glowIntensity={0.22}
+            maskSize={320}
             items={sections.map((s, i) => ({
               id: s.heading,
               theme: { hue: 152, saturation: 55, lightness: 42 },
               element: (
                 <motion.article
                   className={cn(
-                    "flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]",
+                    "group flex h-full flex-col rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 sm:p-6",
                     sections.length % 2 === 1 &&
                       i === sections.length - 1 &&
                       "sm:col-span-2 sm:mx-auto sm:w-full sm:max-w-xl"
@@ -112,13 +113,15 @@ export function PillarPage({
                   viewport={{ margin: "-80px", once: true }}
                   whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                 >
-                  <p className="text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">Advisory</p>
-                  <h3 className="heading-soft mt-1.5 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
+                  <h3 className="heading-soft text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground lg:text-[1.45rem]">
                     {s.heading}
                   </h3>
-                  <ul className="mt-4 flex-1 space-y-3">
+                  <ul className="mt-3 flex-1 space-y-2.5">
                     {s.items.map((item) => (
-                      <li key={item} className="flex gap-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
+                      <li
+                        key={item}
+                        className="flex gap-3 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground"
+                      >
                         <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-primary" aria-hidden />
                         <span>{item}</span>
                       </li>
@@ -132,15 +135,15 @@ export function PillarPage({
           {faq && faq.length > 0 ? <FaqList items={faq} /> : null}
 
           {cta && showFooterCta && (
-            <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
-              <SmoothButton asChild size="lg" variant="candy">
+            <div className="mt-12 flex flex-col items-stretch justify-center gap-3 sm:mt-14 sm:flex-row sm:flex-wrap sm:items-center">
+              <SmoothButton asChild size="lg" variant="candy" className="w-full sm:w-auto">
                 <Link href={cta.href}>
                   {cta.label}
                   <ArrowRight className="size-4" />
                 </Link>
               </SmoothButton>
               {secondaryCta && (
-                <SmoothButton asChild size="lg" variant="outline">
+                <SmoothButton asChild size="lg" variant="outline" className="w-full sm:w-auto">
                   <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
                 </SmoothButton>
               )}

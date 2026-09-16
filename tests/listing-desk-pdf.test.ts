@@ -5,7 +5,7 @@ import { EMPTY_LINE_ITEMS } from "@/lib/calc";
 describe("listing desk PDF", () => {
   it("builds a multi-page confidential dossier with legal name and line items", async () => {
     const bytes = await generateListingDeskPdf({
-      hashId: "SARA-MA-720",
+      hashId: "ASAR-MA-720",
       status: "PENDING_REVIEW",
       companyName: "Example Hydropower Pvt Ltd",
       sellerName: "Seller Name",

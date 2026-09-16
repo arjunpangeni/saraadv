@@ -552,7 +552,7 @@ export function financialTemplateFilename(kind: FinancialExcelKind, years: Finan
     .map((y) => y.fiscalYearLabel.replace(/\s+/g, ""))
     .join("_");
   const slug = kind === "forecast" ? "forecast" : "historical";
-  return `sara-listing-${slug}-${labels || "template"}.xlsx`;
+  return `asar-listing-${slug}-${labels || "template"}.xlsx`;
 }
 
 export function copyPreviousFiscalYear<T extends FinancialExcelYear>(years: T[], targetFiscalYear: number): T[] {

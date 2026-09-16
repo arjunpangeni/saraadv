@@ -105,7 +105,7 @@ export function HomeServiceCards() {
             <p className="mt-3 flex-1 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground">
               {s.description}
             </p>
-            <SmoothButton asChild variant="candy" size="sm" className="mt-5 w-fit">
+            <SmoothButton asChild variant="candy" size="sm" className="mt-5 w-full sm:w-fit">
               <Link href={s.href}>
                 Learn more
                 <ArrowRight className="size-4" />

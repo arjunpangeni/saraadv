@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { ga4InitScript } from "@/lib/csp-inline-scripts";
 
 const MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() ?? "";
 
@@ -16,7 +17,7 @@ export function GoogleAnalytics() {
         strategy="afterInteractive"
       />
       <Script id="ga4-init" strategy="afterInteractive">
-        {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${MEASUREMENT_ID}');`}
+        {ga4InitScript(MEASUREMENT_ID)}
       </Script>
     </>
   );

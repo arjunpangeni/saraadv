@@ -16,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <DevPointerCaptureGuard />
       <ThemeColorMeta />
       <TooltipProvider>
-        <SessionProvider>
+        <SessionProvider refetchOnWindowFocus={false} refetchInterval={0}>
           <QueryClientProvider client={queryClient}>
             {children}
             <Toaster position="top-right" richColors closeButton />

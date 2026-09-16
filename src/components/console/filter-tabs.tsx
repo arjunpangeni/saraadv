@@ -20,6 +20,7 @@ export function FilterTabs({
             : "overflow-x-auto [scrollbar-width:thin] [mask-image:linear-gradient(to_right,transparent,black_0.75rem,black_calc(100%-0.75rem),transparent)]"
         )}
         role="tablist"
+        aria-label="Filters"
       >
         <div className="inline-flex min-w-min rounded-full border border-border bg-muted/80 p-1">
           {items.map((item) => (

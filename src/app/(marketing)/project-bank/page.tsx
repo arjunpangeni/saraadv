@@ -9,6 +9,7 @@ import { SectionHeading } from "@/components/marketing/section-heading";
 import { FaqList, type FaqItem } from "@/components/marketing/faq-list";
 import SmoothButton from "@/components/smoothui/smooth-button";
 import { ProjectBankAudience } from "@/components/project-bank/project-bank-audience";
+import { LIST_PROJECT_HREF } from "@/lib/auth-utils";
 
 export const metadata: Metadata = pageMetadata({
   title: "Investment Opportunities in Nepal - Project Bank",
@@ -76,28 +77,29 @@ export default function ProjectBankPage() {
           title="Investment opportunities in Nepal"
           description={INTRO}
           cta={{ label: "Browse projects", href: "/project-bank/discover" }}
-          secondaryCta={{ label: "List your idea", href: "/project-bank/new" }}
+          secondaryCta={{ label: "List your idea", href: LIST_PROJECT_HREF }}
+          compact
         />
 
-        <section className="container-page py-20 sm:py-28">
+        <section className="container-page py-14 sm:py-20 lg:py-28">
           <SectionHeading
             eyebrow="Teaser & Gate"
             title="What investors see — and what stays protected"
             description="The public card is a teaser. The operational plan never goes online — ASAR Partners share it after vetting and an NDA."
             align="center"
-            className="mb-12 sm:mb-14"
+            className="mb-10 sm:mb-12 lg:mb-14"
           />
 
-          <div className="mb-12 grid gap-4 sm:grid-cols-2">
-            <article className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+          <div className="mb-10 grid gap-12 sm:mb-12 sm:grid-cols-2 sm:gap-5">
+            <article className="group rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 sm:p-6">
               <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">
                 <Eye className="size-4" aria-hidden />
                 Public teaser
               </div>
-              <h2 className="heading-soft mt-2 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
+              <h2 className="heading-soft mt-3 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground lg:text-[1.45rem]">
                 Discovery without the blueprint
               </h2>
-              <ul className="mt-4 space-y-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
+              <ul className="mt-3 space-y-2.5 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 {[
                   "Title, sector, and broad region only",
                   "A 2–3 sentence elevator pitch",
@@ -111,15 +113,15 @@ export default function ProjectBankPage() {
                 ))}
               </ul>
             </article>
-            <article className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+            <article className="group rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 sm:p-6">
               <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">
                 <Lock className="size-4" aria-hidden />
                 Handled by advisors
               </div>
-              <h2 className="heading-soft mt-2 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
+              <h2 className="heading-soft mt-3 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground lg:text-[1.45rem]">
                 Request, vet, then NDA
               </h2>
-              <ul className="mt-4 space-y-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
+              <ul className="mt-3 space-y-2.5 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 {[
                   "Request the dossier and confirm your work email with a magic link",
                   "ASAR Partners vet the inquiry at the deal desk",
@@ -139,15 +141,17 @@ export default function ProjectBankPage() {
 
           <FaqList items={FAQ} />
 
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
-            <SmoothButton asChild size="lg" variant="candy">
+          <div className="mt-12 flex flex-col items-stretch justify-center gap-3 sm:mt-14 sm:flex-row sm:flex-wrap sm:items-center">
+            <SmoothButton asChild size="lg" variant="candy" className="w-full sm:w-auto">
               <Link href="/project-bank/discover">
                 Browse projects
                 <ArrowRight className="size-4" />
               </Link>
             </SmoothButton>
-            <SmoothButton asChild size="lg" variant="outline">
-              <Link href="/project-bank/new">List your idea</Link>
+            <SmoothButton asChild size="lg" variant="outline" className="w-full sm:w-auto">
+              <Link href={LIST_PROJECT_HREF} prefetch={false}>
+                List your idea
+              </Link>
             </SmoothButton>
           </div>
         </section>

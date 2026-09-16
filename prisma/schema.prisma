@@ -1,4 +1,4 @@
-// SARA Advisors Platform - Prisma schema
+// ASAR Partners Platform - Prisma schema
 // Covers: Auth/RBAC, Pillar 2 Buy/Sell M&A, Pillar 1 Start a Business,
 // Pillar 3 Asset Management, Pillar 4 Project Bank, Pillar 5 Carbon Finance,
 // plus shared audit/analytics/search infrastructure.
@@ -33,6 +33,7 @@ model User {
   name          String?
   email         String    @unique
   passwordHash  String?
+  phone         String?
   role          Role      @default(BUYER)
   verified      Boolean   @default(false)
   emailVerified DateTime?
@@ -61,6 +62,7 @@ model User {
   notifications   Notification[]
 
   @@index([role])
+  @@index([phone])
 }
 
 model Notification {
@@ -237,7 +239,7 @@ enum ExitReason {
 
 model Listing {
   id                    String         @id @default(cuid())
-  hashId                String         @unique // e.g. SARA-MA-102
+  hashId                String         @unique // e.g. ASAR-MA-102
   ownerId               String
   organizationId        String?
   industry              IndustrySector

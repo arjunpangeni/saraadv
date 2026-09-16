@@ -42,8 +42,7 @@ export function PageHero({
       <div
         className={cn(
           "container-page relative z-10",
-          compact ? "py-10 sm:py-16" : "py-16 sm:py-24 lg:py-28",
-          tight && "py-8 sm:py-10"
+          tight ? "py-8 sm:py-10" : compact ? "py-10 sm:py-16" : "py-16 sm:py-24 lg:py-28"
         )}
       >
         <div
@@ -61,8 +60,19 @@ export function PageHero({
           )}
 
           {eyebrow && (
-            <BlurFade offset={8}>
-              <p className="mb-4 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">{eyebrow}</p>
+            <BlurFade
+              offset={8}
+              className={cn(compact || tight ? "mb-3 sm:mb-1" : "mb-4 sm:mb-2")}
+            >
+              <p
+                className={cn(
+                  "flex flex-col gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase",
+                  centered ? "items-center" : "items-start"
+                )}
+              >
+                <span>{eyebrow}</span>
+                <span aria-hidden className="h-px w-10 bg-foreground sm:w-12" />
+              </p>
             </BlurFade>
           )}
 
@@ -96,8 +106,8 @@ export function PageHero({
             <BlurFade delay={0.16} offset={10}>
               <p
                 className={cn(
-                  "heading-soft max-w-3xl text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground",
-                  centered && "mx-auto"
+                  "heading-soft text-pretty text-[1.05rem] leading-[1.8] text-foreground/75 sm:text-[1.125rem] sm:leading-[1.85]",
+                  centered ? "mx-auto max-w-3xl sm:max-w-4xl" : "max-w-3xl sm:max-w-4xl"
                 )}
               >
                 {description}
@@ -115,10 +125,13 @@ export function PageHero({
             <BlurFade
               delay={0.2}
               offset={8}
-              className={cn("flex flex-wrap items-center gap-3", centered && "justify-center")}
+              className={cn(
+                "mt-4 flex w-full flex-col items-stretch gap-3 sm:mt-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center",
+                centered && "sm:justify-center"
+              )}
             >
               {cta && (
-                <SmoothButton asChild size="lg" variant="candy">
+                <SmoothButton asChild size="lg" variant="candy" className="w-full sm:w-auto">
                   <Link href={cta.href}>
                     {cta.label}
                     <ArrowRight className="size-4" />
@@ -126,7 +139,7 @@ export function PageHero({
                 </SmoothButton>
               )}
               {secondaryCta && (
-                <SmoothButton asChild size="lg" variant="outline">
+                <SmoothButton asChild size="lg" variant="outline" className="w-full sm:w-auto">
                   <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
                 </SmoothButton>
               )}

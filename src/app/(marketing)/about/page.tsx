@@ -8,7 +8,7 @@ import SmoothButton from "@/components/smoothui/smooth-button";
 import { siteConfig } from "@/lib/site-config";
 import { pageMetadata } from "@/lib/seo";
 import { MARKETING_SERVICES } from "@/lib/marketing-nav";
-import { SARA_TEAM } from "@/lib/team";
+import { ASAR_TEAM } from "@/lib/team";
 
 const DESCRIPTION =
   "ASAR Partners is a corporate and investment advisory firm — company formation, M&A, asset revival, Project Bank matchmaking, and carbon finance.";
@@ -60,7 +60,7 @@ export default function AboutPage() {
           mainEntity: {
             "@type": "ProfessionalService",
             name: siteConfig.name,
-            employee: SARA_TEAM.map((member) => ({
+            employee: ASAR_TEAM.map((member) => ({
               "@type": "Person",
               name: member.name,
               jobTitle: member.credentialLabel,
@@ -140,7 +140,7 @@ export default function AboutPage() {
           className="mb-12 sm:mb-14"
         />
         <ul className="grid gap-4 lg:grid-cols-2">
-          {SARA_TEAM.map((member) => (
+          {ASAR_TEAM.map((member) => (
             <li key={member.name}>
               <article className="h-full rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
                 <h3 className="heading-soft text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">

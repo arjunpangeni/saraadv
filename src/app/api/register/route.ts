@@ -3,12 +3,20 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { isSignupRole, safeCallbackUrl } from "@/lib/auth-utils";
+import { normalizePhone } from "@/lib/phone";
 import { issueEmailOtp } from "@/lib/otp";
 import { clientIp, rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Enter your full name."),
   email: z.string().email("Enter a valid email."),
+  phone: z
+    .string()
+    .min(7, "Enter a valid phone number with country code (e.g. +977…).")
+    .refine((value) => normalizePhone(value) !== null, {
+      message: "Enter a valid phone number with country code (e.g. +977… or +1…).",
+    })
+    .transform((value) => normalizePhone(value)!),
   password: z.string().min(12, "Use at least 12 characters."),
   role: z.enum(["SELLER", "ENTREPRENEUR"]),
   callbackUrl: z.string().optional(),
@@ -27,7 +35,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: message }, { status: 400 });
   }
 
-  const { name, password, role } = parsed.data;
+  const { name, password, role, phone } = parsed.data;
   if (!isSignupRole(role)) {
     return NextResponse.json({ error: "Choose a valid account type." }, { status: 400 });
   }
@@ -48,7 +56,7 @@ export async function POST(req: Request) {
   if (!existing) {
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({
-      data: { name, email, passwordHash, role, emailVerified: null },
+      data: { name, email, phone, passwordHash, role, emailVerified: null },
     });
     await prisma.auditLog.create({
       data: { actorId: user.id, action: "user.register", entity: "User", entityId: user.id },
@@ -57,7 +65,7 @@ export async function POST(req: Request) {
     const passwordHash = await bcrypt.hash(password, 12);
     await prisma.user.update({
       where: { id: existing.id },
-      data: { name, passwordHash, role },
+      data: { name, phone, passwordHash, role },
     });
   }
 

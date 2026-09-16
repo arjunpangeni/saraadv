@@ -1122,7 +1122,8 @@ function ComplianceStep({ form, setForm }: { form: FormState; setForm: Dispatch<
             );
           })}
         </div>
-        <div className="hidden overflow-x-auto rounded-lg border border-border-subtle md:block">
+        <div className="hidden rounded-lg border border-border-subtle md:block">
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-background/90 text-muted-foreground">
@@ -1179,6 +1180,7 @@ function ComplianceStep({ form, setForm }: { form: FormState; setForm: Dispatch<
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 

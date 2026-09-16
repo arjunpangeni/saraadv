@@ -15,8 +15,18 @@ import { buildListingSearchContent, upsertListingEmbedding, searchListingIds } f
 import { notifyRoles } from "@/lib/notifications";
 import { deleteStorageKeys } from "@/lib/storage";
 import type { ListingWizardInput } from "@/types/listing";
+import { INDUSTRY_LABELS, INDUSTRY_OPTIONS } from "@/types/listing";
 import type { Role } from "@/generated/prisma";
 import { canEditOwnListing } from "@/lib/listing-status";
+
+function industriesMatchingQuery(query: string): Array<(typeof INDUSTRY_OPTIONS)[number]> {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  return INDUSTRY_OPTIONS.filter((sector) => {
+    const label = INDUSTRY_LABELS[sector].toLowerCase();
+    return sector.toLowerCase().includes(q) || label.includes(q) || q.includes(label);
+  });
+}
 
 function lineItemsFrom(row: AnnualLineItems): AnnualLineItems {
   const out = { ...EMPTY_LINE_ITEMS };
@@ -434,17 +444,36 @@ export interface PublicListingSummary {
 
 export async function getPublicListings(filters: MarketplaceFilters): Promise<PublicListingSummary[]> {
   let rankedIds: string[] | null = null;
-  if (filters.query) {
-    const ranked = await searchListingIds(filters.query, 200);
-    rankedIds = ranked.map((r) => r.listingId);
-    if (rankedIds.length === 0) return [];
+  const query = filters.query?.trim();
+
+  if (query) {
+    try {
+      const ranked = await searchListingIds(query, 200);
+      rankedIds = ranked.map((r) => r.listingId);
+    } catch (err) {
+      console.error("[listings] searchListingIds failed, using field fallback", err);
+      rankedIds = null;
+    }
   }
+
+  const matchedIndustries = query ? industriesMatchingQuery(query) : [];
+  const useFieldFallback = Boolean(query) && (!rankedIds || rankedIds.length === 0);
 
   const listings = await prisma.listing.findMany({
     where: {
       status: "PUBLISHED",
       ...(filters.industry ? { industry: filters.industry as never } : {}),
-      ...(rankedIds ? { id: { in: rankedIds } } : {}),
+      ...(rankedIds && rankedIds.length > 0 ? { id: { in: rankedIds } } : {}),
+      ...(useFieldFallback
+        ? {
+            OR: [
+              { hashId: { contains: query!, mode: "insensitive" } },
+              ...(matchedIndustries.length > 0
+                ? [{ industry: { in: matchedIndustries as never } }]
+                : []),
+            ],
+          }
+        : {}),
     },
     include: {
       financials: {
@@ -457,6 +486,12 @@ export async function getPublicListings(filters: MarketplaceFilters): Promise<Pu
     },
     take: 200,
   });
+
+  // Preserve embedding rank order when available
+  if (rankedIds && rankedIds.length > 0) {
+    const order = new Map(rankedIds.map((id, i) => [id, i]));
+    listings.sort((a, b) => (order.get(a.id) ?? 999) - (order.get(b.id) ?? 999));
+  }
 
   let summaries: PublicListingSummary[] = listings.map((l) => {
     const headOffice = l.headOffice as { district?: string; province?: string } | null;

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { loadGuidePayload, SARA_ADVISOR_MAIL } from "@/lib/start-a-business-guide";
+import { loadGuidePayload, ASAR_ADVISOR_MAIL } from "@/lib/start-a-business-guide";
 
 export function InvestorGuide() {
   const [contactName, setContactName] = useState("");
@@ -34,14 +34,14 @@ export function InvestorGuide() {
       <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
         We received your inquiry. A ASAR Partners team member will follow up shortly. For more queries,
         contact us at{" "}
-        <a href={`mailto:${SARA_ADVISOR_MAIL}`} className="font-medium text-brand-sky underline">
-          {SARA_ADVISOR_MAIL}
+        <a href={`mailto:${ASAR_ADVISOR_MAIL}`} className="font-medium text-brand-sky underline">
+          {ASAR_ADVISOR_MAIL}
         </a>
         .
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Button asChild variant="sky">
-          <a href={`mailto:${SARA_ADVISOR_MAIL}`}>
+          <a href={`mailto:${ASAR_ADVISOR_MAIL}`}>
             <Mail className="h-4 w-4" aria-hidden />
             Email ASAR
           </a>

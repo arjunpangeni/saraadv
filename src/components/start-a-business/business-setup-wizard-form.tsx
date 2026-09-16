@@ -42,39 +42,23 @@ import { normalizePhone, sanitizePhoneInput } from "@/lib/phone";
 import { cn } from "@/lib/utils";
 
 export const WIZARD_PATH = "/start-a-business/wizard";
-export const DRAFT_KEY = "sara:business-setup-draft";
+export const DRAFT_KEY = "asar:business-setup-draft-v3";
 
 export const CONTACT_NAME_MAX = 60;
 export const BUSINESS_NAME_MAX = 80;
 
-export const SECTOR_TAGS = [
-  { value: "food_beverage", label: "Food & Beverage" },
-  { value: "pharma", label: "Pharmaceuticals" },
-  { value: "telecom", label: "Telecom" },
-  { value: "telecom_it", label: "IT / ICT" },
-  { value: "tourism", label: "Tourism / Hospitality" },
-  { value: "aviation", label: "Aviation" },
-  { value: "transport", label: "Transport" },
-  { value: "bfi", label: "Banking / Financial Institution" },
-  { value: "insurance", label: "Insurance" },
-  { value: "capital_market", label: "Capital Market / Securities" },
-  { value: "import_export", label: "Import / Export Trading" },
-  { value: "health", label: "Healthcare" },
-  { value: "labor_intensive", label: "Labor-Intensive Manufacturing" },
-];
-
 const STEP_HEADING =
-  "heading-soft mb-3 font-heading text-lg font-semibold tracking-[-0.015em] text-foreground sm:text-xl";
-const STEP_COPY = "mb-4 text-[1.05rem] leading-[1.75] text-muted-foreground";
+  "heading-soft mb-2 font-heading text-base font-semibold tracking-[-0.015em] text-foreground sm:text-lg";
+const STEP_COPY = "mb-3 text-sm leading-relaxed text-muted-foreground sm:text-[1.05rem] sm:leading-[1.7]";
 
 const STEPS = [
   "Basic details",
   "Addresses",
+  "Objective category",
   "Investment",
   "Proposed application",
   "Shareholders",
   "Industry size",
-  "Objective category",
   "Licensing",
   "Environment",
   "Review",
@@ -94,6 +78,29 @@ const SHAREHOLDER_LABEL: Record<string, string> = {
   FOREIGN_ENTITY: "Foreign Entity",
   PUBLIC: "General Public / Secondary Market",
 };
+
+const SHAREHOLDER_CATEGORY_OPTIONS = [
+  { value: "NEPALI_CITIZEN", label: "Nepali Citizen" },
+  { value: "FOREIGN_CITIZEN", label: "Foreign Citizen" },
+  { value: "NEPALI_ENTITY", label: "Nepali Entity" },
+  { value: "FOREIGN_ENTITY", label: "Foreign Entity" },
+  { value: "PUBLIC", label: "General Public / Secondary Market" },
+] as const;
+
+/** Each category may appear on only one row; counts go in that row's promoter field. */
+function shareholderCategoryOptions(shareholders: ShareholderRow[], idx: number) {
+  const usedElsewhere = new Set(
+    shareholders.filter((_, i) => i !== idx).map((row) => row.category)
+  );
+  return SHAREHOLDER_CATEGORY_OPTIONS.filter(
+    (opt) => !usedElsewhere.has(opt.value) || shareholders[idx]?.category === opt.value
+  );
+}
+
+function nextShareholderCategory(shareholders: ShareholderRow[]) {
+  const used = new Set(shareholders.map((s) => s.category));
+  return SHAREHOLDER_CATEGORY_OPTIONS.find((opt) => !used.has(opt.value))?.value ?? null;
+}
 
 const ADDRESS_KIND_LABEL: Record<string, string> = {
   HEAD_OFFICE: "Head Office",
@@ -124,7 +131,6 @@ export interface WizardFormState {
   objective: string;
   businessType: string;
   fdiRequested: boolean;
-  sectorTags: string[];
   addresses: AddressRow[];
   equityInvestment: string;
   loanInvestment: string;
@@ -151,7 +157,6 @@ export const INITIAL_FORM: WizardFormState = {
   objective: "SERVICE",
   businessType: "PRIVATE_LIMITED",
   fdiRequested: false,
-  sectorTags: [],
   addresses: [{ kind: "HEAD_OFFICE", province: "", district: "", localBody: "" }],
   equityInvestment: "",
   loanInvestment: "",
@@ -192,15 +197,25 @@ function normalizeAddress(raw: Partial<AddressRow> & { kind?: AddressRow["kind"]
   };
 }
 
-function saveDraft(form: WizardFormState, shareholders: ShareholderRow[], step: number) {
+function saveDraft(
+  form: WizardFormState,
+  shareholders: ShareholderRow[],
+  step: number,
+  maxReachedStep: number
+) {
   try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, shareholders, step }));
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ form, shareholders, step, maxReachedStep }));
   } catch {
     // ignore
   }
 }
 
-function loadDraft(): { form: WizardFormState; shareholders: ShareholderRow[]; step: number } | null {
+function loadDraft(): {
+  form: WizardFormState;
+  shareholders: ShareholderRow[];
+  step: number;
+  maxReachedStep: number;
+} | null {
   try {
     const raw = localStorage.getItem(DRAFT_KEY);
     if (!raw) return null;
@@ -208,11 +223,17 @@ function loadDraft(): { form: WizardFormState; shareholders: ShareholderRow[]; s
       form?: WizardFormState;
       shareholders?: ShareholderRow[];
       step?: number;
+      maxReachedStep?: number;
     };
     if (!parsed.form || !Array.isArray(parsed.shareholders)) return null;
     const addresses = (parsed.form.addresses ?? INITIAL_FORM.addresses).map((a) =>
       normalizeAddress(a)
     );
+    const step = typeof parsed.step === "number" ? parsed.step : 0;
+    const maxReachedStep =
+      typeof parsed.maxReachedStep === "number"
+        ? Math.max(parsed.maxReachedStep, step)
+        : step;
     return {
       form: {
         ...INITIAL_FORM,
@@ -221,7 +242,8 @@ function loadDraft(): { form: WizardFormState; shareholders: ShareholderRow[]; s
         fdiNegativeCodes: parsed.form.fdiNegativeCodes ?? [],
       },
       shareholders: parsed.shareholders.length > 0 ? parsed.shareholders : INITIAL_SHAREHOLDERS,
-      step: typeof parsed.step === "number" ? parsed.step : 0,
+      step,
+      maxReachedStep,
     };
   } catch {
     return null;
@@ -245,7 +267,7 @@ function buildPayload(form: WizardFormState, shareholders: ShareholderRow[]) {
     objective: form.objective,
     businessType: form.businessType,
     fdiRequested: form.fdiRequested,
-    sectorTags: form.sectorTags,
+    sectorTags: [],
     sizeCategory: form.sizeCategory,
     objectiveCategory: form.objectiveCategory,
     licenseIndustries: form.licenseIndustries,
@@ -278,7 +300,7 @@ function engineInputFromForm(form: WizardFormState, shareholders: ShareholderRow
     objective: form.objective as StartABusinessInput["objective"],
     businessType: form.businessType as StartABusinessInput["businessType"],
     fdiRequested: form.fdiRequested,
-    sectorTags: form.sectorTags,
+    sectorTags: [],
     shareholders: shareholders.map((s) => ({
       category: s.category,
       promoterCount: Number(s.promoterCount || (s.category === "PUBLIC" ? 0 : 1)),
@@ -391,22 +413,21 @@ const INTAKE_FIELD_META: Record<string, { label: string; step: number }> = {
   objective: { label: "Objective", step: 0 },
   businessType: { label: "Type of business", step: 0 },
   fdiRequested: { label: "FDI", step: 0 },
-  sectorTags: { label: "Sector tags", step: 0 },
   fdiNegativeCodes: { label: "FDI negative list", step: 0 },
   addresses: { label: "Addresses", step: 1 },
-  equityInvestment: { label: "Equity investment", step: 2 },
-  loanInvestment: { label: "Loan investment", step: 2 },
-  fixedAssets: { label: "Fixed assets", step: 3 },
-  plantMachineryCost: { label: "Plant & machinery cost", step: 3 },
-  netCurrentAssets: { label: "Net current assets", step: 3 },
-  shareholders: { label: "Shareholders", step: 4 },
-  sizeCategory: { label: "Industry size", step: 5 },
-  ownerOperated: { label: "Owner-operated (Micro)", step: 5 },
-  workerCount: { label: "Number of workers (Micro)", step: 5 },
-  annualTurnover: { label: "Annual turnover (Micro)", step: 5 },
-  powerKw: { label: "Power use (kW)", step: 5 },
-  cottageActivityConfirmed: { label: "Cottage activity confirmation", step: 5 },
-  objectiveCategory: { label: "Industry objective category", step: 6 },
+  objectiveCategory: { label: "Industry objective category", step: 2 },
+  equityInvestment: { label: "Equity investment", step: 3 },
+  loanInvestment: { label: "Loan investment", step: 3 },
+  fixedAssets: { label: "Fixed assets", step: 4 },
+  plantMachineryCost: { label: "Plant & machinery cost", step: 4 },
+  netCurrentAssets: { label: "Net current assets", step: 4 },
+  shareholders: { label: "Shareholders", step: 5 },
+  sizeCategory: { label: "Industry size", step: 6 },
+  ownerOperated: { label: "Owner-operated (Micro)", step: 6 },
+  workerCount: { label: "Number of workers (Micro)", step: 6 },
+  annualTurnover: { label: "Annual turnover (Micro)", step: 6 },
+  powerKw: { label: "Power use (kW)", step: 6 },
+  cottageActivityConfirmed: { label: "Cottage activity confirmation", step: 6 },
   licenseIndustries: { label: "License-needed industry", step: 7 },
   ieeEiaCriterionId: { label: "IEE / EIA screening", step: 8 },
   ieeEiaLevel: { label: "IEE / EIA screening", step: 8 },
@@ -470,6 +491,7 @@ function parseIntakeError(error: unknown): { message: string; step: number } | n
 export function BusinessSetupWizardForm() {
   const router = useRouter();
   const [step, setStep] = useState(0);
+  const [maxReachedStep, setMaxReachedStep] = useState(0);
   const [form, setForm] = useState(INITIAL_FORM);
   const [shareholders, setShareholders] = useState<ShareholderRow[]>(INITIAL_SHAREHOLDERS);
   const [criteria, setCriteria] = useState<IeeCriterion[]>([]);
@@ -503,9 +525,14 @@ export function BusinessSetupWizardForm() {
       setForm(draft.form);
       setShareholders(draft.shareholders);
       setStep(draft.step);
+      setMaxReachedStep(draft.maxReachedStep);
     }
     setReady(true);
   }, []);
+
+  useEffect(() => {
+    setMaxReachedStep((prev) => Math.max(prev, step));
+  }, [step]);
 
   useEffect(() => {
     if (!ready) return;
@@ -525,9 +552,9 @@ export function BusinessSetupWizardForm() {
 
   useEffect(() => {
     if (!ready) return;
-    const t = setTimeout(() => saveDraft(form, shareholders, step), 400);
+    const t = setTimeout(() => saveDraft(form, shareholders, step, maxReachedStep), 400);
     return () => clearTimeout(t);
-  }, [ready, form, shareholders, step]);
+  }, [ready, form, shareholders, step, maxReachedStep]);
 
   const submitIntake = useCallback(async () => {
     setLoading(true);
@@ -566,13 +593,6 @@ export function BusinessSetupWizardForm() {
     router.push("/start-a-business/guide");
     return true;
   }, [form, shareholders, router]);
-
-  function toggleSector(tag: string) {
-    setForm((prev) => ({
-      ...prev,
-      sectorTags: prev.sectorTags.includes(tag) ? prev.sectorTags.filter((t) => t !== tag) : [...prev.sectorTags, tag],
-    }));
-  }
 
   function toggleNegative(code: string) {
     setForm((prev) => ({
@@ -659,6 +679,18 @@ export function BusinessSetupWizardForm() {
         return null;
       }
       case 2: {
+        if (!isAllowed(form.objectiveCategory, OBJECTIVE_CATEGORY_VALUES)) {
+          return "Select an industry objective category.";
+        }
+        if (form.objective === "TRADING" && form.objectiveCategory !== "TRADING") {
+          return "Trading businesses must use the Trading industry objective category.";
+        }
+        if (form.fdiRequested && form.objectiveCategory === "TRADING") {
+          return "FDI is not permitted for Trading. Change the industry objective category, or turn FDI off.";
+        }
+        return null;
+      }
+      case 3: {
         if (form.objective === "MANUFACTURING") {
           const capital =
             Number(form.equityInvestment || 0) + Number(form.loanInvestment || 0);
@@ -669,18 +701,18 @@ export function BusinessSetupWizardForm() {
         const issues = eligibilityIssues(form, shareholders).filter((i) => i.severity === "BLOCKER");
         const fdiMin = issues.find((i) => i.code === "FDI-MIN-CAPITAL");
         if (fdiMin) {
-          return `FDI requires a minimum investment of Rs 2 crore (${formatNpr(MIN_FDI_CAPITAL_NPR)}).`;
+          return `FDI requires a minimum investment of Rs 2 crore (${formatNpr(MIN_FDI_CAPITAL_NPR)}), except for IT / ICT. Choose Information & Communication Technology as the industry category if this venture qualifies.`;
         }
         return null;
       }
-      case 3: {
+      case 4: {
         const investmentIssue = investmentBlockers(form, shareholders).find(
           (i) => i.code === "INVESTMENT-MFG-MACHINERY" || i.code === "INVESTMENT-TOTAL-MISMATCH"
         );
         if (investmentIssue) return investmentIssue.message;
         return null;
       }
-      case 4: {
+      case 5: {
         if (shareholders.length === 0) return "Add at least one shareholder category.";
         for (const s of shareholders) {
           const min = promoterMin(s.category);
@@ -697,24 +729,12 @@ export function BusinessSetupWizardForm() {
         if (sh) return sh.message;
         return null;
       }
-      case 5: {
+      case 6: {
         if (!isAllowed(form.sizeCategory, SIZE_VALUES)) return "Select industry size.";
         const sizeClass = checkIndustrySizeClassification(sizeFactsFromForm(form));
         if (sizeClass[0]) return sizeClass[0].message;
         const sizeBlock = eligibilityIssues(form, shareholders).find((i) => i.code === "FDI-B");
         if (sizeBlock) return sizeBlock.message;
-        return null;
-      }
-      case 6: {
-        if (!isAllowed(form.objectiveCategory, OBJECTIVE_CATEGORY_VALUES)) {
-          return "Select an industry objective category.";
-        }
-        if (form.objective === "TRADING" && form.objectiveCategory !== "TRADING") {
-          return "Trading businesses must use the Trading industry objective category.";
-        }
-        if (form.fdiRequested && form.objectiveCategory === "TRADING") {
-          return "FDI is not permitted for Trading. Change the industry objective category, or turn FDI off.";
-        }
         return null;
       }
       case 7:
@@ -760,6 +780,12 @@ export function BusinessSetupWizardForm() {
     setError(null);
     shouldScrollOnStep.current = true;
     setStep(n);
+  }
+
+  function selectStep(n: number) {
+    if (n === step) return;
+    if (n > maxReachedStep) return;
+    goToStep(n);
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -825,58 +851,65 @@ export function BusinessSetupWizardForm() {
   const listedAddresses = form.addresses.filter((a) => a.district || a.localBody);
 
   return (
-    <Card ref={cardRef} className="relative scroll-mt-28 rounded-3xl">
-      <CardContent className="px-5 pt-6 sm:px-8">
-        <WizardSteps steps={STEPS} current={step} />
+    <div className="lg:grid lg:grid-cols-[15.5rem_minmax(0,1fr)] lg:items-start lg:gap-8">
+      <WizardSteps
+        steps={STEPS}
+        current={step}
+        layout="sidebar"
+        onSelect={selectStep}
+        canSelect={(i) => i <= maxReachedStep}
+      />
 
-        <form onSubmit={onSubmit} className="space-y-6">
-          {step === 0 && (
-            <>
-              <div>
-                <h2 className={STEP_HEADING}>A. Basic Details</h2>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-1.5">
-                    <Label>Your name *</Label>
-                    <Input
-                      required
-                      maxLength={CONTACT_NAME_MAX}
-                      value={form.contactName}
-                      onChange={(e) =>
-                        setForm({ ...form, contactName: e.target.value.slice(0, CONTACT_NAME_MAX) })
-                      }
-                      placeholder="Full name"
-                    />
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {form.contactName.length} / {CONTACT_NAME_MAX}
-                    </p>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>Contact number *</Label>
-                    <Input
-                      required
-                      type="tel"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      maxLength={16}
-                      value={form.phone}
-                      onChange={(e) => {
-                        const phone = sanitizePhoneInput(e.target.value);
-                        setForm({ ...form, phone });
-                        const digits = phone.replace(/\D/g, "");
-                        setPhoneError(digits.length >= 7 ? validatePhoneField(phone) : null);
-                      }}
-                      onBlur={() => setPhoneError(validatePhoneField(form.phone))}
-                      placeholder="+977 98XXXXXXXX"
-                    />
-                    {phoneError && <p className="mt-1 text-xs text-destructive">{phoneError}</p>}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>Email *</Label>
-                    <Input
-                      type="email"
-                      required
-                      autoComplete="email"
-                      value={form.email}
+      <Card ref={cardRef} className="relative scroll-mt-28 gap-4 rounded-3xl py-4 sm:gap-5 sm:py-5">
+        <CardContent className="px-4 pt-1 pb-2 sm:px-6 sm:pb-3 lg:px-7">
+          <form onSubmit={onSubmit} className="space-y-4 sm:space-y-5">
+            {step === 0 && (
+              <>
+                <div>
+                  <h2 className={STEP_HEADING}>A. Basic Details</h2>
+                  <div className="grid gap-3 sm:grid-cols-2 sm:gap-3.5">
+                    <div className="space-y-1">
+                      <Label>Your name *</Label>
+                      <Input
+                        required
+                        maxLength={CONTACT_NAME_MAX}
+                        value={form.contactName}
+                        onChange={(e) =>
+                          setForm({ ...form, contactName: e.target.value.slice(0, CONTACT_NAME_MAX) })
+                        }
+                        placeholder="Full name"
+                      />
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {form.contactName.length} / {CONTACT_NAME_MAX}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Contact number *</Label>
+                      <Input
+                        required
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        maxLength={16}
+                        value={form.phone}
+                        onChange={(e) => {
+                          const phone = sanitizePhoneInput(e.target.value);
+                          setForm({ ...form, phone });
+                          const digits = phone.replace(/\D/g, "");
+                          setPhoneError(digits.length >= 7 ? validatePhoneField(phone) : null);
+                        }}
+                        onBlur={() => setPhoneError(validatePhoneField(form.phone))}
+                        placeholder="+977 98XXXXXXXX"
+                      />
+                      {phoneError && <p className="mt-1 text-xs text-destructive">{phoneError}</p>}
+                    </div>
+                    <div className="space-y-1">
+                      <Label>Email *</Label>
+                      <Input
+                        type="email"
+                        required
+                        autoComplete="email"
+                        value={form.email}
                       onChange={(e) => {
                         const email = e.target.value;
                         setForm({ ...form, email });
@@ -891,7 +924,7 @@ export function BusinessSetupWizardForm() {
                     />
                     {emailError && <p className="mt-1 text-xs text-destructive">{emailError}</p>}
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     <Label>Business name *</Label>
                     <Input
                       required
@@ -903,7 +936,7 @@ export function BusinessSetupWizardForm() {
                       {form.name.length} / {BUSINESS_NAME_MAX}
                     </p>
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     <Label>Objective</Label>
                     <SelectField
                       value={form.objective}
@@ -915,7 +948,7 @@ export function BusinessSetupWizardForm() {
                       ]}
                     />
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     <Label>Type of Business</Label>
                     <SelectField
                       value={form.businessType}
@@ -928,7 +961,7 @@ export function BusinessSetupWizardForm() {
                       ]}
                     />
                   </div>
-                  <label className="flex items-center gap-2 text-sm text-muted-foreground mt-6">
+                  <label className="mt-3 flex items-center gap-2 text-sm text-muted-foreground sm:mt-4">
                     <input
                       type="checkbox"
                       checked={form.fdiRequested}
@@ -980,25 +1013,6 @@ export function BusinessSetupWizardForm() {
                     </div>
                   </div>
                 )}
-              </div>
-              <div>
-                <h2 className={STEP_HEADING}>Sector Tags</h2>
-                <div className="flex flex-wrap gap-2">
-                  {SECTOR_TAGS.map((t) => (
-                    <button
-                      type="button"
-                      key={t.value}
-                      onClick={() => toggleSector(t.value)}
-                      className={`text-xs px-3 py-1.5 rounded-full border ${
-                        form.sectorTags.includes(t.value)
-                          ? "border-brand-sky bg-brand-sky text-white"
-                          : "text-muted-foreground border-border-subtle"
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
               </div>
             </>
           )}
@@ -1078,21 +1092,21 @@ export function BusinessSetupWizardForm() {
             </div>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <div>
-              <h2 className={STEP_HEADING}>C. Investment Details (Rs)</h2>
+              <h2 className={STEP_HEADING}>D. Investment Details (Rs)</h2>
               <p className={STEP_COPY}>
                 Equity + loan must later equal the proposed application total.
                 {form.objective === "MANUFACTURING" ? " Required for manufacturing." : ""}
               </p>
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {(
                   [
                     ["equityInvestment", "Equity Investment"],
                     ["loanInvestment", "Loan Investment"],
                   ] as const
                 ).map(([key, label]) => (
-                  <div key={key} className="space-y-1.5">
+                  <div key={key} className="space-y-1">
                     <Label>
                       {label}
                       {form.objective === "MANUFACTURING" ? " *" : ""}
@@ -1113,27 +1127,19 @@ export function BusinessSetupWizardForm() {
                 <p>
                   Total: <strong>{formatNpr(totalCapital)}</strong>
                 </p>
-                {form.fdiRequested && (
-                  <p>
-                    FDI minimum: <strong>{formatNpr(MIN_FDI_CAPITAL_NPR)}</strong>
-                    {totalCapital < MIN_FDI_CAPITAL_NPR && (
-                      <span className="text-destructive"> — below the Rs 2 crore threshold.</span>
-                    )}
-                  </p>
-                )}
               </div>
             </div>
           )}
 
-          {step === 3 && (
+          {step === 4 && (
             <div>
-              <h2 className={STEP_HEADING}>D. Proposed Application (Rs)</h2>
+              <h2 className={STEP_HEADING}>E. Proposed Application (Rs)</h2>
               <p className={STEP_COPY}>
                 {form.objective === "MANUFACTURING"
                   ? "How the capital will be applied. Plant & machinery is compulsory for manufacturing, and this total must equal investment."
                   : "How the capital will be applied. This total must equal equity + loan."}
               </p>
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {(
                   [
                     ["fixedAssets", "Fixed Assets (excl. Plant & Machinery)", false],
@@ -1141,7 +1147,7 @@ export function BusinessSetupWizardForm() {
                     ["netCurrentAssets", "Net Current Assets", false],
                   ] as const
                 ).map(([key, label, required]) => (
-                  <div key={key} className="space-y-1.5">
+                  <div key={key} className="space-y-1">
                     <Label>
                       {label}
                       {required ? " *" : ""}
@@ -1182,9 +1188,9 @@ export function BusinessSetupWizardForm() {
             </div>
           )}
 
-          {step === 4 && (
+          {step === 5 && (
             <div>
-              <h2 className={STEP_HEADING}>E. Shareholder Details</h2>
+              <h2 className={STEP_HEADING}>F. Shareholder Details</h2>
               <p className={STEP_COPY}>
                 {form.businessType === "PRIVATE_LIMITED" && "Private Limited: maximum 100 shareholders."}
                 {form.businessType === "PUBLIC_LIMITED" && "Public Limited: minimum 7 shareholders."}
@@ -1217,13 +1223,7 @@ export function BusinessSetupWizardForm() {
                           return list;
                         });
                       }}
-                      options={[
-                        { value: "NEPALI_CITIZEN", label: "Nepali Citizen" },
-                        { value: "FOREIGN_CITIZEN", label: "Foreign Citizen" },
-                        { value: "NEPALI_ENTITY", label: "Nepali Entity" },
-                        { value: "FOREIGN_ENTITY", label: "Foreign Entity" },
-                        { value: "PUBLIC", label: "General Public / Secondary Market" },
-                      ]}
+                      options={[...shareholderCategoryOptions(shareholders, idx)]}
                     />
                     <Input
                       type="number"
@@ -1267,11 +1267,20 @@ export function BusinessSetupWizardForm() {
                 type="button"
                 variant="outline"
                 size="sm"
+                disabled={nextShareholderCategory(shareholders) == null}
                 onClick={() =>
-                  setShareholders((prev) => [
-                    ...prev,
-                    { category: "NEPALI_CITIZEN", promoterCount: "1", committedCapital: "" },
-                  ])
+                  setShareholders((prev) => {
+                    const category = nextShareholderCategory(prev);
+                    if (!category) return prev;
+                    return [
+                      ...prev,
+                      {
+                        category,
+                        promoterCount: String(promoterMin(category)),
+                        committedCapital: "",
+                      },
+                    ];
+                  })
                 }
               >
                 + Add shareholder category
@@ -1300,10 +1309,10 @@ export function BusinessSetupWizardForm() {
             </div>
           )}
 
-          {step === 5 && (
-            <div className="space-y-6">
+          {step === 6 && (
+            <div className="space-y-4">
               <div>
-                <h2 className={STEP_HEADING}>F. Category of Industry — Size</h2>
+                <h2 className={STEP_HEADING}>G. Category of Industry — Size</h2>
                 <p className={STEP_COPY}>
                   Classify by fixed capital excluding land. Cottage is a special artisan category, not only a
                   capital band.
@@ -1350,7 +1359,7 @@ export function BusinessSetupWizardForm() {
               </div>
 
               {sizeGuide && (
-                <section className="space-y-4 rounded-2xl border border-border p-4 sm:p-5">
+                <section className="space-y-4 rounded-2xl border border-border p-3 sm:p-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
@@ -1392,7 +1401,7 @@ export function BusinessSetupWizardForm() {
                         Owner-operated and managed by the entrepreneur
                       </label>
                       <div className="grid gap-3 sm:grid-cols-2">
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           <Label>Workers including entrepreneur *</Label>
                           <Input
                             type="number"
@@ -1407,7 +1416,7 @@ export function BusinessSetupWizardForm() {
                             }
                           />
                         </div>
-                        <div className="space-y-1.5">
+                        <div className="space-y-1">
                           <Label>Annual turnover (Rs) *</Label>
                           <Input
                             type="number"
@@ -1421,7 +1430,7 @@ export function BusinessSetupWizardForm() {
                             }
                           />
                         </div>
-                        <div className="space-y-1.5 sm:col-span-2">
+                        <div className="space-y-1 sm:col-span-2">
                           <Label>Power if machinery is used (kW)</Label>
                           <Input
                             type="number"
@@ -1452,7 +1461,7 @@ export function BusinessSetupWizardForm() {
                           ))}
                         </ol>
                       </details>
-                      <div className="space-y-1.5">
+                      <div className="space-y-1">
                         <Label>Power if machinery is used (kW)</Label>
                         <Input
                           type="number"
@@ -1501,9 +1510,9 @@ export function BusinessSetupWizardForm() {
             </div>
           )}
 
-          {step === 6 && (
+          {step === 2 && (
             <div>
-              <h2 className={STEP_HEADING}>G. Category of Industry — Objective</h2>
+              <h2 className={STEP_HEADING}>C. Category of Industry — Objective</h2>
               <p className={STEP_COPY}>
                 Choose the sector path. Trading cannot take FDI. If the business objective is Trading, this
                 category must be Trading.
@@ -1570,7 +1579,7 @@ export function BusinessSetupWizardForm() {
                 </p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-1.5">
+                <div className="space-y-1">
                   <Label>Category</Label>
                   <SelectField
                     wrapItems
@@ -1586,7 +1595,7 @@ export function BusinessSetupWizardForm() {
                     ]}
                   />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1">
                   <Label>Search activity or scale</Label>
                   <Input
                     type="search"
@@ -1673,7 +1682,7 @@ export function BusinessSetupWizardForm() {
           )}
 
           {step === 9 && (
-            <div className="space-y-6 text-sm">
+            <div className="space-y-4 text-sm">
               <div>
                 <h2 className={STEP_HEADING}>Review your inquiry</h2>
                 <p className="text-[1.05rem] leading-[1.75] text-muted-foreground">
@@ -1708,16 +1717,6 @@ export function BusinessSetupWizardForm() {
                   missing={objectiveMissing}
                 />
                 <ReviewItem label="FDI" value={form.fdiRequested ? "Yes" : "No"} />
-                <ReviewItem
-                  label="Sectors"
-                  value={
-                    form.sectorTags.length
-                      ? form.sectorTags
-                          .map((t) => SECTOR_TAGS.find((s) => s.value === t)?.label ?? t)
-                          .join(", ")
-                      : "—"
-                  }
-                />
               </ReviewBlock>
 
               <ReviewBlock title="Addresses" onEdit={() => goToStep(1)} incomplete={addressMissing}>
@@ -1736,8 +1735,20 @@ export function BusinessSetupWizardForm() {
               </ReviewBlock>
 
               <ReviewBlock
-                title="Investment (Rs)"
+                title="Industry objective category"
                 onEdit={() => goToStep(2)}
+                incomplete={objectiveCategoryMissing}
+              >
+                <ReviewItem
+                  label="Objective category"
+                  value={prettyLabel(form.objectiveCategory)}
+                  missing={objectiveCategoryMissing}
+                />
+              </ReviewBlock>
+
+              <ReviewBlock
+                title="Investment (Rs)"
+                onEdit={() => goToStep(3)}
                 incomplete={investmentMismatch || (form.objective === "MANUFACTURING" && totalCapital <= 0)}
               >
                 <ReviewItem label="Equity" value={formatNpr(Number(form.equityInvestment || 0))} />
@@ -1747,7 +1758,7 @@ export function BusinessSetupWizardForm() {
 
               <ReviewBlock
                 title="Proposed application (Rs)"
-                onEdit={() => goToStep(3)}
+                onEdit={() => goToStep(4)}
                 incomplete={plantMachineryMissing || investmentMismatch}
               >
                 <ReviewItem label="Fixed assets" value={formatNpr(Number(form.fixedAssets || 0))} />
@@ -1760,7 +1771,7 @@ export function BusinessSetupWizardForm() {
                 <ReviewItem label="Total" value={formatNpr(assetTotal)} missing={investmentMismatch} />
               </ReviewBlock>
 
-              <ReviewBlock title="Shareholders" onEdit={() => goToStep(4)}>
+              <ReviewBlock title="Shareholders" onEdit={() => goToStep(5)}>
                 {shareholders.map((s, i) => (
                   <ReviewItem
                     key={`${s.category}-${i}`}
@@ -1772,7 +1783,7 @@ export function BusinessSetupWizardForm() {
 
               <ReviewBlock
                 title="Industry size"
-                onEdit={() => goToStep(5)}
+                onEdit={() => goToStep(6)}
                 incomplete={sizeMissing || sizeClassIssues.length > 0}
               >
                 <ReviewItem
@@ -1781,18 +1792,6 @@ export function BusinessSetupWizardForm() {
                   missing={sizeMissing || sizeClassIssues.length > 0}
                 />
                 <ReviewItem label="Fixed capital (excl. land)" value={formatNpr(proposedFixedCapital)} />
-              </ReviewBlock>
-
-              <ReviewBlock
-                title="Industry objective category"
-                onEdit={() => goToStep(6)}
-                incomplete={objectiveCategoryMissing}
-              >
-                <ReviewItem
-                  label="Objective category"
-                  value={prettyLabel(form.objectiveCategory)}
-                  missing={objectiveCategoryMissing}
-                />
               </ReviewBlock>
 
               <ReviewBlock title="License-needed industry" onEdit={() => goToStep(7)}>
@@ -1850,6 +1849,7 @@ export function BusinessSetupWizardForm() {
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 }
 

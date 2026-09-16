@@ -6,9 +6,12 @@ import { RegisterForm } from "@/components/auth/register-form";
 import {
   authIntentFromCallback,
   googleOAuthEnabled,
+  resolveSignedInDestination,
   safeCallbackUrl,
   suggestedRoleFromQuery,
+  withPhoneGate,
 } from "@/lib/auth-utils";
+import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Create an account",
@@ -22,8 +25,14 @@ export default async function RegisterPage({
   const session = await auth();
   const params = await searchParams;
   const callbackUrl = safeCallbackUrl(params.callbackUrl);
-  if (session?.user) redirect(callbackUrl);
-
+  if (session?.user?.id) {
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { phone: true, role: true },
+    });
+    const dest = resolveSignedInDestination(user?.role ?? session.user.role, callbackUrl);
+    redirect(withPhoneGate(dest, { phone: user?.phone, role: user?.role ?? session.user.role }));
+  }
   const copy = authIntentFromCallback(callbackUrl);
   const initialRole = suggestedRoleFromQuery(params.role ?? null, copy.suggestedRole);
 

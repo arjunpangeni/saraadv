@@ -6,7 +6,7 @@ import { pageMetadata, SITE_OFFICE } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
-  description: `How ${siteConfig.name} collects, uses, and protects personal and confidential information on saraadvisors.com.`,
+  description: `How ${siteConfig.name} collects, uses, and protects personal and confidential information on asarpartners.com.`,
   path: "/privacy",
   ogTitle: "Privacy Policy | ASAR Partners",
 });

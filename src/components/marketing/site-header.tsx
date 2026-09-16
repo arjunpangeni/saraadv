@@ -12,14 +12,17 @@ import { MobileMenuPanel } from "@/components/marketing/mobile-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { MARKETING_SERVICES, isNavActive } from "@/lib/marketing-nav";
 import { cn } from "@/lib/utils";
-import { RemoveScroll } from "react-remove-scroll";
 
 const EASE_OUT_QUART = [0.22, 1, 0.36, 1] as const;
 
 const navLinkClass =
-  "inline-flex h-8 items-center rounded-full px-2.5 text-[13px] font-semibold tracking-wide text-foreground/80 transition-colors hover:bg-muted hover:text-foreground lg:px-3";
+  "relative inline-flex h-8 items-center rounded-full px-2.5 text-[0.8125rem] font-semibold tracking-wide text-foreground/80 transition-colors hover:bg-muted hover:text-foreground lg:h-9 lg:px-3.5 lg:font-heading lg:text-[0.9375rem] lg:font-medium lg:tracking-[-0.02em] lg:text-foreground/70 lg:hover:bg-transparent lg:hover:text-foreground";
 const navLinkActive =
-  "bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground";
+  "bg-transparent text-foreground shadow-none hover:bg-transparent hover:text-foreground after:absolute after:inset-x-2.5 after:bottom-1 after:h-0.5 after:rounded-full after:bg-primary lg:font-semibold lg:tracking-[-0.02em] lg:after:inset-x-3.5 lg:after:bottom-1.5";
+
+function scrollPageTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+}
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -27,9 +30,12 @@ export function SiteHeader() {
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
   const headerRef = useRef<HTMLElement>(null);
+  const restoreScrollRef = useRef(true);
 
   useEffect(() => {
+    restoreScrollRef.current = false;
     setOpen(false);
+    scrollPageTop();
   }, [pathname]);
 
   useEffect(() => {
@@ -42,6 +48,7 @@ export function SiteHeader() {
   useEffect(() => {
     if (!open) return;
 
+    restoreScrollRef.current = true;
     const scrollY = window.scrollY;
     const { body, documentElement } = document;
     const previous = {
@@ -90,7 +97,7 @@ export function SiteHeader() {
       body.style.top = previous.bodyTop;
       body.style.width = previous.bodyWidth;
       documentElement.style.overflow = previous.htmlOverflow;
-      window.scrollTo(0, scrollY);
+      window.scrollTo(0, restoreScrollRef.current ? scrollY : 0);
       document.removeEventListener("wheel", stopBackgroundScroll);
       document.removeEventListener("touchmove", stopBackgroundScroll);
       document.removeEventListener("mousedown", onPointer);
@@ -99,11 +106,23 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  function closeMenuForNavigation() {
+    restoreScrollRef.current = false;
+    setOpen(false);
+    scrollPageTop();
+  }
+
+  function onNavClick(href: string) {
+    if (isNavActive(pathname, href)) {
+      scrollPageTop();
+    }
+  }
+
   return (
     <>
     <header
       ref={headerRef}
-      className={cn("fixed inset-x-0 top-0 z-50", RemoveScroll.classNames.fullWidth)}
+      className="fixed inset-x-0 top-0 z-50"
     >
       {open && typeof document !== "undefined"
         ? createPortal(
@@ -133,8 +152,10 @@ export function SiteHeader() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    scroll
                     data-active={active}
                     aria-current={active ? "page" : undefined}
+                    onClick={() => onNavClick(item.href)}
                     className={cn(navLinkClass, active && navLinkActive)}
                   >
                     {item.label}
@@ -147,13 +168,15 @@ export function SiteHeader() {
           <div className="flex items-center justify-end gap-1.5 sm:gap-2">
             <Link
               href="/marketplace"
+              scroll
               data-active={isNavActive(pathname, "/marketplace")}
               aria-current={isNavActive(pathname, "/marketplace") ? "page" : undefined}
+              onClick={() => onNavClick("/marketplace")}
               className={cn(
-                "hidden rounded-full px-3 py-1.5 text-[13px] font-semibold tracking-wide transition-colors sm:inline-flex",
+                "relative hidden rounded-full px-3 py-1.5 text-[0.8125rem] font-semibold tracking-wide transition-colors sm:inline-flex lg:h-9 lg:items-center lg:px-3.5 lg:font-heading lg:text-[0.9375rem] lg:font-medium lg:tracking-[-0.02em]",
                 isNavActive(pathname, "/marketplace")
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-foreground/80 hover:bg-muted hover:text-foreground"
+                  ? "bg-transparent text-foreground after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:rounded-full after:bg-primary lg:font-semibold lg:after:inset-x-3.5 lg:after:bottom-1.5"
+                  : "text-foreground/80 hover:bg-muted hover:text-foreground lg:text-foreground/70 lg:hover:bg-transparent lg:hover:text-foreground"
               )}
             >
               Marketplace
@@ -214,7 +237,7 @@ export function SiteHeader() {
                 data-mobile-menu-scroll
                 className="max-h-[min(70vh,calc(100dvh-6rem))] overflow-y-auto overscroll-contain"
               >
-                <MobileMenuPanel onNavigate={() => setOpen(false)} />
+                <MobileMenuPanel onNavigate={closeMenuForNavigation} />
               </div>
             </motion.div>
           ) : null}

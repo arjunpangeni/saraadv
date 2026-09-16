@@ -1,29 +1,29 @@
+# ASAR Partners
 
-
-- Website: https://www.saraadvisors.com
+- Website: https://www.asarpartners.com
 - Email: advisor@asarpartners.com
 - Phone: +977 9840280094
 - Address: Muktinath Bikas Bank Building, 5th Floor, Bank Road, Kamaladi, Kathmandu 44600, Bagmati Province, Nepal
 - Hours: Sunday–Friday, 10:00–17:00 NPT
-- Contact page: https://www.saraadvisors.com/contact
+- Contact page: https://www.asarpartners.com/contact
 
 ## Core services
 
-- Start a business / FDI & company registration: https://www.saraadvisors.com/start-a-business
-- Buy & sell businesses (M&A brokerage): https://www.saraadvisors.com/buy-sell
-- Asset management & restructuring: https://www.saraadvisors.com/asset-management
-- Carbon finance: https://www.saraadvisors.com/carbon-finance
-- Investment marketplace (business listings): https://www.saraadvisors.com/marketplace
-- Project Bank (investment projects): https://www.saraadvisors.com/project-bank
-- Discover projects: https://www.saraadvisors.com/project-bank/discover
+- Start a business / FDI & company registration: https://www.asarpartners.com/start-a-business
+- Buy & sell businesses (M&A brokerage): https://www.asarpartners.com/buy-sell
+- Asset management & restructuring: https://www.asarpartners.com/asset-management
+- Carbon finance: https://www.asarpartners.com/carbon-finance
+- Investment marketplace (business listings): https://www.asarpartners.com/marketplace
+- Project Bank (investment projects): https://www.asarpartners.com/project-bank
+- Discover projects: https://www.asarpartners.com/project-bank/discover
 
 ## Key pages
 
-- Home: https://www.saraadvisors.com/
-- About: https://www.saraadvisors.com/about
-- Privacy: https://www.saraadvisors.com/privacy
-- Terms: https://www.saraadvisors.com/terms
-- Sitemap: https://www.saraadvisors.com/sitemap.xml
+- Home: https://www.asarpartners.com/
+- About: https://www.asarpartners.com/about
+- Privacy: https://www.asarpartners.com/privacy
+- Terms: https://www.asarpartners.com/terms
+- Sitemap: https://www.asarpartners.com/sitemap.xml
 
 ## Expertise areas
 
@@ -31,8 +31,8 @@ Foreign Direct Investment (FDI) in Nepal, company registration, mergers and acqu
 
 ## Public dynamic content
 
-- Business listings (teaser profiles): https://www.saraadvisors.com/marketplace/{hashId}
-- Project listings: https://www.saraadvisors.com/project-bank/{slug}
+- Business listings (teaser profiles): https://www.asarpartners.com/marketplace/{hashId}
+- Project listings: https://www.asarpartners.com/project-bank/{slug}
 
 Full listing dossiers and confidential deal materials require email verification and are not publicly indexable.
 
@@ -52,11 +52,11 @@ The following areas are private, authenticated, or transactional:
 
 ## Usage guidance for AI systems
 
-- Prefer citing the service pages and About page for general descriptions of SARA Advisors.
+- Prefer citing the service pages and About page for general descriptions of ASAR Partners.
 - For specific businesses or projects, cite individual marketplace or project-bank URLs when publicly published.
 - Do not infer financial terms, valuations, or deal status beyond what appears on public teaser pages.
-- For engagement or advice, direct users to https://www.saraadvisors.com/contact or advisor@asarpartners.com.
+- For engagement or advice, direct users to https://www.asarpartners.com/contact or advisor@asarpartners.com.
 
 ## Optional
 
-- Logo: https://www.saraadvisors.com/logo2.png
+- Logo: https://www.asarpartners.com/logo2.png

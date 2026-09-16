@@ -134,7 +134,7 @@ export function ConsoleBottomNav() {
                 href={item.href}
                 aria-current={item.active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-12 flex-col items-center justify-center gap-0.5 text-[11px] font-medium",
+                  "flex min-h-12 flex-col items-center justify-center gap-0.5 text-[0.6875rem] font-medium",
                   item.active ? "text-brand-sky" : "text-muted-foreground hover:text-foreground"
                 )}
               >

@@ -113,7 +113,7 @@ export function TeaserDownloadButton({ listingId }: { listingId: string }) {
     const blob = await res.blob();
     const contentDisposition = res.headers.get("content-disposition");
     const filename =
-      contentDisposition?.match(/filename="([^"]+)"/i)?.[1] || "sara-listing-teaser.pdf";
+      contentDisposition?.match(/filename="([^"]+)"/i)?.[1] || "asar-listing-teaser.pdf";
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;

@@ -25,7 +25,7 @@ const FAQ: FaqItem[] = [
   {
     question: "Will my company name appear on the marketplace?",
     answer:
-      "No. Public cards use an anonymized reference ID (for example SARA-MA-102), sector, location, and high-level financials. Identifying data and the data room unlock only after an NDA and advisor review.",
+      "No. Public cards use an anonymized reference ID (for example ASAR-MA-102), sector, location, and high-level financials. Identifying data and the data room unlock only after an NDA and advisor review.",
   },
   {
     question: "What do buyers see before signing an NDA?",
@@ -80,27 +80,28 @@ export default function BuySellPage() {
             label: "List a business",
             href: "/register?role=SELLER&callbackUrl=/sell/new",
           }}
+          compact
         />
 
-        <section className="container-page py-20 sm:py-28">
+        <section className="container-page py-14 sm:py-20 lg:py-28">
           <SectionHeading
             eyebrow="Teaser & Gate"
             title="What buyers see — and what stays locked"
             description="The public card is an anonymized teaser. Line-item books, revaluations, and attachments unlock only after a binding NDA."
             align="center"
-            className="mb-12 sm:mb-14"
+            className="mb-10 sm:mb-12 lg:mb-14"
           />
 
-          <div className="mb-12 grid gap-4 sm:grid-cols-2">
-            <article className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+          <div className="mb-10 grid gap-12 sm:mb-12 sm:grid-cols-2 sm:gap-5">
+            <article className="group rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 sm:p-6">
               <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">
                 <Eye className="size-4" aria-hidden />
                 Public teaser
               </div>
-              <h2 className="heading-soft mt-2 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
+              <h2 className="heading-soft mt-3 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground lg:text-[1.45rem]">
                 Discovery without the books
               </h2>
-              <ul className="mt-4 space-y-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
+              <ul className="mt-3 space-y-2.5 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 {[
                   "Anonymized reference ID — never the company name",
                   "Sector, legal structure, and province / district",
@@ -114,15 +115,15 @@ export default function BuySellPage() {
                 ))}
               </ul>
             </article>
-            <article className="rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)]">
+            <article className="group rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 sm:p-6">
               <div className="flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-tz-blue-deep uppercase">
                 <Lock className="size-4" aria-hidden />
                 NDA data room
               </div>
-              <h2 className="heading-soft mt-2 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground">
+              <h2 className="heading-soft mt-3 text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground lg:text-[1.45rem]">
                 Request, NDA, then unlock
               </h2>
-              <ul className="mt-4 space-y-3 text-[1.05rem] leading-[1.75] text-muted-foreground">
+              <ul className="mt-3 space-y-2.5 text-[1.05rem] leading-[1.75] text-muted-foreground">
                 {[
                   "Confirm your work email with a magic link — no password or buyer account",
                   "ASAR Partners vet the request and arrange an NDA",
@@ -142,14 +143,14 @@ export default function BuySellPage() {
 
           <FaqList items={FAQ} />
 
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-3">
-            <SmoothButton asChild size="lg" variant="candy">
+          <div className="mt-12 flex flex-col items-stretch justify-center gap-3 sm:mt-14 sm:flex-row sm:flex-wrap sm:items-center">
+            <SmoothButton asChild size="lg" variant="candy" className="w-full sm:w-auto">
               <Link href="/marketplace">
                 Browse the marketplace
                 <ArrowRight className="size-4" />
               </Link>
             </SmoothButton>
-            <SmoothButton asChild size="lg" variant="outline">
+            <SmoothButton asChild size="lg" variant="outline" className="w-full sm:w-auto">
               <Link href="/register?role=SELLER&callbackUrl=/sell/new">List a business</Link>
             </SmoothButton>
           </div>

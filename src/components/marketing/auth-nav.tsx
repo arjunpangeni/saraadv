@@ -88,21 +88,22 @@ export function AuthNav() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/notifications">Notifications</Link>
-            </DropdownMenuItem>
             {shortcuts.map((item) => (
               <DropdownMenuItem key={item.href} asChild>
                 <Link href={item.href}>{item.label}</Link>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => signOut({ callbackUrl: "/" })}>
-            Log out
+          {shortcuts.length > 0 ? <DropdownMenuSeparator /> : null}
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard">Dashboard</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              void signOut({ callbackUrl: "/" });
+            }}
+          >
+            Sign out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -13,6 +13,7 @@ import { RolePicker } from "@/components/auth/role-picker";
 import { storePendingPassword } from "@/components/auth/verify-email-form";
 import { AuthCard } from "@/components/auth/auth-card";
 import { googleContinueLabel, postAuthDestination, type SignupRole } from "@/lib/auth-utils";
+import { sanitizePhoneInput } from "@/lib/phone";
 
 export function RegisterForm({
   callbackUrl,
@@ -24,7 +25,13 @@ export function RegisterForm({
   googleEnabled: boolean;
 }) {
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", password: "", role: initialRole });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+    role: initialRole,
+  });
   const next = postAuthDestination(form.role, callbackUrl);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<"google" | "email" | null>(null);
@@ -84,7 +91,7 @@ export function RegisterForm({
       <AuthCard className="p-3.5">
         <h2 className="font-display text-lg font-extrabold tracking-tight text-foreground">Create your account</h2>
         <p className="mt-0.5 text-xs text-foreground/70">
-          Google uses the role you picked above. Email sends a one-time code.
+          Google asks for your phone next. Email signup collects it here, then sends a one-time code.
         </p>
 
         <div className="mt-3 space-y-3">
@@ -128,6 +135,23 @@ export function RegisterForm({
                   className="h-9"
                 />
               </div>
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="phone" className="text-xs">
+                Mobile number
+              </Label>
+              <Input
+                id="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                required
+                placeholder="+977 98XXXXXXXX"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: sanitizePhoneInput(e.target.value) })}
+                className="h-9"
+              />
+              <p className="text-[11px] text-muted-foreground">Include country code so the desk can reach you.</p>
             </div>
             <div className="space-y-1">
               <Label htmlFor="password" className="text-xs">

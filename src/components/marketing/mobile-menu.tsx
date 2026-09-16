@@ -132,7 +132,7 @@ function MenuLink({
       aria-current={active ? "page" : undefined}
       onClick={onNavigate}
       className={cn(
-        "flex items-center gap-3 rounded-full px-3 py-2 text-[13px] font-semibold transition-colors",
+        "flex items-center gap-3 rounded-full px-3 py-2 text-[0.8125rem] font-semibold transition-colors",
         active ? "bg-primary text-primary-foreground" : "text-foreground/80 hover:bg-muted hover:text-foreground"
       )}
     >

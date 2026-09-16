@@ -1,0 +1,3 @@
+Contact: mailto:advisor@asarpartners.com
+Preferred-Languages: en
+Canonical: https://asarpartners.com/.well-known/security.txt

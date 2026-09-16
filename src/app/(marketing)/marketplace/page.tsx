@@ -9,16 +9,17 @@ import SmoothButton from "@/components/smoothui/smooth-button";
 import { getPublicListings, parseMarketplaceSort } from "@/lib/listings";
 import type { DealValueBand } from "@/lib/calc";
 import { JsonLd } from "@/components/json-ld";
-import { PageHero } from "@/components/marketing/page-hero";
+import { DiscoverPageHeader } from "@/components/marketing/discover-page-header";
 import { pageMetadata, itemListJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
+import { LIST_BUSINESS_HREF } from "@/lib/auth-utils";
 
 export const metadata: Metadata = pageMetadata({
-  title: "M&A Marketplace - Anonymized Business Listings in Nepal",
+  title: "Marketplace - Businesses for Sale in Nepal",
   description:
-    "Browse anonymized, verified business acquisition opportunities across Nepal. Filter by sector, deal value, profitability, and location. Sign an NDA to unlock full due-diligence data.",
+    "Browse businesses for sale across Nepal. Each listing uses a symbolic name; the real company identity stays private until an NDA. Filter by sector, deal value, and location.",
   path: "/marketplace",
-  ogTitle: "M&A marketplace | Anonymized business listings in Nepal",
+  ogTitle: "Businesses for sale in Nepal | Marketplace",
 });
 
 export const revalidate = 60;
@@ -29,9 +30,10 @@ export default async function MarketplacePage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const sp = await searchParams;
-  const hasActiveQuery = Boolean(sp.industry || sp.dealValueBand || sp.province);
+  const hasActiveQuery = Boolean(sp.q || sp.industry || sp.dealValueBand || sp.province || sp.sort);
 
   const listings = await getPublicListings({
+    query: sp.q,
     industry: sp.industry,
     dealValueBand: sp.dealValueBand as DealValueBand | undefined,
     province: sp.province,
@@ -43,8 +45,9 @@ export default async function MarketplacePage({
       {listings.length > 0 ? (
         <JsonLd
           data={itemListJsonLd({
-            name: "Anonymized M&A listings in Nepal",
-            description: "Advisor-reviewed business opportunities. Identities stay gated until an NDA.",
+            name: "Businesses for sale in Nepal",
+            description:
+              "Advisor-reviewed businesses listed for sale. Cards use symbolic names until an NDA.",
             path: "/marketplace",
             items: listings.map((l) => ({
               name: l.hashId,
@@ -54,21 +57,21 @@ export default async function MarketplacePage({
         />
       ) : null}
 
-      <PageHero
-        eyebrow="M&A Marketplace"
-        title="Anonymized opportunities"
-        description="Company names stay hidden. Request a profile with a work email — ASAR Partners arranges an NDA before anything confidential is shared."
+      <DiscoverPageHeader
+        eyebrow="Marketplace"
+        title="Businesses for sale"
+        description="Each card uses a symbolic name (e.g. ASAR-MA-720). The real company identity stays private until an NDA."
       />
 
-      <section className="container-page pb-20 sm:pb-28">
-        <Suspense fallback={<div className="mb-6 h-28 animate-pulse rounded-3xl border border-border bg-card sm:h-24" />}>
+      <section className="container-page pt-5 pb-20 sm:pt-6 sm:pb-28">
+        <Suspense fallback={<div className="mb-5 h-10 animate-pulse rounded-full bg-muted/60" />}>
           <MarketplaceFilterBar resultCount={listings.length} />
         </Suspense>
 
         {listings.length === 0 ? (
           <EmptyState
             icon={Building2}
-            title={hasActiveQuery ? "No listings match your filters" : "No published opportunities yet"}
+            title={hasActiveQuery ? "No businesses match your search" : "No businesses listed yet"}
             description={
               hasActiveQuery
                 ? "Try a broader search, remove a filter chip, or clear everything and browse again."
@@ -77,11 +80,13 @@ export default async function MarketplacePage({
             action={
               hasActiveQuery ? (
                 <SmoothButton asChild variant="candy" size="sm">
-                  <Link href="/marketplace">Clear filters</Link>
+                  <Link href="/marketplace">Clear search</Link>
                 </SmoothButton>
               ) : (
                 <SmoothButton asChild variant="candy" size="sm">
-                  <Link href="/sell/new">List a business</Link>
+                  <Link href={LIST_BUSINESS_HREF} prefetch={false}>
+                    List a business
+                  </Link>
                 </SmoothButton>
               )
             }
@@ -92,7 +97,7 @@ export default async function MarketplacePage({
 
         <p className="mt-12 text-center text-[1.05rem] leading-[1.75] text-muted-foreground">
           Looking to sell?{" "}
-          <Link href="/sell/new" className="font-semibold text-tz-blue-deep hover:underline">
+          <Link href={LIST_BUSINESS_HREF} prefetch={false} className="font-semibold text-tz-blue-deep hover:underline">
             List a business confidentially
           </Link>
         </p>

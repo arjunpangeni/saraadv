@@ -3,7 +3,7 @@ import { LINE_ITEM_KEYS } from "@/lib/calc";
 
 /**
  * Zod schema for the full Seller Ingestion Wizard payload
- * (SARA_Advisors_BuySell_System_Blueprint - Modules A-F + enhancements).
+ * (ASAR_Partners_BuySell_System_Blueprint - Modules A-F + enhancements).
  * Shared between the client wizard (live validation) and the
  * POST /api/listings route handler (server validation).
  */

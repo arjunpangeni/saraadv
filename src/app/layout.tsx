@@ -15,7 +15,13 @@ const sans = DM_Sans({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#fff6f8",
+  width: "device-width",
+  initialScale: 1,
+  // Do not set maximumScale — users must be able to zoom (WCAG 1.4.4).
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fff6f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#1e2a38" },
+  ],
 };
 
 export const metadata: Metadata = {
@@ -71,10 +77,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${sans.variable} h-full antialiased`}
     >
       <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body

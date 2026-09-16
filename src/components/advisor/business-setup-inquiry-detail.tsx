@@ -13,22 +13,6 @@ import { formatNpr } from "@/lib/calc";
 import { FDI_NEGATIVE_LIST } from "@/lib/rules/startABusiness";
 import { SETUP_STATUS_OPTIONS, setupStatusBadge } from "@/components/advisor/business-setup-desk";
 
-const SECTOR_LABEL: Record<string, string> = {
-  food_beverage: "Food & Beverage",
-  pharma: "Pharmaceuticals",
-  telecom: "Telecom",
-  telecom_it: "IT / ICT",
-  tourism: "Tourism / Hospitality",
-  aviation: "Aviation",
-  transport: "Transport",
-  bfi: "Banking / Financial Institution",
-  insurance: "Insurance",
-  capital_market: "Capital Market / Securities",
-  import_export: "Import / Export Trading",
-  health: "Healthcare",
-  labor_intensive: "Labor-Intensive Manufacturing",
-};
-
 const ADDRESS_KIND_LABEL: Record<string, string> = {
   HEAD_OFFICE: "Head Office",
   BRANCH: "Branch",
@@ -215,14 +199,6 @@ export function BusinessSetupInquiryDetail({
             <Field label="Objective" value={pretty(inquiry.objective)} />
             <Field label="Type" value={TYPE_LABEL[inquiry.businessType] ?? pretty(inquiry.businessType)} />
             <Field label="FDI" value={inquiry.fdiRequested ? "Yes" : "No"} />
-            <Field
-              label="Sectors"
-              value={
-                inquiry.sectorTags.length
-                  ? inquiry.sectorTags.map((t) => SECTOR_LABEL[t] ?? pretty(t)).join(", ")
-                  : "—"
-              }
-            />
           </dl>
         </DetailCard>
 

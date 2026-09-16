@@ -35,9 +35,10 @@ const defaultContainerVariants: Variants = {
   },
 };
 
+// Do not force opacity: 0 by default — if Motion never runs, content stays visible.
 const defaultItemVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  hidden: {},
+  visible: {},
 };
 
 const presetVariants: Record<PresetType, Variants> = {
@@ -56,7 +57,10 @@ const presetVariants: Record<PresetType, Variants> = {
       y: 0,
     },
   },
-  fade: {},
+  fade: {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  },
   flip: {
     hidden: { rotateX: -90 },
     visible: {

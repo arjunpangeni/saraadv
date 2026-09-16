@@ -1,6 +1,7 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import { ChevronDown, ListFilter, Search, X } from "lucide-react";
 import SmoothButton from "@/components/smoothui/smooth-button";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,113 @@ export function DiscoverSearchShell({
       <div className="rounded-2xl border border-border bg-card p-3 shadow-[var(--shadow-card)] sm:p-4">
         {children}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Compact discover chrome: optional always-visible search + Filters toggle.
+ * Filter panel expands in document flow and pushes the listing grid down.
+ */
+export function CollapsibleDiscoverFilters({
+  pending,
+  resultCount,
+  resultNoun,
+  activeFilterCount = 0,
+  search,
+  chips,
+  children,
+  defaultOpen = false,
+}: {
+  pending?: boolean;
+  resultCount?: number;
+  resultNoun: { one: string; many: string };
+  activeFilterCount?: number;
+  /** Always-visible search control (marketplace). When set, sits beside Filters. */
+  search?: React.ReactNode;
+  chips?: React.ReactNode;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  const panelId = useId();
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  const filtersButton = (
+    <SmoothButton
+      type="button"
+      size="sm"
+      variant="outline"
+      aria-expanded={open}
+      aria-controls={panelId}
+      onClick={() => setOpen((value) => !value)}
+      className="h-9 w-[6.75rem] shrink-0 gap-1.5 sm:w-[7.5rem]"
+    >
+      <ListFilter className="size-4" aria-hidden />
+      <span className="truncate">Filters</span>
+      {activeFilterCount > 0 ? (
+        <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-semibold text-primary-foreground">
+          {activeFilterCount}
+        </span>
+      ) : (
+        <ChevronDown
+          className={cn("size-4 opacity-70 transition-transform", open && "rotate-180")}
+          aria-hidden
+        />
+      )}
+    </SmoothButton>
+  );
+
+  return (
+    <div className={cn("mb-5", pending && "opacity-80")}>
+      {search ? (
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="min-w-0 flex-1">{search}</div>
+          {filtersButton}
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {typeof resultCount === "number" ? (
+            <p className="text-sm text-foreground/60">
+              <span className="font-semibold text-foreground">{resultCount}</span>{" "}
+              {resultCount === 1 ? resultNoun.one : resultNoun.many}
+              {pending ? " · updating…" : ""}
+            </p>
+          ) : (
+            <span />
+          )}
+          {filtersButton}
+        </div>
+      )}
+
+      {typeof resultCount === "number" && search ? (
+        <p className="mt-3 text-sm text-foreground/60">
+          <span className="font-semibold text-foreground">{resultCount}</span>{" "}
+          {resultCount === 1 ? resultNoun.one : resultNoun.many}
+          {pending ? " · updating…" : ""}
+        </p>
+      ) : null}
+
+      {chips ? <div className="mt-3">{chips}</div> : null}
+
+      {open ? (
+        <div
+          id={panelId}
+          role="region"
+          aria-label="Filter options"
+          className="mt-3 rounded-2xl border border-border bg-card p-3 shadow-[var(--shadow-card)] sm:p-4"
+        >
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -47,33 +155,31 @@ export function SearchField({
         Search
       </label>
       <div className="relative">
-        <Search
-          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-brand-sky"
-          aria-hidden
-        />
         <input
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           enterKeyHint="search"
-          className="h-10 w-full rounded-lg border border-border bg-background py-2 pr-[6.25rem] pl-9 text-sm text-foreground placeholder:text-foreground/50 outline-none transition focus:border-brand-sky/50 focus:ring-2 focus:ring-brand-sky/20"
+          className="h-9 w-full rounded-full border border-border bg-background py-1.5 pr-16 pl-3.5 text-sm text-foreground placeholder:text-foreground/50 outline-none transition focus:border-brand-sky/50 focus:ring-2 focus:ring-brand-sky/20"
         />
         {value ? (
           <button
             type="button"
             onClick={onClear}
-            className="absolute top-1/2 right-[4.5rem] -translate-y-1/2 rounded-md p-1.5 text-foreground/50 hover:bg-surface-muted hover:text-foreground"
+            className="absolute top-1/2 right-9 -translate-y-1/2 rounded-full p-1 text-foreground/50 hover:bg-surface-muted hover:text-foreground"
             aria-label="Clear search"
           >
             <X className="size-3.5" />
           </button>
         ) : null}
-        <div className="absolute top-1/2 right-1.5 -translate-y-1/2">
-          <SmoothButton type="submit" size="sm" variant="candy" className="h-7 px-2.5 text-xs">
-            Search
-          </SmoothButton>
-        </div>
+        <button
+          type="submit"
+          aria-label="Search"
+          className="absolute top-1/2 right-1 -translate-y-1/2 flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground transition hover:opacity-90"
+        >
+          <Search className="size-3.5" aria-hidden />
+        </button>
       </div>
     </form>
   );

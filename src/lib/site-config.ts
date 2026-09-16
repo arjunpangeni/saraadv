@@ -9,10 +9,10 @@ export const siteConfig = {
     marketplace: "/marketplace",
     projectBank: "/project-bank",
     social: {
-      instagram: "https://www.instagram.com/saraadvisors",
-      facebook: "https://www.facebook.com/saraadvisors",
-      linkedin: "https://www.linkedin.com/company/sara-advisors",
-      x: "https://x.com/saraadvisors",
+      instagram: "https://www.instagram.com/asarpartners",
+      facebook: "https://www.facebook.com/asarpartners",
+      linkedin: "https://www.linkedin.com/company/asar-partners",
+      x: "https://x.com/asarpartners",
     },
   },
 };

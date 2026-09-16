@@ -22,14 +22,20 @@ export default function ErrorPage({
       <EmptyState
         icon={AlertTriangle}
         title="Something went wrong"
-        description="An unexpected error occurred. Try again, or return to the homepage."
+        description="An unexpected error occurred. Try again, or use one of the links below."
         action={
           <div className="flex flex-wrap justify-center gap-3">
             <Button variant="sky" onClick={() => retry()}>
               Try again
             </Button>
             <Button asChild variant="outline">
+              <Link href="/dashboard">Go to dashboard</Link>
+            </Button>
+            <Button asChild variant="outline">
               <Link href="/">Go home</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link href="/contact">Contact support</Link>
             </Button>
           </div>
         }

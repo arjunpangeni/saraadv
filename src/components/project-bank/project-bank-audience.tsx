@@ -32,28 +32,30 @@ export function ProjectBankAudience() {
 
   return (
     <GlowHover
-      className="grid gap-4 sm:grid-cols-2 sm:gap-5"
-      glowIntensity={0.18}
-      maskSize={280}
+      className="grid gap-12 sm:grid-cols-2 sm:gap-5"
+      glowIntensity={0.22}
+      maskSize={320}
       items={AUDIENCE.map((s, i) => ({
         id: s.id,
         theme: { hue: 210, saturation: 78, lightness: 42 },
         element: (
           <motion.article
-            className="flex h-full flex-col rounded-xl border border-border bg-card p-4 shadow-[var(--shadow-card)] sm:p-5"
+            className="group flex h-full flex-col rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 sm:p-6"
             initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 16 }}
             transition={shouldReduceMotion ? { duration: 0 } : { ...SPRING, delay: i * 0.05 }}
             viewport={{ margin: "-80px", once: true }}
             whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           >
-            <p className="text-sm font-medium tracking-tight text-brand-sky">Advisory</p>
-            <h3 className="mt-1 text-pretty font-display text-xl font-extrabold tracking-tight text-foreground">
+            <h3 className="heading-soft text-pretty font-heading text-xl font-semibold tracking-[-0.015em] text-foreground lg:text-[1.45rem]">
               {s.heading}
             </h3>
-            <ul className="mt-3 flex-1 space-y-2">
+            <ul className="mt-3 flex-1 space-y-2.5">
               {s.items.map((item) => (
-                <li key={item} className="flex gap-2.5 text-sm leading-relaxed text-foreground/70">
-                  <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-brand-sky" aria-hidden />
+                <li
+                  key={item}
+                  className="flex gap-3 text-pretty text-[1.05rem] leading-[1.75] text-muted-foreground"
+                >
+                  <CheckCircle2 className="mt-1.5 size-5 shrink-0 text-primary" aria-hidden />
                   <span>{item}</span>
                 </li>
               ))}

@@ -1,16 +1,16 @@
 services:
   postgres:
     image: pgvector/pgvector:pg16
-    container_name: sara-postgres
+    container_name: asar-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: sara
-      POSTGRES_PASSWORD: sara_dev_password
-      POSTGRES_DB: sara_advisors
+      POSTGRES_USER: asar
+      POSTGRES_PASSWORD: asar_dev_password
+      POSTGRES_DB: asar_partners
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - sara_postgres_data:/var/lib/postgresql/data
+      - asar_postgres_data:/var/lib/postgresql/data
 
 volumes:
-  sara_postgres_data:
+  asar_postgres_data:

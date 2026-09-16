@@ -4,7 +4,7 @@ export type PublicRole = (typeof PUBLIC_ROLES)[number];
 export const SIGNUP_ROLES = ["SELLER", "ENTREPRENEUR"] as const;
 export type SignupRole = (typeof SIGNUP_ROLES)[number];
 
-export const AUTH_INTENT_COOKIE = "sara-auth-intent";
+export const AUTH_INTENT_COOKIE = "asar-auth-intent";
 
 export function isPublicRole(value: string | null | undefined): value is PublicRole {
   return PUBLIC_ROLES.includes(value as PublicRole);
@@ -93,6 +93,21 @@ export function safeCallbackUrl(raw: string | null | undefined, fallback = "/das
   return fallback;
 }
 
+export function hasUsablePhone(phone: string | null | undefined): boolean {
+  if (!phone?.trim()) return false;
+  // Lazy import avoided — digits-only check mirrors normalizePhone without circular deps.
+  const digits = phone.replace(/\D/g, "");
+  return digits.length >= 7 && digits.length <= 15;
+}
+
+export function profileOnboardingPath(callbackUrl?: string | null): string {
+  return `/onboarding/profile?callbackUrl=${encodeURIComponent(safeCallbackUrl(callbackUrl))}`;
+}
+
+export function roleOnboardingPath(callbackUrl?: string | null): string {
+  return `/onboarding/role?callbackUrl=${encodeURIComponent(safeCallbackUrl(callbackUrl))}`;
+}
+
 export function authIntentFromCallback(callbackUrl: string): {
   title: string;
   subtitle: string;
@@ -137,6 +152,52 @@ export function postAuthDestination(role: string | undefined, callbackUrl: strin
   if (role === "ENTREPRENEUR") return "/project-bank/new";
   return next;
 }
+
+/** Whether a signed-in role is allowed to open a protected callback path. */
+export function roleCanAccessPath(role: string | undefined, path: string): boolean {
+  if (!role) return false;
+  if (path.startsWith("/admin")) return role === "ADMIN";
+  if (path.startsWith("/advisor")) return role === "ADVISOR" || role === "ADMIN";
+  if (path.startsWith("/sell")) return role === "SELLER" || role === "ADVISOR" || role === "ADMIN";
+  if (path.startsWith("/project-bank/new")) {
+    return role === "ENTREPRENEUR" || role === "ADVISOR" || role === "ADMIN";
+  }
+  return true;
+}
+
+/**
+ * Safe landing path for an already-signed-in visitor on /login or /register.
+ * Avoids redirect loops when callbackUrl points at a role-gated route.
+ */
+export function resolveSignedInDestination(role: string | undefined, callbackUrl?: string | null): string {
+  const next = safeCallbackUrl(callbackUrl);
+  if (roleCanAccessPath(role, next)) {
+    return postAuthDestination(role, next);
+  }
+  if (!role || role === "BUYER" || role === "INVESTOR") {
+    return roleOnboardingPath(next);
+  }
+  return `/dashboard?reason=role&from=${encodeURIComponent(next)}`;
+}
+
+/** After auth, send users who still need a phone to the profile gate. */
+export function withPhoneGate(
+  destination: string,
+  opts: { phone?: string | null; role?: string | undefined; skipDesk?: boolean } = {}
+): string {
+  const role = opts.role;
+  const isDesk = role === "ADMIN" || role === "ADVISOR";
+  if (opts.skipDesk !== false && isDesk) return destination;
+  if (hasUsablePhone(opts.phone)) return destination;
+  // Don't nest the profile page inside itself.
+  if (destination.startsWith("/onboarding/profile")) return destination;
+  return profileOnboardingPath(destination);
+}
+
+/** Public marketing CTAs — go through auth instead of hitting protected routes directly. */
+export const LIST_BUSINESS_HREF = "/register?role=SELLER&callbackUrl=/sell/new";
+export const LIST_PROJECT_HREF = "/register?role=ENTREPRENEUR&callbackUrl=/project-bank/new";
+
 
 export function oauthErrorMessage(code?: string | null) {
   if (!code) return null;

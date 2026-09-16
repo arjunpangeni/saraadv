@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { FormError } from "@/components/ui/status-banner";
 import { safeCallbackUrl } from "@/lib/auth-utils";
 
-const PENDING_PASSWORD_KEY = "sara-pending-password";
+const PENDING_PASSWORD_KEY = "asar-pending-password";
 
 export function storePendingPassword(password: string) {
   try {

@@ -6,18 +6,32 @@ import fdiNegativeList from "./data/fdiNegativeList.json";
 
 const prisma = new PrismaClient();
 
-const ADMIN_EMAIL = "admin@saraadvisors.com";
-const ADMIN_PASSWORD = "Password123!";
+const ADMIN_EMAIL = "admin@asarpartners.com";
+const LOCAL_DEMO_PASSWORD = "Password123!";
+
+function seedAdminPassword(): string | null {
+  const fromEnv = process.env.SEED_ADMIN_PASSWORD?.trim();
+  if (fromEnv) return fromEnv;
+  if (process.env.NODE_ENV === "production") return null;
+  return LOCAL_DEMO_PASSWORD;
+}
 
 async function seedAdmin() {
-  const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 12);
   const existing = await prisma.user.findUnique({ where: { email: ADMIN_EMAIL } });
+  const password = seedAdminPassword();
 
   if (!existing) {
+    if (!password) {
+      console.warn(
+        `Skipping admin create: set SEED_ADMIN_PASSWORD to create ${ADMIN_EMAIL} in production.`
+      );
+      return;
+    }
+    const passwordHash = await bcrypt.hash(password, 12);
     await prisma.user.create({
       data: {
         email: ADMIN_EMAIL,
-        name: "SARA Admin",
+        name: "ASAR Admin",
         role: "ADMIN",
         passwordHash,
         verified: true,
@@ -28,28 +42,28 @@ async function seedAdmin() {
     return;
   }
 
+  // Never overwrite an existing password hash (deploy seeds must not reset prod credentials).
   await prisma.user.update({
     where: { email: ADMIN_EMAIL },
     data: {
-      name: existing.name || "SARA Admin",
+      name: existing.name || "ASAR Admin",
       role: "ADMIN",
       verified: true,
       emailVerified: existing.emailVerified ?? new Date(),
-      passwordHash,
     },
   });
-  console.log(`Ensured admin ${ADMIN_EMAIL}`);
+  console.log(`Ensured admin ${ADMIN_EMAIL} (password unchanged)`);
 }
 
 async function seedLocalDemoUsers() {
   const users: { email: string; name: string; role: "ADVISOR" | "SELLER" | "ENTREPRENEUR" | "INVESTOR" }[] = [
-    { email: "advisor@saraadvisors.com", name: "SARA Advisor", role: "ADVISOR" },
+    { email: "advisor@asarpartners.com", name: "ASAR Advisor", role: "ADVISOR" },
     { email: "seller@example.com", name: "Demo Seller", role: "SELLER" },
     { email: "entrepreneur@example.com", name: "Demo Entrepreneur", role: "ENTREPRENEUR" },
     { email: "investor@example.com", name: "Demo Investor", role: "INVESTOR" },
   ];
 
-  const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 12);
+  const passwordHash = await bcrypt.hash(LOCAL_DEMO_PASSWORD, 12);
 
   for (const u of users) {
     await prisma.user.upsert({

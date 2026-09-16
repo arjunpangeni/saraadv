@@ -38,12 +38,22 @@ describe("FDI negative list check", () => {
     expect(issues.length).toBe(0);
   });
 
-  it("blocks FDI for micro, cottage, and small industry size", () => {
+  it("blocks FDI for micro and cottage industry size", () => {
+    for (const sizeCategory of ["MICRO", "COTTAGE"] as const) {
+      const issues = checkFdiNegativeList(
+        { ...baseInput, fdiRequested: true, sizeCategory, fdiNegativeCodes: [] },
+        fdiNegativeList
+      );
+      expect(issues.some((i) => i.code === "FDI-B")).toBe(true);
+    }
+  });
+
+  it("allows FDI for small industry size when no negative-list activity is selected", () => {
     const issues = checkFdiNegativeList(
       { ...baseInput, fdiRequested: true, sizeCategory: "SMALL", fdiNegativeCodes: [] },
       fdiNegativeList
     );
-    expect(issues.some((i) => i.code === "FDI-B")).toBe(true);
+    expect(issues.some((i) => i.code === "FDI-B")).toBe(false);
   });
 });
 
@@ -95,6 +105,17 @@ describe("FDI capital requirement", () => {
     };
     const issues = checkFdiCapitalRequirement(input);
     expect(issues.some((i) => i.code === "FDI-MIN-CAPITAL")).toBe(true);
+  });
+
+  it("allows FDI below Rs 2 crore when industry objective category is ICT", () => {
+    const input: StartABusinessInput = {
+      ...baseInput,
+      fdiRequested: true,
+      objectiveCategory: "ICT",
+      investment: { equityInvestment: 500_000, loanInvestment: 0 },
+    };
+    const issues = checkFdiCapitalRequirement(input);
+    expect(issues.some((i) => i.code === "FDI-MIN-CAPITAL")).toBe(false);
   });
 
   it("passes when capital meets the minimum and business type/objective allow FDI", () => {

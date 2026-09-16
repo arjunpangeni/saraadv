@@ -13,8 +13,7 @@ const COMPANY_LINKS = [
   { href: "/terms", label: "Terms" },
 ] as const;
 
-const LINK_GROUPS = [
-  { title: "Services", links: MARKETING_SERVICES },
+const DESKTOP_LINK_GROUPS = [
   { title: "Platform", links: MARKETING_PLATFORM_LINKS },
   { title: "Company", links: COMPANY_LINKS },
 ] as const;
@@ -26,7 +25,7 @@ const MOBILE_LINK_GROUPS = [
 
 function FooterHeading({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-4 text-[11px] font-semibold tracking-[0.18em] text-foreground uppercase">
+    <p className="mb-3 text-[11px] font-semibold tracking-[0.18em] text-foreground uppercase">
       {children}
     </p>
   );
@@ -40,33 +39,123 @@ function FooterTagline() {
   );
 }
 
-function FooterOffice({ align = "left" }: { align?: "left" | "center" }) {
+function FooterOffice({
+  align = "left",
+  showDirections = true,
+}: {
+  align?: "left" | "center";
+  showDirections?: boolean;
+}) {
   const centered = align === "center";
   return (
     <div className={centered ? "text-center" : undefined}>
       <FooterHeading>Office</FooterHeading>
-      <div className={centered ? "mx-auto flex max-w-xs items-start justify-center gap-2.5 text-left" : "flex items-start gap-2.5"}>
-        <MapPin className="mt-0.5 size-4 shrink-0 text-tz-green-deep" aria-hidden />
-        <address className="text-sm leading-relaxed text-muted-foreground not-italic">
-          {SITE_OFFICE.street}
-          <br />
-          {SITE_OFFICE.streetLine}
-          <br />
-          {SITE_OFFICE.locality}
+      <div
+        className={
+          centered
+            ? "mx-auto flex max-w-sm items-start justify-center gap-3 text-left"
+            : "flex items-start gap-3"
+        }
+      >
+        <MapPin className="mt-1 size-4 shrink-0 text-tz-green-deep" aria-hidden />
+        <address className="space-y-1.5 text-sm leading-6 text-muted-foreground not-italic">
+          <span className="block text-foreground/90">{SITE_OFFICE.street}</span>
+          <span className="block">{SITE_OFFICE.streetLine}</span>
+          <span className="block">
+            {SITE_OFFICE.locality} {SITE_OFFICE.postalCode}
+          </span>
+          <span className="block">
+            {SITE_OFFICE.region} Province, {SITE_OFFICE.countryName}
+          </span>
         </address>
       </div>
+      {showDirections ? (
+        <a
+          href={googleMapsDirectionsUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={
+            centered
+              ? "mt-4 inline-flex items-center justify-center gap-1 text-sm font-medium text-foreground"
+              : "mt-4 inline-flex items-center gap-1 text-sm font-medium text-foreground hover:text-foreground/75"
+          }
+        >
+          Directions
+          <ArrowUpRight className="size-3.5" aria-hidden />
+        </a>
+      ) : null}
+    </div>
+  );
+}
+
+function FooterContactRows() {
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
       <a
         href={googleMapsDirectionsUrl()}
         target="_blank"
         rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <MapPin className="size-4 shrink-0 text-tz-green-deep" aria-hidden />
+        <span className="font-medium text-foreground/80">Directions</span>
+        <ArrowUpRight className="size-3.5 shrink-0" aria-hidden />
+      </a>
+      <a
+        href={`mailto:${SITE_OFFICE.email}`}
+        className="inline-flex min-w-0 items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <Mail className="size-4 shrink-0 text-tz-blue-deep" aria-hidden />
+        <span className="font-medium text-foreground/80">Email</span>
+        <span className="truncate">{SITE_OFFICE.email}</span>
+      </a>
+      <a
+        href={`tel:${SITE_OFFICE.phoneTel}`}
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <Phone className="size-4 shrink-0 text-tz-pink-deep" aria-hidden />
+        <span className="font-medium text-foreground/80">Phone</span>
+        <span>{SITE_OFFICE.phone}</span>
+      </a>
+    </div>
+  );
+}
+
+function FooterEmail({ align = "left" }: { align?: "left" | "center" }) {
+  const centered = align === "center";
+  return (
+    <div className={centered ? "text-center" : undefined}>
+      <FooterHeading>Email</FooterHeading>
+      <a
+        href={`mailto:${SITE_OFFICE.email}`}
         className={
           centered
-            ? "mt-3 inline-flex items-center justify-center gap-1 text-sm font-medium text-foreground"
-            : "mt-3 inline-flex items-center gap-1 text-sm font-medium text-foreground hover:text-foreground/75"
+            ? "inline-flex items-center justify-center gap-2 break-all text-sm text-muted-foreground transition-colors hover:text-foreground"
+            : "inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         }
       >
-        Directions
-        <ArrowUpRight className="size-3.5" aria-hidden />
+        <Mail className="size-4 shrink-0 text-tz-blue-deep" aria-hidden />
+        <span>{SITE_OFFICE.email}</span>
+      </a>
+    </div>
+  );
+}
+
+function FooterPhone({ align = "left" }: { align?: "left" | "center" }) {
+  const centered = align === "center";
+  return (
+    <div className={centered ? "text-center" : undefined}>
+      <FooterHeading>Phone</FooterHeading>
+      <a
+        href={`tel:${SITE_OFFICE.phoneTel}`}
+        className={
+          centered
+            ? "inline-flex items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            : "inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        }
+      >
+        <Phone className="size-4 shrink-0 text-tz-pink-deep" aria-hidden />
+        <span>{SITE_OFFICE.phone}</span>
       </a>
     </div>
   );
@@ -76,7 +165,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
   return (
     <Link
       href={href}
-      className="inline-flex min-h-10 items-center text-sm text-muted-foreground transition-colors hover:text-foreground lg:min-h-9"
+      className="inline-flex items-center py-1 font-sans text-sm font-normal leading-snug tracking-normal text-muted-foreground transition-colors hover:text-foreground"
     >
       {children}
     </Link>
@@ -89,26 +178,22 @@ function MobileFooter() {
       <FooterTagline />
       <SocialIcons className="mt-5 justify-center" />
 
-      <div className="mt-6 flex w-full flex-col items-center gap-3 text-sm">
+      <div className="mt-8 flex w-full max-w-sm flex-col items-center gap-7">
         <FooterOffice align="center" />
-        <a href={`mailto:${SITE_OFFICE.email}`} className="break-all text-foreground">
-          {SITE_OFFICE.email}
-        </a>
-        <a href={`tel:${SITE_OFFICE.phoneTel}`} className="text-foreground">
-          {SITE_OFFICE.phone}
-        </a>
+        <div className="h-px w-12 bg-border" aria-hidden />
+        <FooterEmail align="center" />
+        <div className="h-px w-12 bg-border" aria-hidden />
+        <FooterPhone align="center" />
       </div>
 
-      <nav aria-label="Footer" className="mt-8 grid w-full max-w-sm grid-cols-2 gap-8">
+      <nav aria-label="Footer" className="mt-10 grid w-full max-w-sm grid-cols-2 gap-8">
         {MOBILE_LINK_GROUPS.map((group) => (
           <div key={group.title}>
             <FooterHeading>{group.title}</FooterHeading>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {group.links.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-muted-foreground">
-                    {link.label}
-                  </Link>
+                  <FooterLink href={link.href}>{link.label}</FooterLink>
                 </li>
               ))}
             </ul>
@@ -148,45 +233,35 @@ export function SiteFooter() {
       <div className="container-page relative py-14 sm:py-16">
         <MobileFooter />
 
-        <div className="hidden lg:grid lg:grid-cols-12 lg:gap-8">
-          <div className="lg:col-span-4">
-            <FooterTagline />
-            <SocialIcons className="mt-5" />
-            <div className="mt-5 flex flex-wrap gap-2">
-              <a
-                href={`mailto:${SITE_OFFICE.email}`}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-              >
-                <Mail className="size-4 shrink-0" aria-hidden />
-                <span className="truncate">{SITE_OFFICE.email}</span>
-              </a>
-              <a
-                href={`tel:${SITE_OFFICE.phoneTel}`}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-border bg-card px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-              >
-                <Phone className="size-4 shrink-0" aria-hidden />
-                {SITE_OFFICE.phone}
-              </a>
+        <div className="hidden lg:block">
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-4">
+              <FooterTagline />
+              <SocialIcons className="mt-5" />
+            </div>
+
+            <nav aria-label="Footer" className="col-span-5 grid grid-cols-2 gap-x-8">
+              {DESKTOP_LINK_GROUPS.map((group) => (
+                <div key={group.title}>
+                  <FooterHeading>{group.title}</FooterHeading>
+                  <ul className="space-y-1">
+                    {group.links.map((link) => (
+                      <li key={link.href}>
+                        <FooterLink href={link.href}>{link.label}</FooterLink>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </nav>
+
+            <div className="col-span-3">
+              <FooterOffice showDirections={false} />
             </div>
           </div>
 
-          <nav aria-label="Footer" className="grid grid-cols-3 gap-x-8 lg:col-span-5">
-            {LINK_GROUPS.map((group) => (
-              <div key={group.title}>
-                <FooterHeading>{group.title}</FooterHeading>
-                <ul className="space-y-0.5">
-                  {group.links.map((link) => (
-                    <li key={link.href}>
-                      <FooterLink href={link.href}>{link.label}</FooterLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </nav>
-
-          <div className="lg:col-span-3">
-            <FooterOffice />
+          <div className="mt-8 border-t border-border/50 pt-6">
+            <FooterContactRows />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
-# SARA Advisors Platform
+# ASAR Partners Platform
 
-Full-stack platform for SARA Advisors covering all five strategic pillars - **Start a Business**,
+Full-stack platform for ASAR Partners covering all five strategic pillars - **Start a Business**,
 **Buy/Sell (M&A)**, **Asset Management**, **Project Bank**, and **Carbon Finance** - anchored by an
 anonymized M&A marketplace with an NDA-gated deal room, AI-ranked search, SEO-optimized marketing
 pages, and product analytics.
@@ -40,6 +40,11 @@ embeddings; without it, search gracefully falls back to keyword matching) and Cl
 credentials (without them, uploaded files are stored on local disk and served via
 `/api/storage/[...key]`).
 
+**Production (Railway / reverse proxy):** set `AUTH_TRUST_PROXY=true`, `AUTH_URL`, and
+`NEXT_PUBLIC_SITE_URL` to your public origin so rate limiting and Auth.js see real client IPs
+and trusted hosts. Rotate any Cloudinary keys that were ever committed. After changing
+`NEXT_PUBLIC_GA_MEASUREMENT_ID`, rebuild so the production CSP script hash stays in sync.
+
 ### 3. Install dependencies, migrate, and seed
 
 ```bash
@@ -49,8 +54,10 @@ npm run db:seed
 ```
 
 Seeding loads the "Start a Business" regulatory rule set, the IEE/EIA threshold table, the FDI
-Negative List, and the admin account `admin@saraadvisors.com` (password `Password123!`).
+Negative List, and (locally) the admin account `admin@asarpartners.com` (password `Password123!`).
 Local development also creates extra desk/test users; those are skipped in production.
+Existing admin passwords are never overwritten by seed. In production, set `SEED_ADMIN_PASSWORD`
+only when you need to create the admin user for the first time.
 
 ### 4. Run the dev server
 
@@ -68,7 +75,7 @@ Visit [http://localhost:3000](http://localhost:3000).
   and profitability filters, plus AI-ranked natural-language search (e.g. *"profitable hydropower
   under 5 crore"*).
 - **NDA gate:** `/marketplace/[hashId]/unlock` executes a digital NDA, then lets buyers request the
-  full profile and quote SARA advisory add-ons - this creates a priority `CrmTicket` for the advisor
+  full profile and quote ASAR advisory add-ons - this creates a priority `CrmTicket` for the advisor
   desk (`/advisor/crm`).
 - **Start a Business:** `/start-a-business/wizard` runs the compliance rules engine
   (`src/lib/rules/startABusiness.ts`) against FDI Negative List, shareholder, and capital rules, and

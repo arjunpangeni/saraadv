@@ -1,20 +1,32 @@
 "use client";
 
-import { useCallback, useMemo, useTransition } from "react";
+import { useCallback, useEffect, useId, useMemo, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SelectField } from "@/components/ui/select-field";
 import { INDUSTRY_OPTIONS, INDUSTRY_LABELS } from "@/types/listing";
 import { DEAL_VALUE_BAND_LABELS } from "@/lib/calc";
 import { NEPAL_PROVINCES } from "@/lib/nepal-locations";
-import { DiscoverSearchShell, FilterChips, FilterField } from "@/components/marketing/discover-search";
+import {
+  CollapsibleDiscoverFilters,
+  FilterChips,
+  FilterField,
+  SearchField,
+} from "@/components/marketing/discover-search";
 
-const DROPPED_KEYS = ["q", "positiveEbitdaOnly", "minRevenueNpr", "district"];
+const DROPPED_KEYS = ["positiveEbitdaOnly", "minRevenueNpr", "district"];
 
 export function MarketplaceFilterBar({ resultCount }: { resultCount?: number }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const searchId = useId();
+  const urlQuery = searchParams.get("q") || "";
+  const [query, setQuery] = useState(urlQuery);
+
+  useEffect(() => {
+    setQuery(urlQuery);
+  }, [urlQuery]);
 
   const pushParams = useCallback(
     (mutate: (params: URLSearchParams) => void) => {
@@ -36,13 +48,30 @@ export function MarketplaceFilterBar({ resultCount }: { resultCount?: number }) 
     });
   }
 
+  function submitSearch() {
+    const next = query.trim();
+    pushParams((params) => {
+      if (next) params.set("q", next);
+      else params.delete("q");
+    });
+  }
+
+  function clearSearch() {
+    setQuery("");
+    pushParams((params) => {
+      params.delete("q");
+    });
+  }
+
   const activeChips = useMemo(() => {
     const chips: { key: string; label: string }[] = [];
+    const q = searchParams.get("q");
     const industry = searchParams.get("industry");
     const deal = searchParams.get("dealValueBand");
     const province = searchParams.get("province");
     const sort = searchParams.get("sort");
 
+    if (q) chips.push({ key: "q", label: `“${q}”` });
     if (industry) {
       chips.push({
         key: "industry",
@@ -62,8 +91,40 @@ export function MarketplaceFilterBar({ resultCount }: { resultCount?: number }) 
     return chips;
   }, [searchParams]);
 
+  const structuredFilterCount = activeChips.filter((chip) => chip.key !== "q").length;
+
   return (
-    <DiscoverSearchShell pending={isPending}>
+    <CollapsibleDiscoverFilters
+      pending={isPending}
+      resultCount={resultCount}
+      resultNoun={{ one: "business", many: "businesses" }}
+      activeFilterCount={structuredFilterCount}
+      search={
+        <SearchField
+          id={searchId}
+          value={query}
+          onChange={setQuery}
+          onSubmit={submitSearch}
+          onClear={clearSearch}
+          placeholder="Search sector, place, or ID…"
+        />
+      }
+      chips={
+        activeChips.length > 0 ? (
+          <FilterChips
+            chips={activeChips}
+            onRemove={(key) => {
+              if (key === "q") clearSearch();
+              else update(key, "");
+            }}
+            onClear={() => {
+              setQuery("");
+              startTransition(() => router.push(pathname, { scroll: false }));
+            }}
+          />
+        ) : null
+      }
+    >
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <FilterField label="Sector">
           <SelectField
@@ -116,24 +177,6 @@ export function MarketplaceFilterBar({ resultCount }: { resultCount?: number }) 
           />
         </FilterField>
       </div>
-
-      {typeof resultCount === "number" ? (
-        <p className="mt-3 text-sm text-foreground/60">
-          <span className="font-semibold text-foreground">{resultCount}</span>{" "}
-          {resultCount === 1 ? "listing" : "listings"}
-          {isPending ? " · updating…" : ""}
-        </p>
-      ) : null}
-
-      {activeChips.length > 0 ? (
-        <div className="mt-3">
-          <FilterChips
-            chips={activeChips}
-            onRemove={(key) => update(key, "")}
-            onClear={() => startTransition(() => router.push(pathname, { scroll: false }))}
-          />
-        </div>
-      ) : null}
-    </DiscoverSearchShell>
+    </CollapsibleDiscoverFilters>
   );
 }

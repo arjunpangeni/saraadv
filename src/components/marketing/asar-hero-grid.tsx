@@ -1,20 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { AnimatedGroup, AnimatedText } from "@/components/smoothui/shared";
 import SmoothButton from "@/components/smoothui/smooth-button";
-import { CoolMode } from "@/components/ui/cool-mode";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import { InteractiveHeroGrid } from "@/components/marketing/interactive-hero-grid";
 import { siteConfig } from "@/lib/site-config";
+
+const InteractiveHeroGrid = dynamic(
+  () =>
+    import("@/components/marketing/interactive-hero-grid").then((m) => m.InteractiveHeroGrid),
+  { ssr: false }
+);
 
 const HERO_SUPPORT =
   "Company formation, M&A, asset revival, investment matchmaking, and carbon finance — from Kathmandu.";
 
-export function SaraHeroGrid() {
+export function AsarHeroGrid() {
   return (
-    <section className="relative flex min-h-[calc(100svh-5rem-4.75rem)] items-center overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:min-h-[calc(100svh-5rem)] lg:py-16">
+    <section className="relative flex min-h-[calc(78svh-5rem-4.75rem)] items-center overflow-hidden px-4 pt-10 pb-6 sm:px-6 sm:pt-14 sm:pb-8 lg:min-h-[calc(82svh-5rem)] lg:pt-16 lg:pb-10">
       <InteractiveHeroGrid />
       <AnimatedGroup
         className="pointer-events-none relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center gap-4 text-center sm:gap-5"
@@ -43,11 +48,9 @@ export function SaraHeroGrid() {
               <ArrowRight className="size-4" />
             </Link>
           </RainbowButton>
-          <CoolMode className="inline-flex w-full sm:w-auto">
-            <SmoothButton asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link href="/project-bank/discover">Browse Project Bank</Link>
-            </SmoothButton>
-          </CoolMode>
+          <SmoothButton asChild size="lg" variant="outline" className="w-full sm:w-auto">
+            <Link href="/project-bank/discover">Browse Project Bank</Link>
+          </SmoothButton>
         </AnimatedGroup>
       </AnimatedGroup>
     </section>

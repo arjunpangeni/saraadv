@@ -34,10 +34,10 @@ export function useDeskCounts() {
     void load();
     const id = window.setInterval(() => void load(), 45_000);
     const onRefresh = () => void load();
-    window.addEventListener("sara:desk-counts", onRefresh);
+    window.addEventListener("asar:desk-counts", onRefresh);
     return () => {
       window.clearInterval(id);
-      window.removeEventListener("sara:desk-counts", onRefresh);
+      window.removeEventListener("asar:desk-counts", onRefresh);
     };
   }, [status, enabled, load]);
 

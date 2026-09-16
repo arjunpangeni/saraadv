@@ -9,9 +9,10 @@ import { ProjectCardGrid } from "@/components/project-bank/project-card-grid";
 import { getPublicProjects } from "@/lib/project-bank";
 import { getSignedDownloadUrl } from "@/lib/storage";
 import { JsonLd } from "@/components/json-ld";
-import { PageHero } from "@/components/marketing/page-hero";
+import { DiscoverPageHeader } from "@/components/marketing/discover-page-header";
 import { pageMetadata, itemListJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
+import { LIST_PROJECT_HREF } from "@/lib/auth-utils";
 
 export const metadata: Metadata = pageMetadata({
   title: "Project Bank - Discover Investment Opportunities",
@@ -59,17 +60,14 @@ export default async function ProjectDiscoverPage({
           })}
         />
       ) : null}
-      <PageHero
+      <DiscoverPageHeader
         eyebrow="Project Bank"
         title="Discover projects"
-        description="Browse curated teasers. Full dossiers stay with ASAR Partners until vetting and an NDA."
-        cta={{ label: "List your idea", href: "/project-bank/new" }}
+        description="Curated teasers first. Full dossiers stay with ASAR Partners until vetting and an NDA."
       />
 
-      <section className="container-page pb-20 sm:pb-28">
-        <Suspense
-          fallback={<div className="mb-6 h-10 animate-pulse rounded-3xl border border-border bg-card" />}
-        >
+      <section className="container-page pt-5 pb-20 sm:pt-6 sm:pb-28">
+        <Suspense fallback={<div className="mb-5 h-10 animate-pulse rounded-full bg-muted/60" />}>
           <ProjectBankFilterBar resultCount={projects.length} />
         </Suspense>
 
@@ -89,7 +87,9 @@ export default async function ProjectDiscoverPage({
                 </SmoothButton>
               ) : (
                 <SmoothButton asChild variant="candy" size="sm">
-                  <Link href="/project-bank/new">List your idea</Link>
+                  <Link href={LIST_PROJECT_HREF} prefetch={false}>
+                    List your idea
+                  </Link>
                 </SmoothButton>
               )
             }
@@ -112,7 +112,7 @@ export default async function ProjectDiscoverPage({
 
         <p className="mt-12 text-center text-[1.05rem] leading-[1.75] text-muted-foreground">
           Have a concept?{" "}
-          <Link href="/project-bank/new" className="font-semibold text-tz-blue-deep hover:underline">
+          <Link href={LIST_PROJECT_HREF} prefetch={false} className="font-semibold text-tz-blue-deep hover:underline">
             List your idea
           </Link>
           {" — "}we review it before it goes live.

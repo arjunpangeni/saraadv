@@ -9,7 +9,7 @@ function hostname() {
   try {
     return new URL(siteConfig.url).hostname;
   } catch {
-    return "saraadvisors.com";
+    return "asarpartners.com";
   }
 }
 
